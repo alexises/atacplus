@@ -13,7 +13,7 @@ class TacacsPacketInterface
 		 * @param[in] size size of the buffer
 		 * @return size of encoded packet
 		 */
-		virtual int encode(char* payload, int size) = 0;
+		virtual int encode(char* payload, const int size) = 0;
 		/**
 		 * decode : decode a portion of network packet and generate
 		 * the corresponding TacacsPacketInterface instance
@@ -22,8 +22,23 @@ class TacacsPacketInterface
 		 * @param[in] size size of the payload
 		 * @return the corresponding TacacsPacketInterface instance
 		 */
-		virtual TacacsPacketInterface* decode(const char* paylod, int size) = 0;
-		virtual std::string getType() = 0;
+		static virtual TacacsPacketInterface* decode(const char* paylod, int size) = 0;
+		/**
+		 * getType : get an unique string that describe the type of packet decoded
+		 * @return the correspoding unique indentifier string
+		 */
+		static virtual std::string getType() = 0;
+		/**
+		 * getSize : get the size of the corresponding part of the packet
+		 * @return size of the packet
+		 * 
+		 * this function should be used to allocate the proper buffer
+		 * to decode the corresponding package
+		 */
+		virtual inline int getSize()
+		{
+			return 12;
+		}
 }
 
 #endif
