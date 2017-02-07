@@ -1,5 +1,8 @@
 #include "TacacsPacketHeader.h"
 #include "EncodingException.h"
+#include "DecodingException.h"
+#include <netinet/in.h>
+#include <cstring>
 
 TacacsPacketHeader::TacacsPacketHeader(const uint8_t version,
 	const uint8_t type,
@@ -16,23 +19,25 @@ TacacsPacketHeader::TacacsPacketHeader(const uint8_t version,
 	this->length = length;
 }
 
-virtual int encode(char* payload, int size)
+int TacacsPacketHeader::encode(char* payload, int size)
 {
 	if (size < this->getSize())
 	{
-		throw EncodingException("buffer too small")
+		throw EncodingException("buffer too small");
 	}
 	payload[0] = this->version;
 	payload[1] = this->type;
 	payload[2] = this->seqNo;
 	payload[3] = this->flags;
-	memcpy(&payload[4], htonl(this->sessionId), 4);
-	memcpy(&payload[8], htonl(this->size), 4);
+	uint32_t tmp = htonl(this->sessionId);
+	memcpy(&payload[4], &tmp, 4);
+	tmp = htonl(this->length);
+	memcpy(&payload[8], &tmp, 4);
 }
 
-static virtual TacacsPacketHeader* decode(const char* paylod, int size)
+TacacsPacketHeader* TacacsPacketHeader::decode(const char* payload, int size)
 {
-	if (size < TACAS_PACKET_HEADER_SIZE)
+	if (size < TACACS_PACKET_HEADER_SIZE)
 	{
 		throw DecodingException("buffer too small");
 	}
@@ -40,10 +45,10 @@ static virtual TacacsPacketHeader* decode(const char* paylod, int size)
 	uint8_t type = payload[1];
 	uint8_t seqNo = payload[2];
 	uint8_t flags = payload[3];
-	uint32_t sessionId;
-	uint32_t size;
-	memcpy(&sessionId, &payload[4], 4);
+	uint32_t sessionId = (uint32_t) payload[4];
+	uint32_t length;
+	memcpy(&sessionId,  &payload[4], 4);
 	memcpy(&size, &payload[8], 4);
         return new TacacsPacketHeader(version, type, seqNo, flags,
-		       	sessionId, size);
+		       	ntohl(sessionId), ntohl(length));
 }

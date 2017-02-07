@@ -1,6 +1,6 @@
 #ifndef TACACSPACKETHEADER_H
 #define TACACSPACKETHEADER_H
-#include <cinit>
+#include <cstdint>
 #include "TacacsPacketInterface.h"
 
 #define TACACS_PACKET_HEADER_SIZE 16
@@ -31,13 +31,13 @@ class TacacsPacketHeader : public TacacsPacketInterface
                  * @param[in] size size of the payload
                  * @return the corresponding TacacsPacketInterface instance
                  */
-                static virtual TacacsPacketHeader* decode(const char* paylod, int size) = 0;
+                static TacacsPacketHeader* decode(const char* payload, int size);
 		/**
                  * getType : get an unique string that describe the type of pack
 et decoded
                  * @return the correspoding unique indentifier string
                  */
-                static inline virtual std::string getType()
+                virtual inline std::string getType()
 		{
 			return std::string("header");
 		}
@@ -63,6 +63,6 @@ t
 		uint32_t length;
 		// decoding attributes
 		std::string key;
-}
+};
 
 #endif

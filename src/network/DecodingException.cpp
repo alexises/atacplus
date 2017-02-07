@@ -9,7 +9,7 @@ const char * DecodingException::what () const throw ()
 DecodingException::DecodingException(const char* str)
 {
 	this->str = new char[strlen(str) + 1];
-	strcpy(str, this->str);
+	strcpy(this->str, str);
 }
 
 DecodingException::~DecodingException()
