@@ -4,6 +4,15 @@
 #include "TacacsPacketInterface.h"
 
 #define TACACS_PACKET_HEADER_SIZE 12
+enum TacacsPacketType {
+	Authentication = 1,
+	Authorization = 2,
+	Accounting = 3
+};
+enum TacacsPacketFlags {
+	NoFlags = 0,
+	Unencrypted = 1
+};
 class TacacsPacketHeader : public TacacsPacketInterface
 {
 	public:
@@ -53,6 +62,51 @@ t
 		{
 			return TACACS_PACKET_HEADER_SIZE;
 		}
+		/**
+		 * getMajorVersion : get the major tacacs version of the packet
+		 *
+		 * @return major version
+		 */
+		virtual int getMajorVersion();
+		/**
+		 * getMinorVersion : get the minor tacacs version of the packet
+		 *
+		 * @return minor version
+		 */
+		virtual int getMinorVersion();
+		/**
+		 * getPacketType : get the type of packet (Authentication, Authorization, Accouinting
+		 *
+		 * @return TacacsPacketType::Authentication,
+		 *         TacacsPacketType::Authorization,
+		 *         TacacsPacketType::Accounting
+		 */
+		virtual uint8_t getPacketType(); 
+		/**
+		 * getSeqNo : get the sequence id of the packet
+		 *
+		 * @return sequence No
+		 */
+		virtual uint8_t getSeqNo();
+		/**
+		 * getFlags : return the related flags of the packets
+		 *
+		 * the flags is a bitwise field of TacacsPacketFlags
+		 * @return flags of the packet
+		 */
+		virtual uint8_t getFlags();
+		/**
+		 * getSessionId : get the session id 
+		 *
+		 * @return session id
+		 */
+		virtual uint32_t getSessionId();
+		/**
+		 * getLength : get the length of the packet
+		 *
+		 * @return length of the packet
+		 */
+		virtual uint32_t getLength();
 	private:
 		// packet attribute
 		uint8_t version;

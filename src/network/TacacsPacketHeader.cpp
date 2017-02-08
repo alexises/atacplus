@@ -49,7 +49,42 @@ TacacsPacketHeader* TacacsPacketHeader::decode(const char* payload, int size)
 	uint32_t sessionId = (uint32_t) payload[4];
 	uint32_t length;
 	memcpy(&sessionId,  &payload[4], 4);
-	memcpy(&size, &payload[8], 4);
+	memcpy(&length, &payload[8], 4);
         return new TacacsPacketHeader(version, type, seqNo, flags,
 		       	ntohl(sessionId), ntohl(length));
+}
+
+int TacacsPacketHeader::getMajorVersion()
+{
+	return this->version >> 4;
+}
+
+int TacacsPacketHeader::getMinorVersion()
+{
+	return this->version & 0x0f; 
+}
+
+uint8_t TacacsPacketHeader::getPacketType()
+{
+	return this->type;
+}
+
+uint8_t TacacsPacketHeader::getSeqNo()
+{
+	return this->seqNo;
+}
+
+uint8_t TacacsPacketHeader::getFlags()
+{
+	return this->flags;
+}
+
+uint32_t TacacsPacketHeader::getSessionId()
+{
+	return this->sessionId;
+}
+
+uint32_t TacacsPacketHeader::getLength()
+{
+	return this->length;
 }
