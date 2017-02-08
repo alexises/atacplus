@@ -14,5 +14,5 @@ EncodingException::EncodingException(const char* str)
 
 EncodingException::~EncodingException()
 {
-    delete this->str;
+    delete[] this->str;
 }

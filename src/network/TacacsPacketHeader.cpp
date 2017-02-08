@@ -59,7 +59,7 @@ TacacsPacketHeader* TacacsPacketHeader::decode(const char* payload, int size)
         return new TacacsPacketHeader(version, type, seqNo, flags,
                        ntohl(sessionId), ntohl(length));
     }
-    catch (PreconditionFailException e)
+    catch (PreconditionFailException & e)
     {
 	std::string msg("invalid parameter : ");
         msg += e.what();

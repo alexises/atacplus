@@ -14,5 +14,5 @@ PreconditionFailException::PreconditionFailException(const char* str)
 
 PreconditionFailException::~PreconditionFailException()
 {
-    delete this->str;
+    delete[] this->str;
 }
