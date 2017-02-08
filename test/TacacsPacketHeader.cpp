@@ -1,4 +1,6 @@
 #include "network/TacacsPacketHeader.h"
+#include "network/EncodingException.h"
+
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE TacacsPacketHeader
 #include <boost/test/unit_test.hpp>
@@ -32,4 +34,51 @@ BOOST_AUTO_TEST_CASE( check_basic_auth_decode )
     BOOST_CHECK( h->getLength() == 12 );
     delete h;
 }
+
+BOOST_AUTO_TEST_CASE( check_valid_args )
+{
+    const char data1[] = "\xc0\x01\x01\x01" // check flags
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    const char data2[] = "\xc1\x02\x01\x01" // check authorization
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    const char data3[] = "\xc1\x03\x01\x01" // check accounting
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    const char data4[] = "\xc1\x03\x01\x00" // check flags
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    TacacsPacketHeader* h;
+    h = TacacsPacketHeader::decode(data1, 12);
+    delete h;
+    h = TacacsPacketHeader::decode(data2, 12);
+    delete h;
+    h = TacacsPacketHeader::decode(data3, 12);
+    delete h;
+    h = TacacsPacketHeader::decode(data4, 12);
+    delete h;
+}
+
+BOOST_AUTO_TEST_CASE( check_invalid_expression )
+{
+    const char data1[] = "\xd0\x01\x01\x01" // bad major version
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    const char data2[] = "\xc4\x01\x01\x01" // bad minor version
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    const char data3[] = "\xc1\x04\x01\x01" // bad packet type
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    const char data4[] = "\xc1\x04\x01\xf0" // bad flags
+                         "\x00\x00\x00\x01"
+                         "\x00\x00\x00\x0c";
+    BOOST_CHECK_THROW(TacacsPacketHeader::decode(data1, 12), EncodingException);
+    BOOST_CHECK_THROW(TacacsPacketHeader::decode(data2, 12), EncodingException);
+    BOOST_CHECK_THROW(TacacsPacketHeader::decode(data3, 12), EncodingException);
+    BOOST_CHECK_THROW(TacacsPacketHeader::decode(data4, 12), EncodingException);
+}
+
+
 

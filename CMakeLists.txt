@@ -13,6 +13,11 @@ set (CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+# debug
+
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
 
 # library
 find_package(Boost 1.55 REQUIRED COMPONENTS unit_test_framework)
@@ -22,6 +27,7 @@ set (Atacplus_network_src
 	"${SRC_DIR}/network/DecodingException.cpp"
 	"${SRC_DIR}/network/EncodingException.cpp"
 	"${SRC_DIR}/network/TacacsPacketHeader.cpp"
+	"${SRC_DIR}/network/PreconditionFailException.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
 

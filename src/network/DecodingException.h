@@ -7,12 +7,12 @@
  */
 class DecodingException : public std::exception
 {
-	public:
-		const char * what () const throw ();
-		DecodingException(const char* str);
-		~DecodingException();
-	private:
-		char* str;
+    public:
+        const char * what () const throw ();
+        DecodingException(const char* str);
+        ~DecodingException();
+    private:
+        char* str;
 };
 
 #endif
