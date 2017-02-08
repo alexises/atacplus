@@ -33,6 +33,7 @@ int TacacsPacketHeader::encode(char* payload, int size)
 	memcpy(&payload[4], &tmp, 4);
 	tmp = htonl(this->length);
 	memcpy(&payload[8], &tmp, 4);
+	return TACACS_PACKET_HEADER_SIZE;
 }
 
 TacacsPacketHeader* TacacsPacketHeader::decode(const char* payload, int size)

@@ -3,7 +3,7 @@
 #include <cstdint>
 #include "TacacsPacketInterface.h"
 
-#define TACACS_PACKET_HEADER_SIZE 16
+#define TACACS_PACKET_HEADER_SIZE 12
 class TacacsPacketHeader : public TacacsPacketInterface
 {
 	public:
