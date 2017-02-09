@@ -6,3 +6,4 @@ lib/
 CTestTestfile.cmake
 Testing/
 bin/
+.*.swp
