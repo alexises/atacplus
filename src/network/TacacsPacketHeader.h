@@ -98,7 +98,13 @@ t
          *         TacacsPacketType::Authorization,
          *         TacacsPacketType::Accounting
          */
-        virtual uint8_t getPacketType(); 
+        virtual uint8_t getPacketType();
+        /**
+	 * setPacketType : set the type of packet Authentication, Authorization, Accounting
+	 *
+	 * You should use values provided on TacacsPacketType
+	 */
+        virtual void setPacketType(uint8_t type);	
         /**
          * getSeqNo : get the sequence id of the packet
          *
@@ -112,6 +118,12 @@ t
          * @return flags of the packet
          */
         virtual uint8_t getFlags();
+	/**
+	 * setFlags : the packet flags
+	 *
+	 * the flags should be a bitwise field of TacacsPacketFlags Enum
+	 */
+	virtual void setFlags(uint8_t flags);
         /**
          * getSessionId : get the session id 
          *

@@ -16,6 +16,6 @@ class PreconditionFailException : public std::exception
         char* str;
 };
 
-#define precondition(attr) if (!(attr)) { throw PreconditionFailException("attr"); }
+#define precondition(attr) if (!(attr)) { throw PreconditionFailException(#attr); }
 
 #endif

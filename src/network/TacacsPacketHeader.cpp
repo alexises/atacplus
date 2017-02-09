@@ -13,9 +13,9 @@ TacacsPacketHeader::TacacsPacketHeader(const uint8_t version,
     const uint32_t length)
 {
     this->setVersion(version);
-    this->type = type;
+    this->setPacketType(type);
     this->seqNo = seqNo;
-    this->flags = flags;
+    this->setFlags(flags);
     this->sessionId = sessionId;
     this->length = length;
 }
@@ -94,6 +94,14 @@ uint8_t TacacsPacketHeader::getPacketType()
     return this->type;
 }
 
+void TacacsPacketHeader::setPacketType(uint8_t type)
+{
+    precondition(type == TacacsPacketType::Authentication ||
+		 type == TacacsPacketType::Authorization ||
+		 type == TacacsPacketType::Accounting);
+    this->type = type;
+}
+
 uint8_t TacacsPacketHeader::getSeqNo()
 {
     return this->seqNo;
@@ -104,6 +112,11 @@ uint8_t TacacsPacketHeader::getFlags()
     return this->flags;
 }
 
+void TacacsPacketHeader::setFlags(uint8_t flags)
+{
+    precondition(flags <= TacacsPacketFlags::Unencrypted) 
+    this->flags = flags;
+}
 uint32_t TacacsPacketHeader::getSessionId()
 {
     return this->sessionId;
