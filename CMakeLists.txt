@@ -21,6 +21,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
 
 # library
 find_package(Boost 1.55 REQUIRED COMPONENTS unit_test_framework)
+find_package(OpenSSL REQUIRED)
 
 # network library
 set (Atacplus_network_src
@@ -28,8 +29,10 @@ set (Atacplus_network_src
 	"${SRC_DIR}/network/EncodingException.cpp"
 	"${SRC_DIR}/network/TacacsPacketHeader.cpp"
 	"${SRC_DIR}/network/PreconditionFailException.cpp"
+	"${SRC_DIR}/network/crypto.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
+target_include_directories(atacplus_network PUBLIC ${Boost_INCLUDES} ${OpenSSL_INCLUDES})
 
 # unit test
 enable_testing()
@@ -41,5 +44,5 @@ add_executable (test_network_exec
 	${network_test_files})
 target_include_directories(test_network_exec 
 	PUBLIC ${SRC_DIR} ${Boost_INCLUDES})
-target_link_libraries(test_network_exec atacplus_network ${Boost_LIBRARIES})
+target_link_libraries(test_network_exec atacplus_network ${Boost_LIBRARIES} ${OpenSSL_LIBRARIES})
 add_test (NAME test_network COMMAND test_network_exec)

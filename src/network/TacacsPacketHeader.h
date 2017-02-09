@@ -36,7 +36,7 @@ class TacacsPacketHeader : public TacacsPacketInterface
 	 * @param[in] size size of the buffer
          * @return size of encoded packet
          */
-        virtual int encode(char* payload, const int size);
+        virtual int encode(unsigned char* payload, const int size);
         /**       
  	 * decode : decode a portion of network packet and generate
          * the corresponding TacacsPacketHeader instance
@@ -45,7 +45,7 @@ class TacacsPacketHeader : public TacacsPacketInterface
          * @param[in] size size of the payload
          * @return the corresponding TacacsPacketInterface instance
          */
-        static TacacsPacketHeader* decode(const char* payload, int size);
+        static TacacsPacketHeader* decode(const unsigned char* payload, int size, char* key = NULL);
         /**
          * getType : get an unique string that describe the type of pack
 et decoded
@@ -137,12 +137,6 @@ t
          * @return length of the packet
          */
         virtual uint32_t getLength();
-	/**
-	 * setKey : set the encoding/decoding key needed to decode the data part
-	 *
-	 * @param[in] key
-	 */
-	virtual void setKey(char* key);
     private:
         // packet attribute
         uint8_t version;
@@ -152,7 +146,6 @@ t
         uint32_t sessionId;
         uint32_t length;
         // decoding attributes
-        char* key;
 };
 
 #endif

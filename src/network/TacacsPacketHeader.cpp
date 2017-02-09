@@ -18,7 +18,6 @@ TacacsPacketHeader::TacacsPacketHeader(const uint8_t version,
     this->setFlags(flags);
     this->sessionId = sessionId;
     this->length = length;
-    this->key = NULL;
 }
 
 TacacsPacketHeader::TacacsPacketHeader(const TacacsPacketHeader & other)
@@ -29,22 +28,13 @@ TacacsPacketHeader::TacacsPacketHeader(const TacacsPacketHeader & other)
     this->flags = other.flags;
     this->sessionId = other.sessionId;
     this->length = other.length;
-    if (other.key == NULL)
-    {
-        this->key = NULL;
-    }
-    else
-    {
-        this->setKey(other.key);
-    }
 }
 
 TacacsPacketHeader::~TacacsPacketHeader()
 {
-    delete[] this->key;
 }
 
-int TacacsPacketHeader::encode(char* payload, int size)
+int TacacsPacketHeader::encode(unsigned char* payload, int size)
 {
     if (size < this->getSize())
     {
@@ -61,7 +51,7 @@ int TacacsPacketHeader::encode(char* payload, int size)
     return TACACS_PACKET_HEADER_SIZE;
 }
 
-TacacsPacketHeader* TacacsPacketHeader::decode(const char* payload, int size)
+TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, int size, char* key)
 {
     if (size < TACACS_PACKET_HEADER_SIZE)
     {
@@ -145,10 +135,4 @@ uint32_t TacacsPacketHeader::getSessionId()
 uint32_t TacacsPacketHeader::getLength()
 {
     return this->length;
-}
-
-void TacacsPacketHeader::setKey(char* key)
-{
-    this->key = new char[strlen(key) + 1];
-    strcpy(this->key, key);
 }

@@ -13,7 +13,7 @@ class TacacsPacketInterface
          * @param[in] size size of the buffer
          * @return size of encoded packet
          */
-        virtual int encode(char* payload, const int size) = 0;
+        virtual int encode(unsigned char* payload, const int size) = 0;
         /**
          * getType : get an unique string that describe the type of packet decoded
          * @return the correspoding unique indentifier string
