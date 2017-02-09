@@ -18,10 +18,30 @@ TacacsPacketHeader::TacacsPacketHeader(const uint8_t version,
     this->setFlags(flags);
     this->sessionId = sessionId;
     this->length = length;
+    this->key = NULL;
+}
+
+TacacsPacketHeader::TacacsPacketHeader(const TacacsPacketHeader & other)
+{
+    this->version = other.version;
+    this->type = other.type;
+    this->seqNo = other.seqNo;
+    this->flags = other.flags;
+    this->sessionId = other.sessionId;
+    this->length = other.length;
+    if (other.key == NULL)
+    {
+        this->key = NULL;
+    }
+    else
+    {
+        this->setKey(other.key);
+    }
 }
 
 TacacsPacketHeader::~TacacsPacketHeader()
 {
+    delete[] this->key;
 }
 
 int TacacsPacketHeader::encode(char* payload, int size)
@@ -125,4 +145,10 @@ uint32_t TacacsPacketHeader::getSessionId()
 uint32_t TacacsPacketHeader::getLength()
 {
     return this->length;
+}
+
+void TacacsPacketHeader::setKey(char* key)
+{
+    this->key = new char[strlen(key) + 1];
+    strcpy(this->key, key);
 }

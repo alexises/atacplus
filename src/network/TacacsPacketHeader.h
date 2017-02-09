@@ -25,6 +25,7 @@ class TacacsPacketHeader : public TacacsPacketInterface
                     const uint8_t flags,
                     const uint32_t sessionId,
                     const uint32_t length);
+	TacacsPacketHeader(const TacacsPacketHeader & other);
         virtual ~TacacsPacketHeader();
 
         /**
@@ -136,6 +137,12 @@ t
          * @return length of the packet
          */
         virtual uint32_t getLength();
+	/**
+	 * setKey : set the encoding/decoding key needed to decode the data part
+	 *
+	 * @param[in] key
+	 */
+	virtual void setKey(char* key);
     private:
         // packet attribute
         uint8_t version;
@@ -145,7 +152,7 @@ t
         uint32_t sessionId;
         uint32_t length;
         // decoding attributes
-        std::string key;
+        char* key;
 };
 
 #endif
