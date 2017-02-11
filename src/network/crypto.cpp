@@ -47,7 +47,7 @@ unsigned char* encodeTacacsPacket(const unsigned char * buff, int size, const ch
     for (int chunk = 0; chunk < size; chunk += MD5_DIGEST_LENGTH)
     {
         MD5(md5ClearBuffer, md5ClearBufferSize, md5EncipheredBuffer);
-        for (int i = 0; i < MD5_DIGEST_LENGTH || chunk + i ; ++i)
+        for (int i = 0; i < MD5_DIGEST_LENGTH && (chunk + i) < size; ++i)
 	{
 	    outputBuffer[chunk + i] = buff[chunk + i] ^ md5EncipheredBuffer[i];
 	    md5ClearBuffer[prevMD5pos + i] = md5EncipheredBuffer[i];
