@@ -18,7 +18,7 @@
  * @return the size of the resulting buffer, the buffer allocated into buff provided the needed extra space
  *   to launch all round of the algorithm and set the md5 key
  */
-static int createMD5message(unsigned char** buff, char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
+static int createMD5message(unsigned char** buff, const char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
 {
     int keySize = strlen(key);
     int firstRoundSize = keySize + sizeof(sessionId) + sizeof(version) + sizeof(seqNo); 
@@ -36,7 +36,7 @@ static int createMD5message(unsigned char** buff, char* key, uint32_t sessionId,
     return firstRoundSize;
 }
 
-unsigned char* encodeTacacsPacket(const unsigned char * buff, int size, char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
+unsigned char* encodeTacacsPacket(const unsigned char * buff, int size, const char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
 {
     unsigned char md5EncipheredBuffer[MD5_DIGEST_LENGTH];
     unsigned char* md5ClearBuffer;

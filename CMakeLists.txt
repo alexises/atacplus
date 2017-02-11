@@ -32,17 +32,19 @@ set (Atacplus_network_src
 	"${SRC_DIR}/network/crypto.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
-target_include_directories(atacplus_network PUBLIC ${Boost_INCLUDES} ${OpenSSL_INCLUDES})
+target_include_directories(atacplus_network PUBLIC ${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 
 # unit test
 enable_testing()
 set (network_test_files 
-	"${TEST_DIR}/TacacsPacketHeader.cpp")
+	"${TEST_DIR}/TacacsPacketHeader.cpp"
+	"${TEST_DIR}/crypto.cpp")
 
 
 add_executable (test_network_exec
 	${network_test_files})
 target_include_directories(test_network_exec 
-	PUBLIC ${SRC_DIR} ${Boost_INCLUDES})
-target_link_libraries(test_network_exec atacplus_network ${Boost_LIBRARIES} ${OpenSSL_LIBRARIES})
+	PUBLIC ${SRC_DIR} PUBLIC ${Boost_INCLUDE_DIRS})
+target_link_libraries(test_network_exec atacplus_network ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
+
 add_test (NAME test_network COMMAND test_network_exec)

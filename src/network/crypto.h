@@ -15,6 +15,6 @@
  * @return encoded payload, the client is responsable to free the
  * resulting packet
  */
-unsigned char* encodeTacacsPacket(const unsigned char * buff, int size, char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo);
+unsigned char* encodeTacacsPacket(const unsigned char * buff, int size, const char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo);
 
 #endif
