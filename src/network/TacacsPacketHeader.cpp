@@ -36,7 +36,7 @@ TacacsPacketHeader::~TacacsPacketHeader()
 
 int TacacsPacketHeader::encode(unsigned char* payload, int size)
 {
-    if (size < this->getSize())
+    if (size < this->getSize() + TACACS_PACKET_HEADER_SIZE)
     {
         throw EncodingException("buffer too small");
     }
@@ -51,7 +51,7 @@ int TacacsPacketHeader::encode(unsigned char* payload, int size)
     return TACACS_PACKET_HEADER_SIZE;
 }
 
-TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, int size, char* key)
+TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, unsigned int size, char* key)
 {
     if (size < TACACS_PACKET_HEADER_SIZE)
     {
@@ -65,9 +65,17 @@ TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, int
     uint32_t length;
     memcpy(&sessionId,  &payload[4], 4);
     memcpy(&length, &payload[8], 4);
+    length = ntohl(length);
+    sessionId = ntohl(sessionId);
+    if (size != (TACACS_PACKET_HEADER_SIZE + length))
+    {
+	throw DecodingException("bad packet size");
+    } 
     try {
-        return new TacacsPacketHeader(version, type, seqNo, flags,
-                       ntohl(sessionId), ntohl(length));
+        TacacsPacketHeader* h = new TacacsPacketHeader(version, type, seqNo,
+			                               flags, sessionId,
+						       length);
+        return h;	
     }
     catch (PreconditionFailException & e)
     {

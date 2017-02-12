@@ -45,7 +45,7 @@ class TacacsPacketHeader : public TacacsPacketInterface
          * @param[in] size size of the payload
          * @return the corresponding TacacsPacketInterface instance
          */
-        static TacacsPacketHeader* decode(const unsigned char* payload, int size, char* key = NULL);
+        static TacacsPacketHeader* decode(const unsigned char* payload, unsigned int size, char* key = NULL);
         /**
          * getType : get an unique string that describe the type of pack
 et decoded
