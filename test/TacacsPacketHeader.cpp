@@ -51,13 +51,13 @@ BOOST_AUTO_TEST_CASE( check_valid_args )
                                   "\x00\x00\x00\x01"
                                   "\x00\x00\x00\x00";
     TacacsPacketHeader* h;
-    h = TacacsPacketHeader::decode(data1, 12);
+    h = TacacsPacketHeader::decode(data1, 12, "test");
     delete h;
-    h = TacacsPacketHeader::decode(data2, 12);
+    h = TacacsPacketHeader::decode(data2, 12, "test");
     delete h;
-    h = TacacsPacketHeader::decode(data3, 12);
+    h = TacacsPacketHeader::decode(data3, 12, "test");
     delete h;
-    h = TacacsPacketHeader::decode(data4, 12);
+    h = TacacsPacketHeader::decode(data4, 12, "test");
     delete h;
 }
 

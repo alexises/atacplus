@@ -2,6 +2,7 @@
 #include "EncodingException.h"
 #include "DecodingException.h"
 #include "precondition.h"
+#include "crypto.h"
 #include <netinet/in.h>
 #include <cstring>
 
@@ -51,7 +52,7 @@ int TacacsPacketHeader::encode(unsigned char* payload, int size)
     return TACACS_PACKET_HEADER_SIZE;
 }
 
-TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, unsigned int size, char* key)
+TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, unsigned int size, const char* key)
 {
     if (size < TACACS_PACKET_HEADER_SIZE)
     {
@@ -63,6 +64,8 @@ TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, uns
     uint8_t flags = payload[3];
     uint32_t sessionId = (uint32_t) payload[4];
     uint32_t length;
+    unsigned char* uncipheredPayload;
+
     memcpy(&sessionId,  &payload[4], 4);
     memcpy(&length, &payload[8], 4);
     length = ntohl(length);
@@ -75,6 +78,15 @@ TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, uns
         TacacsPacketHeader* h = new TacacsPacketHeader(version, type, seqNo,
 			                               flags, sessionId,
 						       length);
+	if ((flags & TacacsPacketFlags::Unencrypted) == 0)
+	{
+	    if (key == NULL)
+            {
+                throw DecodingException("unable to decode without a key");
+            }
+	    uncipheredPayload = encodeTacacsPacket(&payload[12], length, key,
+			                           sessionId, version, seqNo); 
+	}
         return h;	
     }
     catch (PreconditionFailException & e)
