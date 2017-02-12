@@ -36,7 +36,7 @@ TacacsPacketHeader::~TacacsPacketHeader()
 
 int TacacsPacketHeader::encode(unsigned char* payload, int size)
 {
-    if (size < this->getSize() + TACACS_PACKET_HEADER_SIZE)
+    if (size < this->getSize())
     {
         throw EncodingException("buffer too small");
     }
