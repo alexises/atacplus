@@ -30,6 +30,7 @@ set (Atacplus_network_src
 	"${SRC_DIR}/network/TacacsPacketHeader.cpp"
 	"${SRC_DIR}/network/PreconditionFailException.cpp"
 	"${SRC_DIR}/network/crypto.cpp"
+	"${SRC_DIR}/network/FixedLengthString.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
 target_include_directories(atacplus_network PUBLIC ${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
