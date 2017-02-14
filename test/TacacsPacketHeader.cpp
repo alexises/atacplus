@@ -2,11 +2,10 @@
 #include "network/EncodingException.h"
 #include "network/DecodingException.h"
 
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE TacacsPacketHeader
 #include <boost/test/unit_test.hpp>
 #include <cstring>
 
+BOOST_AUTO_TEST_SUITE(tacacsPacketHeader)
 BOOST_AUTO_TEST_CASE( check_basic_auth_encode )
 {
     const unsigned char data[] = "\xc1\x01\x01\x01"
@@ -92,4 +91,4 @@ BOOST_AUTO_TEST_CASE( check_invalid_encoding )
    BOOST_CHECK_THROW(h.encode(buff, 5), EncodingException);
 }
 
-
+BOOST_AUTO_TEST_SUITE_END()

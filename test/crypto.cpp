@@ -1,9 +1,10 @@
 #include "network/crypto.h"
 #include "network/TacacsPacketHeader.h"
 
-#define BOOST_TEST_MODULE TacacsPacketHeader
 #include <boost/test/unit_test.hpp>
 #include <cstring>
+
+BOOST_AUTO_TEST_SUITE(crypto)
 const unsigned char datachunk1[] = "\x00\x01\x02\x03"
                                    "\x04\x05\x06\x07"
                                    "\x08\x09\x0a\x0b"
@@ -69,3 +70,5 @@ BOOST_AUTO_TEST_CASE( check_multiple_decoding_fail )
     delete[] decoded4;
     delete[] encoded2;
 }
+
+BOOST_AUTO_TEST_SUITE_END()

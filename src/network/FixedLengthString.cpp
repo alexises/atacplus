@@ -2,7 +2,7 @@
 #include <cstring>
 #include "precondition.h"
 
-FixedLengthString::FixedLengthString(uint8_t size, const char* value)
+FixedLengthString::FixedLengthString(const char* value, uint8_t size)
 {
     this->size = size;
     this->value = new char[size];

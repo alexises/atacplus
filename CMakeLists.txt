@@ -39,7 +39,9 @@ target_include_directories(atacplus_network PUBLIC ${Boost_INCLUDE_DIRS} ${OPENS
 enable_testing()
 set (network_test_files 
 	"${TEST_DIR}/TacacsPacketHeader.cpp"
-	"${TEST_DIR}/crypto.cpp")
+	"${TEST_DIR}/crypto.cpp"
+	"${TEST_DIR}/FixedLengthString.cpp"
+	"${TEST_DIR}/network.cpp")
 
 
 add_executable (test_network_exec
