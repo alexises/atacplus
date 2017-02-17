@@ -1,5 +1,7 @@
 #ifndef TACACSPACKETCONTEXT_H
 #define TACACSPACKETCONTEXT_H
+#include "TacacsPacketInterface.h"
+#include "TacacsPacketHeader.h"
 
 enum TacacsConnectionType
 {
@@ -28,8 +30,14 @@ class TacacsPacketContext
          * @param[in] type : type of connection should be a member of TacacsConnectionType
 	 */
         TacacsPacketContext(int type);
+        /**
+         * decode a packet
+         */
+        TacacsPacketInterface* decode();
     private:
         int step;
 	int connType;
+        TacacsPacketHeader* header;
+        char* key;
 };
 #endif
