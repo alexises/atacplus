@@ -20,7 +20,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
 
 # library
-find_package(Boost 1.55 REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework)
 find_package(OpenSSL REQUIRED)
 
 # network library
