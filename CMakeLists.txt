@@ -35,7 +35,7 @@ set (Atacplus_network_src
         "${SRC_DIR}/network/Buffer.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
-target_include_directories(atacplus_network PUBLIC ${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 
 # unit test
 enable_testing()
@@ -48,8 +48,7 @@ set (network_test_files
 
 add_executable (test_network_exec
 	${network_test_files})
-target_include_directories(test_network_exec 
-	PUBLIC ${SRC_DIR} PUBLIC ${Boost_INCLUDE_DIRS})
+include_directories(${SRC_DIR})
 target_link_libraries(test_network_exec atacplus_network ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
 
 add_test (NAME test_network COMMAND test_network_exec)
