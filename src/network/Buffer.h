@@ -15,6 +15,16 @@ class Buffer
          * @param[in] size size of the buffer
          */
         Buffer(size_t size=4096);
+        /**
+         * Construct a buffer of given size and populate it with data
+         *
+         * This class is usefull for unit testing
+         *
+         * @param[in] buffer buffer used to fill the Buffer instance
+         * @param[in] buffsize size of the buffer
+         * @param[in] size size of the resulting Buffer instance
+         */
+        Buffer(const uint8_t* buffer, size_t buffsize, size_t size=4096);
         virtual ~Buffer();
         /**
          * avalableRead : get the available byte for reading in the buffer
@@ -41,7 +51,7 @@ class Buffer
          * @param[in] size size of the buffer
          * @pre size < this->availableWrite()
          */
-        void write(uint8_t* buff, size_t size);
+        void write(const uint8_t* buff, size_t size);
         /**
          * read byte from network to host
          */

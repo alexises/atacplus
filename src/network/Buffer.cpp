@@ -50,7 +50,7 @@ size_t Buffer::getSize()
 
 void Buffer::write(const uint8_t* buff, size_t size)
 {
-    precondition(size < this->availableWrite())
+    precondition(size <= this->availableWrite())
     for (size_t i = 0; i < size; ++i)
     {
         this->buff[this->writePos % this->size] = buff[i];
