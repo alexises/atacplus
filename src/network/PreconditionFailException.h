@@ -11,7 +11,7 @@ class PreconditionFailException : public std::exception
         const char * what () const throw ();
         PreconditionFailException(const char* str);
 	PreconditionFailException(const PreconditionFailException & other);
-        ~PreconditionFailException();
+        ~PreconditionFailException() throw ();
     private:
         char* str;
 };

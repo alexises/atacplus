@@ -12,7 +12,7 @@ EncodingException::EncodingException(const char* str)
     strcpy(this->str, str);
 }
 
-EncodingException::~EncodingException()
+EncodingException::~EncodingException() throw()
 {
     delete[] this->str;
 }
