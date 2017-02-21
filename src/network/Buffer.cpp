@@ -19,6 +19,15 @@ Buffer::Buffer(size_t size)
     this->buff = new uint8_t[this->size];
 }
 
+Buffer::Buffer(const uint8_t* buffer, size_t buffsize, size_t size)
+{
+    this->size = size;
+    this->readPos = 0;
+    this->writePos = 0;
+    this->buff = new uint8_t[this->size];
+    this->write(buffer, buffsize);
+}
+
 Buffer::~Buffer()
 {
     delete[] this->buff;
@@ -39,7 +48,7 @@ size_t Buffer::getSize()
     return this->size;
 }
 
-void Buffer::write(uint8_t* buff, size_t size)
+void Buffer::write(const uint8_t* buff, size_t size)
 {
     precondition(size < this->availableWrite())
     for (size_t i = 0; i < size; ++i)
