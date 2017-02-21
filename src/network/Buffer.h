@@ -1,7 +1,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 #include <cstring>
-#include <cstdint>
+#include <stdint.h>
 
 /**
  * Buffer : define a network buffer

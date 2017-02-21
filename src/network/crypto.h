@@ -1,7 +1,7 @@
 #ifndef CRYPTO_H
 #define CRYPTO_H
 
-#include <cstdint>
+#include <stdint.h>
 /**
  * encodeTacacasPacket : encode/decode the tacacs packet payload 
  *

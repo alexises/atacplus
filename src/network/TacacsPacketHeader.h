@@ -1,6 +1,6 @@
 #ifndef TACACSPACKETHEADER_H
 #define TACACSPACKETHEADER_H
-#include <cstdint>
+#include <stdint.h>
 #include "TacacsPacketInterface.h"
 
 #define TACACS_PACKET_HEADER_SIZE 12
