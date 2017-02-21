@@ -12,7 +12,7 @@ DecodingException::DecodingException(const char* str)
     strcpy(this->str, str);
 }
 
-DecodingException::~DecodingException()
+DecodingException::~DecodingException() throw()
 {
     delete[] this->str;
 }
