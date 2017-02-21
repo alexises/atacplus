@@ -2,17 +2,20 @@
 #define TACACSPACKETHEADER_H
 #include <stdint.h>
 #include "TacacsPacketInterface.h"
+#include "enum.h"
 
 #define TACACS_PACKET_HEADER_SIZE 12
-enum TacacsPacketType {
-    Authentication = 1,
-    Authorization = 2,
-    Accounting = 3
+struct TacacsPacketType {
+    enum_mbr Authentication = 1;
+    enum_mbr Authorization = 2;
+    enum_mbr Accounting = 3;
 };
-enum TacacsPacketFlags {
-    NoFlags = 0,
-    Unencrypted = 1
+
+struct TacacsPacketFlags {
+    enum_mbr NoFlags = 0;
+    enum_mbr Unencrypted = 1;
 };
+
 #define TACACS_MAJOR         0xC
 #define TACACS_MINOR_DEFAULT 0x0
 #define TACACS_MINOR_ONE     0x1

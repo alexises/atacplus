@@ -2,20 +2,21 @@
 #define TACACSPACKETCONTEXT_H
 #include "TacacsPacketInterface.h"
 #include "TacacsPacketHeader.h"
+#include "enum.h"
 
-enum TacacsConnectionType
+struct TacacsConnectionType
 {
-    Client = 1,
-    Server = 2
+    enum_mbr Client = 1;
+    enum_mbr Server = 2;
 };
 
-enum TacacsConnectionStep
+struct TacacsConnectionStep
 {
-    NoStart = 0,
-    StartAuthentication = 1,
-    StartAuthorization = 2,
-    StartAccounting = 3,
-    ReplayAuthentication = 4
+    enum_mbr NoStart = 0;
+    enum_mbr StartAuthentication = 1;
+    enum_mbr StartAuthorization = 2;
+    enum_mbr StartAccounting = 3;
+    enum_mbr ReplayAuthentication = 4;
 };
 
 /**

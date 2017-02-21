@@ -1,6 +1,7 @@
 #ifndef FIXEDLENGTHSTRING_H
 #define FIXEDLENGTHSTRING_H
 #include <string>
+#include <stdint.h>
 
 /**
  * FixedLengthString : Store a string of a fixed size without null termination
