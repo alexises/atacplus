@@ -18,7 +18,7 @@ PreconditionFailException::PreconditionFailException(const char* str)
     strcpy(this->str, str);
 }
 
-PreconditionFailException::~PreconditionFailException() throw()
+PreconditionFailException::~PreconditionFailException()
 {
     delete[] this->str;
 }
