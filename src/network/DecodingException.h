@@ -10,7 +10,7 @@ class DecodingException : public std::exception
     public:
         const char * what () const throw ();
         DecodingException(const char* str);
-        ~DecodingException();
+        ~DecodingException() throw();
     private:
         char* str;
 };
