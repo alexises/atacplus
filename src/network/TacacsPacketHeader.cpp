@@ -2,7 +2,6 @@
 #include "EncodingException.h"
 #include "DecodingException.h"
 #include "precondition.h"
-#include "crypto.h"
 #include <netinet/in.h>
 #include <cstring>
 
@@ -52,42 +51,21 @@ int TacacsPacketHeader::encode(unsigned char* payload, int size)
     return TACACS_PACKET_HEADER_SIZE;
 }
 
-TacacsPacketHeader* TacacsPacketHeader::decode(const unsigned char* payload, unsigned int size, const char* key)
+TacacsPacketHeader* TacacsPacketHeader::decode(Buffer& buff)
 {
-    if (size < TACACS_PACKET_HEADER_SIZE)
+    if (buff.availableRead() < TACACS_PACKET_HEADER_SIZE)
     {
         throw DecodingException("buffer too small");
     }
-    uint8_t version = payload[0];
-    uint8_t type = payload[1];
-    uint8_t seqNo = payload[2];
-    uint8_t flags = payload[3];
-    uint32_t sessionId = (uint32_t) payload[4];
+    uint8_t version, type, seqNo, flags;
+    uint32_t sessionId;
     uint32_t length;
-    unsigned char* uncipheredPayload;
+    buff >> version >> type >> seqNo >> flags;
+    buff >> sessionId >> length;
 
-    memcpy(&sessionId,  &payload[4], 4);
-    memcpy(&length, &payload[8], 4);
-    length = ntohl(length);
-    sessionId = ntohl(sessionId);
-    if (size != (TACACS_PACKET_HEADER_SIZE + length))
-    {
-	throw DecodingException("bad packet size");
-    } 
     try {
-        TacacsPacketHeader* h = new TacacsPacketHeader(version, type, seqNo,
-			                               flags, sessionId,
-						       length);
-	if ((flags & TacacsPacketFlags::Unencrypted) == 0)
-	{
-	    if (key == NULL)
-            {
-                throw DecodingException("unable to decode without a key");
-            }
-	    uncipheredPayload = encodeTacacsPacket(&payload[12], length, key,
-			                           sessionId, version, seqNo); 
-	}
-        return h;	
+        TacacsPacketHeader* h = 
+            new TacacsPacketHeader(version, type, seqNo, flags, sessionId, length);
     }
     catch (PreconditionFailException & e)
     {
@@ -114,9 +92,15 @@ void TacacsPacketHeader::setVersion(int major, int minor)
                  minor == TACACS_MINOR_ONE);
     this->version = (major << 4) + minor;
 }
+
 void TacacsPacketHeader::setVersion(uint8_t version)
 {
     this->setVersion(version >> 4, version & 0x0f);
+}
+
+uint8_t TacacsPacketHeader::getVersion()
+{
+    return this->version;
 }
 
 uint8_t TacacsPacketHeader::getPacketType()

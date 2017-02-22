@@ -1,6 +1,8 @@
 #include "crypto.h"
+#include "precondition.h"
 #include <cstring>
 #include <openssl/md5.h>
+
 
 #define min(a,b) \
    ({ __typeof__ (a) _a = (a); \
@@ -18,11 +20,11 @@
  * @return the size of the resulting buffer, the buffer allocated into buff provided the needed extra space
  *   to launch all round of the algorithm and set the md5 key
  */
-static int createMD5message(unsigned char** buff, const char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
+static int createMD5message(uint8_t** buff, FixedLengthString* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
 {
-    int keySize = strlen(key);
+    int keySize = key->getSize();
     int firstRoundSize = keySize + sizeof(sessionId) + sizeof(version) + sizeof(seqNo); 
-    unsigned char* md5ClearBuffer = new unsigned char[firstRoundSize + MD5_DIGEST_LENGTH];
+    uint8_t* md5ClearBuffer = new uint8_t[firstRoundSize + MD5_DIGEST_LENGTH];
     int currIdx = 0;
 
     memcpy(&md5ClearBuffer[currIdx], &sessionId, sizeof(sessionId));
@@ -36,23 +38,22 @@ static int createMD5message(unsigned char** buff, const char* key, uint32_t sess
     return firstRoundSize;
 }
 
-unsigned char* encodeTacacsPacket(const unsigned char * buff, int size, const char* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
+void encodeTacacsPacket(Buffer& buff, size_t size, FixedLengthString* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
 {
-    unsigned char md5EncipheredBuffer[MD5_DIGEST_LENGTH];
-    unsigned char* md5ClearBuffer;
-    unsigned char* outputBuffer = new unsigned char[size];
+    precondition(buff.availableRead() >= size);
+    uint8_t md5EncipheredBuffer[MD5_DIGEST_LENGTH];
+    uint8_t* md5ClearBuffer;
     int prevMD5pos = createMD5message(&md5ClearBuffer, key, sessionId, version, seqNo);
     int md5ClearBufferSize = prevMD5pos;
 
-    for (int chunk = 0; chunk < size; chunk += MD5_DIGEST_LENGTH)
+    for (size_t chunk = 0; chunk < size; chunk += MD5_DIGEST_LENGTH)
     {
         MD5(md5ClearBuffer, md5ClearBufferSize, md5EncipheredBuffer);
         for (int i = 0; i < MD5_DIGEST_LENGTH && (chunk + i) < size; ++i)
 	{
-	    outputBuffer[chunk + i] = buff[chunk + i] ^ md5EncipheredBuffer[i];
+	    buff[chunk + i] = buff[chunk + i] ^ md5EncipheredBuffer[i];
 	    md5ClearBuffer[prevMD5pos + i] = md5EncipheredBuffer[i];
 	}
 	md5ClearBufferSize = prevMD5pos + MD5_DIGEST_LENGTH;
     }
-    return outputBuffer;
 }

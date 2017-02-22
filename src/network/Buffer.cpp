@@ -66,13 +66,14 @@ uint8_t Buffer::pop()
     return r;
 }
 
-void Buffer::operator>>(uint8_t &elem)
+Buffer& Buffer::operator>>(uint8_t &elem)
 {
     precondition(this->availableRead() >= 1);
     elem = this->pop();
+    return *this;
 }
 
-void Buffer::operator>>(uint16_t &elem)
+Buffer& Buffer::operator>>(uint16_t &elem)
 {
     precondition(this->availableRead() >= 2);
     #ifndef BIG_ENDIAN
@@ -82,9 +83,10 @@ void Buffer::operator>>(uint16_t &elem)
     elem = (this->pop() << 8) +
            this->pop();
     #endif
+    return *this;
 }
 
-void Buffer::operator>>(uint32_t &elem)
+Buffer& Buffer::operator>>(uint32_t &elem)
 {
     precondition(this->availableRead() >= 4);
     #ifndef BIG_ENDIAN
@@ -98,4 +100,12 @@ void Buffer::operator>>(uint32_t &elem)
            (this->pop() << 8) +
            this->pop();
     #endif
+    return *this;
 }
+
+uint8_t& Buffer::operator[](size_t pos)
+{
+    precondition(pos < this->availableRead());
+    return this->buff[(this->readPos + pos) % this->size];
+}
+

@@ -55,9 +55,19 @@ class Buffer
         /**
          * read byte from network to host
          */
-        void operator>>(uint8_t &elem);
-        void operator>>(uint16_t &elem);
-        void operator>>(uint32_t &elem);
+        Buffer& operator>>(uint8_t &elem);
+        Buffer& operator>>(uint16_t &elem);
+        Buffer& operator>>(uint32_t &elem);
+        /**
+         * access a position and edit it, the position is relative to
+         * the current read curso
+         *
+         * this function is mainly used for decoding/encoding in place.
+         * @param[in] pos position to read
+         * @return reference to the corresponding item
+         * @pre pos < availableReadi()
+         */
+        uint8_t& operator[](size_t pos);
     private:
         /**
          * pop the next char from the buffer and upldate char position

@@ -1,6 +1,9 @@
 #include "TacacsPacketContext.h"
+#include "crypto.cpp"
+#include "DecodingException.h"
 
-TacacsPacketContext::TacacsPacketContext(int type)
+TacacsPacketContext::TacacsPacketContext(int type, size_t rbuff_size, size_t wbuff_size) :
+    rbuff(rbuff_size), wbuff(wbuff_size)
 {
     this->connType = type;
     this->header = NULL;
@@ -8,13 +11,27 @@ TacacsPacketContext::TacacsPacketContext(int type)
     this->step = TacacsConnectionStep::NoStart;
 }
 
+void TacacsPacketContext::setKey(FixedLengthString* key)
+{
+    this->key = key;
+}
+
 TacacsPacketInterface* TacacsPacketContext::decode()
 {
-    /* FIXME : tmp for compiling */
-    unsigned char buff[1];
     if (this->header == NULL)
     {
-        this->header = TacacsPacketHeader::decode(buff, (unsigned int) 0, this->key);
+        this->header = TacacsPacketHeader::decode(this->rbuff);
+    }
+    if (this->rbuff.availableRead() < this->header->getLength())
+    {
+        throw DecodingException("not enough size to decode packet payload");
+    }
+    if ((this->header->getFlags() & TacacsPacketFlags::Unencrypted) == 0)
+    {
+        encodeTacacsPacket(this->rbuff, this->header->getSize(), 
+                           this->key, this->header->getSessionId(),
+                           this->header->getVersion(),
+                           this->header->getSeqNo());
     }
     if (this->header->getPacketType() == TacacsPacketType::Authentication)
     {

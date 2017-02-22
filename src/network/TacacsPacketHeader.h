@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "TacacsPacketInterface.h"
 #include "enum.h"
+#include "Buffer.h"
 
 #define TACACS_PACKET_HEADER_SIZE 12
 struct TacacsPacketType {
@@ -44,11 +45,9 @@ class TacacsPacketHeader : public TacacsPacketInterface
  	 * decode : decode a portion of network packet and generate
          * the corresponding TacacsPacketHeader instance
          *
-         * @param[in] payload packet part to decode
-         * @param[in] size size of the payload
-         * @return the corresponding TacacsPacketInterface instance
+         * @param[in] buff buffer where data are located
          */
-        static TacacsPacketHeader* decode(const unsigned char* payload, unsigned int size, const char* key = NULL);
+        static TacacsPacketHeader* decode(Buffer& rbuff);
         /**
          * getType : get an unique string that describe the type of pack
 et decoded
@@ -89,6 +88,13 @@ t
 	 * @param[in] version full version of the packet
 	 */
 	virtual void setVersion(uint8_t version);
+        /**
+         * get tacacs packet version (with major and minor version
+         * on the same field)
+         *
+         * @return version
+         */
+        virtual uint8_t getVersion();
         /**
          * getMinorVersion : get the minor tacacs version of the packet
          *
