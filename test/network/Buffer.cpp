@@ -29,9 +29,9 @@ BOOST_AUTO_TEST_CASE(check_endianess)
     a >> aa;
     a >> ab;
     b >> bb;
-    BOOST_CHECK(aa == 0x0100);
-    BOOST_CHECK(ab == 0x0302);
-    BOOST_CHECK(bb == 0x03020100);
+    BOOST_CHECK(aa == 1);
+    BOOST_CHECK(ab == 0x0203);
+    BOOST_CHECK(bb == 0x00010203);
 }
 
 BOOST_AUTO_TEST_CASE(test_write)
@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_CASE(test_write)
     BOOST_CHECK(b.availableWrite() == 4);
     uint32_t bb;
     b >> bb;
-    BOOST_CHECK(bb == 0x03020100);
+    BOOST_CHECK(bb == 0x00010203);
 }
 
 BOOST_AUTO_TEST_CASE(check_exception)

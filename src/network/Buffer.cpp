@@ -76,7 +76,7 @@ Buffer& Buffer::operator>>(uint8_t &elem)
 Buffer& Buffer::operator>>(uint16_t &elem)
 {
     precondition(this->availableRead() >= 2);
-    #ifndef BIG_ENDIAN
+    #ifdef BIG_ENDIAN
     elem = this->pop() +
            (this->pop() << 8);
     #else
@@ -89,7 +89,7 @@ Buffer& Buffer::operator>>(uint16_t &elem)
 Buffer& Buffer::operator>>(uint32_t &elem)
 {
     precondition(this->availableRead() >= 4);
-    #ifndef BIG_ENDIAN
+    #ifdef BIG_ENDIAN
     elem = this->pop() +
            (this->pop() << 8) +
            (this->pop() << 16) +
