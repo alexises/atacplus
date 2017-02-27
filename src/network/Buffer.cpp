@@ -9,6 +9,10 @@
 #endif
 #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #define BIG_ENDIAN
+#warning "big endian"
+#else
+#undef BIG_ENDIAN
+#warning "little endian"
 #endif
 
 Buffer::Buffer(size_t size)
@@ -89,17 +93,17 @@ Buffer& Buffer::operator>>(uint16_t &elem)
 Buffer& Buffer::operator>>(uint32_t &elem)
 {
     precondition(this->availableRead() >= 4);
-    #ifdef BIG_ENDIAN
+#ifdef BIG_ENDIAN
     elem = this->pop() +
            (this->pop() << 8) +
            (this->pop() << 16) +
            (this->pop() << 24);
-    #else
+#else
     elem = (this->pop() << 24) +
            (this->pop() << 16) +
            (this->pop() << 8) +
            this->pop();
-    #endif
+#endif
     return *this;
 }
 
