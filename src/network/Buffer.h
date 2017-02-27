@@ -2,6 +2,7 @@
 #define BUFFER_H
 #include <cstring>
 #include <stdint.h>
+#include "FixedLengthString.h"
 
 /**
  * Buffer : define a network buffer
@@ -58,6 +59,8 @@ class Buffer
         Buffer& operator>>(uint8_t &elem);
         Buffer& operator>>(uint16_t &elem);
         Buffer& operator>>(uint32_t &elem);
+        Buffer& operator>>(FixedLengthString &elem);
+        Buffer& operator>>(FixedLengthString *elem);
         /**
          * access a position and edit it, the position is relative to
          * the current read curso

@@ -15,6 +15,11 @@ class FixedLengthString
 	 * @param[in] value string of the size size
 	 */ 
         FixedLengthString(const char* value, uint8_t size);
+        /**
+         * create an empty string
+         * @param[în] size size of the string
+         */
+        FixedLengthString(uint8_t size);
 	/**
 	 * copy constructor
 	 * @param[in] other instance to copy

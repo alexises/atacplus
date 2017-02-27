@@ -9,6 +9,13 @@ FixedLengthString::FixedLengthString(const char* value, uint8_t size)
     memcpy(this->value, value, size);
 }
 
+
+FixedLengthString::FixedLengthString(uint8_t size)
+{
+    this->size = size;
+    this->value = new char[size];
+}
+
 FixedLengthString::FixedLengthString(FixedLengthString & other)
 {
     this->size = other.size;

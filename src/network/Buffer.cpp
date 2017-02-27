@@ -103,6 +103,20 @@ Buffer& Buffer::operator>>(uint32_t &elem)
     return *this;
 }
 
+Buffer& Buffer::operator>>(FixedLengthString &elem)
+{
+    for (uint8_t i = 0; i < elem.getSize(); ++i)
+    {
+        elem[i] = this->pop();
+    }
+    return *this;
+}
+
+Buffer& Buffer::operator>>(FixedLengthString *elem)
+{
+    return this->operator>>(*elem);
+}
+
 uint8_t& Buffer::operator[](size_t pos)
 {
     precondition(pos < this->availableRead());
