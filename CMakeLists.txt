@@ -45,7 +45,8 @@ set (network_test_files
 	"${TEST_DIR}/network/crypto.cpp"
 	"${TEST_DIR}/network/FixedLengthString.cpp"
 	"${TEST_DIR}/network/network.cpp"
-        "${TEST_DIR}/network/Buffer.cpp")
+        "${TEST_DIR}/network/Buffer.cpp"
+        "${TEST_DIR}/network/TacacsPacketAuthenticationStart.cpp")
 
 
 add_executable (test_network_exec

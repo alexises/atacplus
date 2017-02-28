@@ -14,7 +14,7 @@ struct TacacsAuthenticationAction {
 };
 
 #define TACACS_MIN_PRIV_LVL 0
-#define TACACS_MAX_PRIX_LVL 15
+#define TACACS_MAX_PRIV_LVL 15
 
 struct TacacsAuthenticationType {
     enum_mbr Ascii = 1;
@@ -93,6 +93,102 @@ et decoded
          * @return size of the packet
          */
         virtual int getSize();
+        /**
+         * getAction : get action requested for 
+         * this authentication
+         *
+         * @return action value
+         */
+        uint8_t getAction();
+        /**
+         * setAction : set the corresponding action of the packet
+         *
+         * @param[in] action action to set
+         * @pre action == TacacsAuthenticationAction::Login ||
+         *      action == TacacsAuthenticationAction::ChangePassword ||
+         *      action == TacacsAuthenticationAction::SendPassword ||
+         *      action == TacacsAuthenticationAction::SendAuth
+         */
+        void setAction(uint8_t action);
+        /**
+         * get the privilege level associated to the authentication request
+         *
+         * @return privilege level
+         */
+        uint8_t getPrivLvl();
+        /**
+         * set the privilege level associated to this request
+         *
+         * @param[in] privLvl privLvl to set
+         * @pre privLvl >= TACACS_MIN_PRIV_LVL &&
+         *      privLvl <= TACACS_MAX_PRIX_LVL
+         */
+        void setPrivLvl(uint8_t privLvl);
+        /**
+         * getAuthenType : get the authentication type of the 
+         * packet
+         *
+         * @return authentication type
+         */
+        uint8_t getAuthenType();
+        /**
+         * setAuthenType : set the authentication type requested
+         * for this authentication session
+         *
+         * @param[in] authenType authentication type of the query
+         * @pre authenType == TacacsAuthenticationType::Ascii ||
+         *      authenType == TacacsAuthenticationType::Pap ||
+         *      authenType == TacacsAuthenticationType::Chap ||
+         *      authenType == TacacsAuthenticationType::Arap ||
+         *      authenType == TacacsAuthenticationType::mschap
+         */
+        void setAuthenType(uint8_t authenType);
+        /**
+         * getService get the service requested for this auth
+         *
+         * @return service for this authentication
+         */
+        uint8_t getService();
+        /**
+         * set service that require the authentication
+         *
+         * @param[in] service service to use
+         * @pre service == TacacsAuthenticationService::None ||
+         *      service == TacacsAuthenticationService::Login ||
+         *      service == TacacsAuthenticationService::Enable ||
+         *      service == TacacsAuthenticationService::Ppp ||
+         *      service == TacacsAuthenticationService::Arap ||
+         *      service == TacacsAuthenticationService::Pt ||
+         *      service == TacacsAuthenticationService::Rcmd ||
+         *      service == TacacsAuthenticationService::X25 ||
+         *      service == TacacsAuthenticationService::Nasi ||
+         *      service == TacacsAuthenticationService::FwProxy
+         */
+        void setService(uint8_t service);
+        /**
+         * getUser get the user string
+         *
+         * @return user strin
+         */
+        FixedLengthString* getUser();
+        /**
+         * getPort get the port string
+         *
+         * @return port string
+         */
+        FixedLengthString* getPort();
+        /**
+         * getRemoteAddr get the remote addr string
+         *
+         * @return remoteAddr string
+         */
+        FixedLengthString* getRemoteAddr();
+        /**
+         * getData get the data requested to perform authentication
+         *
+         * @return data string
+         */
+        FixedLengthString* getData();
     private:
         uint8_t action;
         uint8_t privLvl;
@@ -102,7 +198,6 @@ et decoded
         FixedLengthString* port;
         FixedLengthString* remoteAddr;
         FixedLengthString* data;
-
 };
 
 #endif

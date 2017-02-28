@@ -1,5 +1,6 @@
 #include "TacacsPacketAuthenticationStart.h"
 #include "EncodingException.h"
+#include "precondition.h"
 
 TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
             const uint8_t action,
@@ -68,4 +69,85 @@ int TacacsPacketAuthenticationStart::getSize()
              + this->port->getSize()
              + this->remoteAddr->getSize()
              + this->data->getSize();
+}
+
+uint8_t TacacsPacketAuthenticationStart::getAction()
+{
+    return this->action;
+}
+
+void TacacsPacketAuthenticationStart::setAction(uint8_t action)
+{
+    precondition(action == TacacsAuthenticationAction::Login ||
+                 action == TacacsAuthenticationAction::ChangePassword ||
+                 action == TacacsAuthenticationAction::SendPassword ||
+                 action == TacacsAuthenticationAction::SendAuth);
+    this->action = action;
+}
+
+uint8_t TacacsPacketAuthenticationStart::getPrivLvl()
+{
+    return this->privLvl;
+}
+
+void TacacsPacketAuthenticationStart::setPrivLvl(uint8_t privLvl)
+{
+    precondition(privLvl <= TACACS_MIN_PRIV_LVL &&
+                 privLvl >= TACACS_MAX_PRIV_LVL);
+    this->privLvl = privLvl;
+}
+
+uint8_t TacacsPacketAuthenticationStart::getAuthenType()
+{
+    return this->authenType;
+}
+
+void TacacsPacketAuthenticationStart::setAuthenType(uint8_t authenType)
+{
+    precondition(authenType == TacacsAuthenticationType::Ascii ||
+                 authenType == TacacsAuthenticationType::Pap ||
+                 authenType == TacacsAuthenticationType::Chap ||
+                 authenType == TacacsAuthenticationType::Arap ||
+                 authenType == TacacsAuthenticationType::mschap);
+    this->authenType = authenType;
+}
+
+uint8_t TacacsPacketAuthenticationStart::getService()
+{
+    return this->service;
+}
+
+void TacacsPacketAuthenticationStart::setService(uint8_t service)
+{
+    precondition(service == TacacsAuthenticationService::None ||
+                 service == TacacsAuthenticationService::Login ||
+                 service == TacacsAuthenticationService::Enable ||
+                 service == TacacsAuthenticationService::Ppp ||
+                 service == TacacsAuthenticationService::Arap ||
+                 service == TacacsAuthenticationService::Pt ||
+                 service == TacacsAuthenticationService::Rcmd ||
+                 service == TacacsAuthenticationService::X25 ||
+                 service == TacacsAuthenticationService::Nasi ||
+                 service == TacacsAuthenticationService::FwProxy);
+    this->service = service;
+}
+
+FixedLengthString* TacacsPacketAuthenticationStart::getUser()
+{
+    return this->user;
+}
+
+FixedLengthString* TacacsPacketAuthenticationStart::getPort()
+{
+    return this->port;
+}
+
+FixedLengthString* TacacsPacketAuthenticationStart::getRemoteAddr()
+{
+    return this->remoteAddr;
+}
+
+FixedLengthString* TacacsPacketAuthenticationStart::getData()
+{
+    return this->data;
 }
