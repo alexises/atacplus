@@ -43,6 +43,10 @@ class TacacsPacketAuthenticationStart : public TacacsPacketInterface
         /**
          * construct a TacacsPacketAuthenticationStart object
          *
+         * Warning : FixedLengthString object are destructed with this object,
+         * you should provides instance of theses object that was allocated
+         * dynamicaly !
+         *
          * @param[in] action action to be run to authenticate the user
          * @param[in] privLvl request privilege level for the action
          * @param[in] authenType authentication type used to perform the authentication
