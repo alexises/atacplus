@@ -67,9 +67,8 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
     }
 }
 
-int TacacsPacketAuthenticationStart::encode(unsigned char* payload, const int size)
+void TacacsPacketAuthenticationStart::encode(Buffer& wbuff)
 {
-    return 0;
 }
 
 int TacacsPacketAuthenticationStart::getSize()

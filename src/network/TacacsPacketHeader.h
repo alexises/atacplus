@@ -37,10 +37,8 @@ class TacacsPacketHeader : public TacacsPacketInterface
          * the corresponding TacacsPacketHeader instance
          *
          * @param[out] payload buffer where the packet will be filled
-	 * @param[in] size size of the buffer
-         * @return size of encoded packet
          */
-        virtual int encode(unsigned char* payload, const int size);
+        virtual void encode(Buffer& wbuff);
         /**       
  	 * decode : decode a portion of network packet and generate
          * the corresponding TacacsPacketHeader instance

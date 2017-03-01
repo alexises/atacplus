@@ -62,6 +62,13 @@ class Buffer
         Buffer& operator>>(FixedLengthString &elem);
         Buffer& operator>>(FixedLengthString *elem);
         /**
+         * write byte from host to network
+         */
+        Buffer& operator<<(uint8_t &elem);
+        Buffer& operator<<(uint16_t &elem);
+        Buffer& operator<<(uint32_t &elem);
+
+        /**
          * access a position and edit it, the position is relative to
          * the current read curso
          *
@@ -79,6 +86,13 @@ class Buffer
          * @return next readed byte
          */
         uint8_t pop();
+        /**
+         * push a char to the buffer and update char position
+         *
+         * @param[in] val value to insert
+         * @pre this->availableWrite() > 0
+         */
+        void push(uint8_t val);
         uint8_t* buff;
         size_t size;
         int readPos;

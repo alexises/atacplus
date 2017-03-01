@@ -34,21 +34,18 @@ TacacsPacketHeader::~TacacsPacketHeader()
 {
 }
 
-int TacacsPacketHeader::encode(unsigned char* payload, int size)
+void TacacsPacketHeader::encode(Buffer& wbuff)
 {
-    if (size < this->getSize())
+    if (wbuff.availableWrite() < this->getSize())
     {
         throw EncodingException("buffer too small");
     }
-    payload[0] = this->version;
-    payload[1] = this->type;
-    payload[2] = this->seqNo;
-    payload[3] = this->flags;
-    uint32_t tmp = htonl(this->sessionId);
-    memcpy(&payload[4], &tmp, 4);
-    tmp = htonl(this->length);
-    memcpy(&payload[8], &tmp, 4);
-    return TACACS_PACKET_HEADER_SIZE;
+    wbuff << this->version
+          << this->type
+          << this->seqNo
+          << this->flags
+          << this->sessionId
+          << this->length;
 }
 
 TacacsPacketHeader* TacacsPacketHeader::decode(Buffer& buff)

@@ -70,6 +70,14 @@ uint8_t Buffer::pop()
     return r;
 }
 
+void Buffer::push(uint8_t val)
+{
+    precondition(this->availableWrite() > 0);
+    this->buff[this->writePos % this->size] = val;
+    this->writePos++;
+}
+
+
 Buffer& Buffer::operator>>(uint8_t &elem)
 {
     precondition(this->availableRead() >= 1);
@@ -119,6 +127,28 @@ Buffer& Buffer::operator>>(FixedLengthString &elem)
 Buffer& Buffer::operator>>(FixedLengthString *elem)
 {
     return this->operator>>(*elem);
+}
+
+Buffer& Buffer::operator<<(uint8_t &elem)
+{
+    this->push(elem);
+    return *this;
+}
+
+Buffer& Buffer::operator<<(uint16_t &elem)
+{
+    this->push((uint8_t) ((elem & 0xff00) >> 8));
+    this->push((uint8_t) elem & 0x00ff);
+    return *this;
+}
+
+Buffer& Buffer::operator<<(uint32_t &elem)
+{
+    this->push((uint8_t) ((elem & 0xff000000) >> 24));
+    this->push((uint8_t) ((elem & 0x00ff0000) >> 16));
+    this->push((uint8_t) ((elem & 0x0000ff00) >> 8));
+    this->push((uint8_t) (elem & 0x000000ff));
+    return *this;
 }
 
 uint8_t& Buffer::operator[](size_t pos)

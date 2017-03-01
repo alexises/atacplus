@@ -1,6 +1,7 @@
 #ifndef TACACSPACKETINTERFACE_H
 #define TACACSPACKETINTERFACE_H
 #include <string>
+#include "Buffer.h"
 
 class TacacsPacketInterface
 {
@@ -9,11 +10,9 @@ class TacacsPacketInterface
          * encode : encode a portion of a network packet from
          * the corresponding TacacsPacketInterface instance
          *
-         * @param[out] payload buffer where the packet will be filled
-         * @param[in] size size of the buffer
-         * @return size of encoded packet
+         * @param[out] wbuff buffer where the packet will be filled
          */
-        virtual int encode(unsigned char* payload, const int size) = 0;
+        virtual void encode(Buffer& wbuff) = 0;
         /**
          * getType : get an unique string that describe the type of packet decoded
          * @return the correspoding unique indentifier string

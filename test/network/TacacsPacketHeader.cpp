@@ -12,12 +12,14 @@ BOOST_AUTO_TEST_CASE( check_basic_auth_encode )
     const uint8_t data[] = "\xc1\x01\x01\x01"
                            "\x00\x00\x00\x01"
                            "\x00\x00\x00\x00";
-    uint8_t buff[12];
+    Buffer buff;
+    FixedLengthString sData((const char*) data, 12);
+    FixedLengthString dData(12);
     TacacsPacketHeader h(0xc1, 0x01, 1, 0x01, 1, 0);
-    int size = h.encode(buff, 12);
+    h.encode(buff);
+    buff >> dData;
 
-    BOOST_CHECK(size == 12);
-    BOOST_CHECK(memcmp(data, buff, 12) == 0);
+    BOOST_CHECK(sData == dData);
 }
 
 BOOST_AUTO_TEST_CASE( check_basic_auth_decode )
@@ -99,8 +101,8 @@ BOOST_AUTO_TEST_CASE( check_invalid_expression )
 BOOST_AUTO_TEST_CASE( check_invalid_encoding )
 {
    TacacsPacketHeader h(0xc1, 0x01, 1, 0x01, 1, 12);
-   uint8_t buff[5];
-   BOOST_CHECK_THROW(h.encode(buff, 5), EncodingException);
+   Buffer buff(5);
+   BOOST_CHECK_THROW(h.encode(buff), EncodingException);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

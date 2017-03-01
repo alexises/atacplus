@@ -66,11 +66,9 @@ class TacacsPacketAuthenticationStart : public TacacsPacketInterface
          * encode : encode a portion of a network packet from
          * the corresponding TacacsPacketAuthenticationStart instance
          *
-         * @param[out] payload buffer where the packet will be filled
-         * @param[in] size size of the buffer
-         * @return size of encoded packet
+         * @param[out] wbuff buffer where the packet will be filled
          */
-        virtual int encode(unsigned char* payload, const int size);
+        virtual void encode(Buffer& wbuff);
         /**       
          * decode : decode a portion of network packet and generate
          * the corresponding TacacsPacketHeader instance
