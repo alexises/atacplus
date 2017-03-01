@@ -64,9 +64,11 @@ class Buffer
         /**
          * write byte from host to network
          */
-        Buffer& operator<<(uint8_t &elem);
-        Buffer& operator<<(uint16_t &elem);
-        Buffer& operator<<(uint32_t &elem);
+        Buffer& operator<<(uint8_t elem);
+        Buffer& operator<<(uint16_t elem);
+        Buffer& operator<<(uint32_t elem);
+        Buffer& operator<<(FixedLengthString &elem);
+        Buffer& operator<<(FixedLengthString *elem);
 
         /**
          * access a position and edit it, the position is relative to

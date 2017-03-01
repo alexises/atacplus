@@ -129,26 +129,44 @@ Buffer& Buffer::operator>>(FixedLengthString *elem)
     return this->operator>>(*elem);
 }
 
-Buffer& Buffer::operator<<(uint8_t &elem)
+Buffer& Buffer::operator<<(uint8_t elem)
 {
+    precondition(this->availableWrite() >= 1);
     this->push(elem);
     return *this;
 }
 
-Buffer& Buffer::operator<<(uint16_t &elem)
+Buffer& Buffer::operator<<(uint16_t elem)
 {
+    precondition(this->availableWrite() >= 2);
     this->push((uint8_t) ((elem & 0xff00) >> 8));
     this->push((uint8_t) elem & 0x00ff);
     return *this;
 }
 
-Buffer& Buffer::operator<<(uint32_t &elem)
+Buffer& Buffer::operator<<(uint32_t elem)
 {
+    precondition(this->availableWrite() >= 4);
     this->push((uint8_t) ((elem & 0xff000000) >> 24));
     this->push((uint8_t) ((elem & 0x00ff0000) >> 16));
     this->push((uint8_t) ((elem & 0x0000ff00) >> 8));
     this->push((uint8_t) (elem & 0x000000ff));
     return *this;
+}
+
+Buffer& Buffer::operator<<(FixedLengthString &elem)
+{
+    precondition(this->availableWrite() >= elem.getSize());
+    for (size_t i = 0; i < elem.getSize(); ++i)
+    {
+        this->push(elem[i]);
+    }
+    return *this;
+}
+
+Buffer& Buffer::operator<<(FixedLengthString *elem)
+{
+    return this->operator<<(*elem);
 }
 
 uint8_t& Buffer::operator[](size_t pos)

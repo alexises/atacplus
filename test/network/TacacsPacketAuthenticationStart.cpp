@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
 {
-    uint8_t* a = (uint8_t*) "\x01\x0f\x01\x01" //bad action
+    uint8_t* a = (uint8_t*) "\x01\x0f\x01\x01"
                             "\x01\x02\x03\x04"
                             "ABBC"
                             "CCDD"
@@ -76,6 +76,28 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     BOOST_CHECK(*port == portStr);
     BOOST_CHECK(*remoteAddr == remoteAddrStr);
     BOOST_CHECK(*data == dataStr);
+}
+
+BOOST_AUTO_TEST_CASE(test_encoding)
+{
+    FixedLengthString* fA = new FixedLengthString("A", 1);
+    FixedLengthString* fB = new FixedLengthString("BB", 2);
+    FixedLengthString* fC = new FixedLengthString("CCC", 3);
+    FixedLengthString* fD = new FixedLengthString("DDDD", 4);
+    TacacsPacketAuthenticationStart packet((uint8_t) 1, (uint8_t) 15, (uint8_t) 1, (uint8_t) 1,
+                                    fA, fB, fC, fD);
+    char result[] = "\x01\x0f\x01\x01"
+                    "\x01\x02\x03\x04"
+                    "ABBC"
+                    "CCDD"
+                    "DD";
+    Buffer bOut;
+    FixedLengthString resultStr(result, 18);
+    FixedLengthString packetStr(18);
+    packet.encode(bOut);
+    bOut >> packetStr;
+
+    BOOST_CHECK(resultStr == packetStr);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

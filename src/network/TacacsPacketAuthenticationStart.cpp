@@ -1,5 +1,6 @@
 #include "TacacsPacketAuthenticationStart.h"
 #include "DecodingException.h"
+#include "EncodingException.h"
 #include "precondition.h"
 #include <string>
 
@@ -69,6 +70,15 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
 
 void TacacsPacketAuthenticationStart::encode(Buffer& wbuff)
 {
+    if (wbuff.availableWrite() < this->getSize())
+    {
+        throw EncodingException("No enough size on the buffer");
+    }
+
+    wbuff << this->action << this->privLvl << this->authenType << this->service
+          << this->user->getSize() << this->port->getSize()
+          << this->remoteAddr->getSize() << this->data->getSize()
+          << *(this->user) << *(this->port) << *(this->remoteAddr) << *(this->data);
 }
 
 int TacacsPacketAuthenticationStart::getSize()
