@@ -2,6 +2,7 @@
 
 #include "network/Buffer.h"
 #include "network/TacacsPacketAuthenticationStart.h"
+#include "network/DecodingException.h"
 
 BOOST_AUTO_TEST_SUITE(tacacsPacketAuthenticationStart)
 
@@ -22,5 +23,33 @@ BOOST_AUTO_TEST_CASE(basic_decode)
     BOOST_CHECK(obj->getSize() == 8);
 }
 
+BOOST_AUTO_TEST_CASE(decoding_fail)
+{
+
+    uint8_t* a = (uint8_t*) "\x05\x0f\x01\x01" //bad action
+                            "\x00\x00\x00\x00";
+    uint8_t* b = (uint8_t*) "\x01\x10\x01\x01" //bad privLvl
+                            "\x00\x00\x00\x00";
+    uint8_t* c = (uint8_t*) "\x01\x0f\x0f\x01" //bad authenType
+                            "\x00\x00\x00\x00";
+    uint8_t* d = (uint8_t*) "\x01\x0f\x01\x10" //bad service
+                            "\x00\x00\x00\x00";
+    uint8_t* e = (uint8_t*) "\x01\x0f\x01\x01" //bad total size
+                            "\x01\x01\x01\x01";
+    uint8_t* f = (uint8_t*) "\x01\x0f\x01\x01"; //bad min size
+    Buffer aa(a, 8);
+    Buffer bb(b, 8);
+    Buffer cc(c, 8);
+    Buffer dd(d, 8);
+    Buffer ee(e, 8);
+    Buffer ff(f, 4);
+
+    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(aa), DecodingException);
+    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(bb), DecodingException);
+    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(cc), DecodingException);
+    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(dd), DecodingException);
+    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(ee), DecodingException);
+    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(ff), DecodingException);
+}
 BOOST_AUTO_TEST_SUITE_END()
 

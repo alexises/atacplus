@@ -64,8 +64,7 @@ TacacsPacketHeader* TacacsPacketHeader::decode(Buffer& buff)
     buff >> sessionId >> length;
 
     try {
-        TacacsPacketHeader* h = 
-            new TacacsPacketHeader(version, type, seqNo, flags, sessionId, length);
+        return new TacacsPacketHeader(version, type, seqNo, flags, sessionId, length);
     }
     catch (PreconditionFailException & e)
     {

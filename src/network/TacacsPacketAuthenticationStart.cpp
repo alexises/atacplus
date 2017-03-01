@@ -1,6 +1,7 @@
 #include "TacacsPacketAuthenticationStart.h"
-#include "EncodingException.h"
+#include "DecodingException.h"
 #include "precondition.h"
+#include <string>
 
 TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
             const uint8_t action,
@@ -12,10 +13,10 @@ TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
             FixedLengthString* remoteAddr,
             FixedLengthString* data)
 {
-    this->action = action;
-    this->privLvl = privLvl;
-    this->authenType = authenType;
-    this->service = service;
+    this->setAction(action);
+    this->setPrivLvl(privLvl);
+    this->setAuthenType(authenType);
+    this->setService(service);
     this->user = user;
     this->port = port;
     this->remoteAddr = remoteAddr;
@@ -34,7 +35,7 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
 {
     if (rbuff.availableRead() < 8)
     {
-        throw EncodingException("no enough size");
+        throw DecodingException("no enough size");
     }
     uint8_t action, privLvl, authenType, service;
     uint8_t userLen, portLen, remoteAddrLen, dataLen;
@@ -50,12 +51,20 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
 
     if (rbuff.availableRead() < (userLen + portLen + remoteAddrLen + dataLen))
     {
-        throw EncodingException("no enougth size of variable arguments");
+        throw DecodingException("no enougth size of variable arguments");
     }
     rbuff >> user >> port >> remoteAddr >> data;
-    return new TacacsPacketAuthenticationStart(
-        action, privLvl, authenType, service,
-        user, port, remoteAddr, data);
+    try {
+        return new TacacsPacketAuthenticationStart(
+            action, privLvl, authenType, service,
+            user, port, remoteAddr, data);
+    }
+    catch (PreconditionFailException &e)
+    {
+        std::string msg("invalid parameter : ");
+        msg += e.what();
+        throw DecodingException(msg.c_str());
+    }
 }
 
 int TacacsPacketAuthenticationStart::encode(unsigned char* payload, const int size)
@@ -92,8 +101,8 @@ uint8_t TacacsPacketAuthenticationStart::getPrivLvl()
 
 void TacacsPacketAuthenticationStart::setPrivLvl(uint8_t privLvl)
 {
-    precondition(privLvl <= TACACS_MIN_PRIV_LVL &&
-                 privLvl >= TACACS_MAX_PRIV_LVL);
+    precondition(privLvl >= TACACS_MIN_PRIV_LVL &&
+                 privLvl <= TACACS_MAX_PRIV_LVL);
     this->privLvl = privLvl;
 }
 
