@@ -51,5 +51,31 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
     BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(ee), DecodingException);
     BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(ff), DecodingException);
 }
-BOOST_AUTO_TEST_SUITE_END()
 
+BOOST_AUTO_TEST_CASE(variable_parameter_check)
+{
+    uint8_t* a = (uint8_t*) "\x01\x0f\x01\x01" //bad action
+                            "\x01\x02\x03\x04"
+                            "ABBC"
+                            "CCDD"
+                            "DD";
+    Buffer aa(a, 18);
+    FixedLengthString userStr("A", 1);
+    FixedLengthString portStr("BB", 2);
+    FixedLengthString remoteAddrStr("CCC", 3);
+    FixedLengthString dataStr("DDDD", 4);
+
+    TacacsPacketAuthenticationStart* obj = TacacsPacketAuthenticationStart::decode(aa);
+    BOOST_CHECK(obj->getSize() == 18);
+    FixedLengthString *user = obj->getUser();
+    FixedLengthString *port = obj->getPort();
+    FixedLengthString *remoteAddr = obj->getRemoteAddr();
+    FixedLengthString *data = obj->getData();
+
+    BOOST_CHECK(*user == userStr);
+    BOOST_CHECK(*port == portStr);
+    BOOST_CHECK(*remoteAddr == remoteAddrStr);
+    BOOST_CHECK(*data == dataStr);
+}
+
+BOOST_AUTO_TEST_SUITE_END()

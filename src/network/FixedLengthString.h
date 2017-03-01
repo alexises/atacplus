@@ -46,6 +46,13 @@ class FixedLengthString
 	 * @pre index > 0 && index < this->getLength()
 	 */
 	char& operator[](uint8_t index);
+        /**
+         * Compare two fixed length string for equality
+         *
+         * @param[in] other other element to compare
+         * @return true if string are equal false otherwise
+         */
+        bool operator==(FixedLengthString& other);
 	/**
 	 * destructor
 	 */

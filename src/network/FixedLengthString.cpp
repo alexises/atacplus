@@ -48,3 +48,19 @@ char& FixedLengthString::operator[](uint8_t pos)
     precondition(pos < this->size);
     return this->value[pos];
 }
+
+bool FixedLengthString::operator==(FixedLengthString& other)
+{
+    if (this->size != other.size)
+    {
+        return false;
+    }
+    for (uint8_t i = 0; i < this->size; ++i)
+    {
+        if (this->value[i] != other.value[i])
+        {
+            return false;
+        }
+    }
+    return true;
+}
