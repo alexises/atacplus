@@ -47,7 +47,8 @@ set (network_test_files
 	"${TEST_DIR}/network/FixedLengthString.cpp"
 	"${TEST_DIR}/network/network.cpp"
         "${TEST_DIR}/network/Buffer.cpp"
-        "${TEST_DIR}/network/TacacsPacketAuthenticationStart.cpp")
+        "${TEST_DIR}/network/TacacsPacketAuthenticationStart.cpp"
+        "${TEST_DIR}/network/TacacsPacketAuthenticationReplay.cpp")
 
 
 add_executable (test_network_exec

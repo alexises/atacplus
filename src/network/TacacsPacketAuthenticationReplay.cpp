@@ -76,7 +76,7 @@ TacacsPacketAuthenticationReplay* TacacsPacketAuthenticationReplay::decode(Buffe
 	      << promptMsgSize << dataSize;
         throw DecodingException("no enougth size of variable arguments");
     }
-    promptMsg = new FixedLengthString(dataSize);
+    promptMsg = new FixedLengthString(promptMsgSize);
     data = new FixedLengthString(dataSize);
     rbuff >> (*promptMsg) >> (*data);
 
