@@ -34,6 +34,7 @@ set (Atacplus_network_src
         "${SRC_DIR}/network/TacacsPacketContext.cpp"
         "${SRC_DIR}/network/Buffer.cpp"
         "${SRC_DIR}/network/TacacsPacketAuthenticationStart.cpp"
+        "${SRC_DIR}/network/TacacsPacketAuthenticationReplay.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
 include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
