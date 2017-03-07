@@ -63,7 +63,7 @@ t
          * this function should be used to allocate the proper buffer
          * to decode the corresponding package
          */
-        virtual inline int getSize()
+        virtual inline size_t getSize()
         {
             return TACACS_PACKET_HEADER_SIZE;
         }

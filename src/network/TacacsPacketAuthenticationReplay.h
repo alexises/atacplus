@@ -117,7 +117,7 @@ class TacacsPacketAuthenticationReplay : public TacacsPacketInterface
          * this function should be used to allocate the proper buffer
          * to decode the corresponding package
          */
-        virtual int getSize();
+        virtual size_t getSize();
     private:
         uint8_t status;
         uint8_t flags;

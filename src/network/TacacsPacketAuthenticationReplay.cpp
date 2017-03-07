@@ -104,7 +104,7 @@ void TacacsPacketAuthenticationReplay::encode(Buffer& wbuff)
 	  << this->promptMsg << this->data;
 }
 
-int TacacsPacketAuthenticationReplay::getSize()
+size_t TacacsPacketAuthenticationReplay::getSize()
 {
     return 6 + this->promptMsg->getSize()
 	     + this->data->getSize();

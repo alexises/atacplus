@@ -45,7 +45,7 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
     rbuff >> action >> privLvl >> authenType >> service
           >> userLen >> portLen >> remoteAddrLen >> dataLen;
     
-    if (rbuff.availableRead() < (userLen + portLen + remoteAddrLen + dataLen))
+    if (rbuff.availableRead() < (size_t) (userLen + portLen + remoteAddrLen + dataLen))
     {
         rbuff << action << privLvl << authenType << service
               << userLen << portLen << remoteAddrLen << dataLen;
@@ -82,7 +82,7 @@ void TacacsPacketAuthenticationStart::encode(Buffer& wbuff)
           << *(this->user) << *(this->port) << *(this->remoteAddr) << *(this->data);
 }
 
-int TacacsPacketAuthenticationStart::getSize()
+size_t TacacsPacketAuthenticationStart::getSize()
 {
     return 8 + this->user->getSize()
              + this->port->getSize()

@@ -25,7 +25,7 @@ class TacacsPacketInterface
          * this function should be used to allocate the proper buffer
          * to decode the corresponding package
          */
-        virtual int getSize() = 0;
+        virtual size_t getSize() = 0;
 	virtual inline ~TacacsPacketInterface() { };
 };
 

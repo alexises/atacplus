@@ -94,7 +94,7 @@ et decoded
          *
          * @return size of the packet
          */
-        virtual int getSize();
+        virtual size_t getSize();
         /**
          * getAction : get action requested for 
          * this authentication

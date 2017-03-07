@@ -9,10 +9,8 @@
 #endif
 #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
 #define BIG_ENDIAN
-#warning "big endian"
 #else
 #undef BIG_ENDIAN
-#warning "little endian"
 #endif
 
 Buffer::Buffer(size_t size)
