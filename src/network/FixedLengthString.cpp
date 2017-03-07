@@ -2,7 +2,7 @@
 #include <cstring>
 #include "precondition.h"
 
-FixedLengthString::FixedLengthString(const char* value, uint8_t size)
+FixedLengthString::FixedLengthString(const char* value, size_t size)
 {
     this->size = size;
     this->value = new char[size];
@@ -10,7 +10,7 @@ FixedLengthString::FixedLengthString(const char* value, uint8_t size)
 }
 
 
-FixedLengthString::FixedLengthString(uint8_t size)
+FixedLengthString::FixedLengthString(size_t size)
 {
     this->size = size;
     this->value = new char[size];
@@ -33,7 +33,7 @@ const char* FixedLengthString::getString()
     return this->value;
 }
 
-uint8_t FixedLengthString::getSize()
+size_t FixedLengthString::getSize()
 {
     return this->size;
 }
@@ -43,7 +43,7 @@ std::string FixedLengthString::toString()
     return std::string(this->value, this->size);
 }
 
-char& FixedLengthString::operator[](uint8_t pos)
+char& FixedLengthString::operator[](size_t pos)
 {
     precondition(pos < this->size);
     return this->value[pos];
@@ -55,7 +55,7 @@ bool FixedLengthString::operator==(FixedLengthString& other)
     {
         return false;
     }
-    for (uint8_t i = 0; i < this->size; ++i)
+    for (size_t i = 0; i < this->size; ++i)
     {
         if (this->value[i] != other.value[i])
         {

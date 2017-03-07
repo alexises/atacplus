@@ -76,8 +76,8 @@ void TacacsPacketAuthenticationStart::encode(Buffer& wbuff)
     }
 
     wbuff << this->action << this->privLvl << this->authenType << this->service
-          << this->user->getSize() << this->port->getSize()
-          << this->remoteAddr->getSize() << this->data->getSize()
+          << (uint8_t) this->user->getSize() << (uint8_t) this->port->getSize()
+          << (uint8_t) this->remoteAddr->getSize() << (uint8_t) this->data->getSize()
           << *(this->user) << *(this->port) << *(this->remoteAddr) << *(this->data);
 }
 

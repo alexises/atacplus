@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(check_access)
 {
     const char* compare = "testtest";
     FixedLengthString f("testtest", 8);
-    for (int i = 0; i < f.getSize(); ++i)
+    for (size_t i = 0; i < f.getSize(); ++i)
     {
         BOOST_CHECK(compare[i] == f[i]);
     }
@@ -28,12 +28,12 @@ BOOST_AUTO_TEST_CASE(check_replace)
 {
     FixedLengthString f("testtest", 8);
     FixedLengthString g("aaaaaaaa", 8);
-    for (int i = 0; i < f.getSize(); ++i)
+    for (size_t i = 0; i < f.getSize(); ++i)
     {
 	f[i] = g[i];
     }
     BOOST_CHECK(f.getSize() == 8);
-    for (int j = 0; j < f.getSize(); ++j)
+    for (size_t j = 0; j < f.getSize(); ++j)
     {
         BOOST_CHECK(f[j] == g[j]);
     }
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(check_convert)
 {
     FixedLengthString f("fo\0", 3);
     std::string s = f.toString();
-    for (int i = 0; i < f.getSize(); ++i)
+    for (size_t i = 0; i < f.getSize(); ++i)
     {
 	BOOST_CHECK(f[i] == s[i]);
     }
