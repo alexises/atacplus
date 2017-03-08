@@ -1,7 +1,7 @@
 #ifndef TACACSPACKETAUTHENTICATIONREPLAY_H
 #define TACACSPACKETAUTHENTICATIONREPLAY_H
 #include "enum.h"
-#include "TacacsPacketInterface.h"
+#include "TacacsPacketWithHeader.h"
 #include "FixedLengthString.h"
 #include "Buffer.h"
 
@@ -23,7 +23,7 @@ struct AuthenticationReplayFlags
     enum_mbr NoEcho = 1;
 };
 
-class TacacsPacketAuthenticationReplay : public TacacsPacketInterface 
+class TacacsPacketAuthenticationReplay : public TacacsPacketWithHeader
 {
     public:
         /**

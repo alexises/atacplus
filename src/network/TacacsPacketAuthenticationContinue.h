@@ -1,6 +1,6 @@
 #ifndef TACACSPACKETAUTHENTICATIONCONTINUE_H
 #define TACACSPACKETAUTHENTICATIONCONTINUE_H
-#include "TacacsPacketInterface.h"
+#include "TacacsPacketWithHeader.h"
 #include "FixedLengthString.h"
 #include "enum.h"
 
@@ -10,7 +10,7 @@ struct AuthenticationContinueFlags
     enum_mbr ContinueAbort = 1;
 };
 
-class TacacsPacketAuthenticationContinue : public TacacsPacketInterface
+class TacacsPacketAuthenticationContinue : public TacacsPacketWithHeader
 {
     public:
         /**
