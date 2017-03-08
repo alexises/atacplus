@@ -69,7 +69,16 @@ class Buffer
         Buffer& operator<<(uint32_t elem);
         Buffer& operator<<(FixedLengthString &elem);
         Buffer& operator<<(FixedLengthString *elem);
-
+        /**
+         * undo the previously consummed offset byte
+         *
+         * this is usefull on error management, the biavior of this
+         * method is only guarrented if no new data have been added
+         * between the read and the offset shift
+         *
+         * @param[in] offset offset to move
+         */
+        void operator-=(size_t offset);
         /**
          * access a position and edit it, the position is relative to
          * the current read curso

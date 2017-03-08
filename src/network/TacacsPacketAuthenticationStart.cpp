@@ -47,8 +47,7 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
     
     if (rbuff.availableRead() < (size_t) (userLen + portLen + remoteAddrLen + dataLen))
     {
-        rbuff << action << privLvl << authenType << service
-              << userLen << portLen << remoteAddrLen << dataLen;
+        rbuff -= 8;
         throw DecodingException("no enougth size of variable arguments");
     }
     user = new FixedLengthString(userLen);

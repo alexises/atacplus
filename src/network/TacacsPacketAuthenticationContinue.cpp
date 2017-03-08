@@ -72,8 +72,7 @@ TacacsPacketAuthenticationContinue*
           >> flags;
     if (rbuff.availableRead() < (userMsgSize + dataSize))
     {
-        rbuff << userMsgSize << dataSize
-              << flags;
+        rbuff -= 5;
         throw DecodingException("no enough byte to decode variable part");
     }
     FixedLengthString* userMsg = new FixedLengthString(userMsgSize);

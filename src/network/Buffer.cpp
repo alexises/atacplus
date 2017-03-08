@@ -167,6 +167,11 @@ Buffer& Buffer::operator<<(FixedLengthString *elem)
     return this->operator<<(*elem);
 }
 
+void Buffer::operator-=(size_t offset)
+{
+    this->readPos -= offset;
+}
+
 uint8_t& Buffer::operator[](size_t pos)
 {
     precondition(pos < this->availableRead());
