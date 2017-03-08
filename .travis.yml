@@ -1,10 +1,11 @@
 language: c++
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y libboost-test-dev libssl-dev
+  - sudo apt-get install -y libboost-test-dev libssl-dev valgrind
 script:
   - cmake .
   - make
   - ctest --verbose
+  - make profile
 compiler: gcc
 
