@@ -14,10 +14,10 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # debug
-
-
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=gnu++03 -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
+set(VALGRIND /usr/bin/valgrind)
+set(VALGRIND_ARGS "--leak-check=full")
 
 # library
 find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework)
@@ -59,3 +59,11 @@ include_directories(${SRC_DIR})
 target_link_libraries(test_network_exec atacplus_network ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
 
 add_test (NAME test_network COMMAND test_network_exec)
+
+# valgrind profile
+
+add_custom_target(profile DEPENDS test_network_exec_profile)
+add_custom_target(test_network_exec_profile
+                  DEPENDS test_network_exec
+                  COMMAND ${VALGRIND} ${VALGRIND_ARGS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_network_exec VERBATIM)
+
