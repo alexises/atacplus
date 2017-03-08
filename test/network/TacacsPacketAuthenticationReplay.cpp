@@ -58,6 +58,7 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
 
     BOOST_CHECK(*promptMsg == promptMsgStr);
     BOOST_CHECK(*data == dataStr);
+    delete obj;
 }
 
 BOOST_AUTO_TEST_CASE(test_encoding)

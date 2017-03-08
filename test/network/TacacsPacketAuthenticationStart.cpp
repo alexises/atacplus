@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_CASE(basic_decode)
     BOOST_CHECK(obj->getRemoteAddr()->getSize() == 0);
     BOOST_CHECK(obj->getData()->getSize() == 0);
     BOOST_CHECK(obj->getSize() == 8);
+    delete obj;
 }
 
 BOOST_AUTO_TEST_CASE(decoding_fail)
@@ -76,6 +77,7 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     BOOST_CHECK(*port == portStr);
     BOOST_CHECK(*remoteAddr == remoteAddrStr);
     BOOST_CHECK(*data == dataStr);
+    delete obj;
 }
 
 BOOST_AUTO_TEST_CASE(test_encoding)

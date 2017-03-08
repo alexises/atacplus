@@ -62,6 +62,10 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
     }
     catch (PreconditionFailException &e)
     {
+        delete user;
+        delete port;
+        delete remoteAddr;
+        delete data;
         std::string msg("invalid parameter : ");
         msg += e.what();
         throw DecodingException(msg.c_str());

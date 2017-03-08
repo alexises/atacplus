@@ -56,4 +56,5 @@ void encodeTacacsPacket(Buffer& buff, size_t size, FixedLengthString* key, uint3
 	}
 	md5ClearBufferSize = prevMD5pos + MD5_DIGEST_LENGTH;
     }
+    delete[] md5ClearBuffer;
 }

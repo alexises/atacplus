@@ -85,6 +85,8 @@ TacacsPacketAuthenticationReplay* TacacsPacketAuthenticationReplay::decode(Buffe
     }
     catch (PreconditionFailException& e)
     {
+        delete promptMsg;
+        delete data;
         std::string msg("invalid parameter : ");
         msg += e.what();
         throw DecodingException(msg.c_str());

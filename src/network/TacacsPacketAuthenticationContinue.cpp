@@ -85,6 +85,8 @@ TacacsPacketAuthenticationContinue*
     }
     catch (PreconditionFailException& e)
     {
+        delete userMsg;
+        delete data;
         std::string msg("invalid parameter : ");
         msg += e.what();
         throw DecodingException(msg.c_str());
