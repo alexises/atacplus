@@ -11,17 +11,16 @@ BOOST_AUTO_TEST_CASE(basic_decode)
     uint8_t* a = (uint8_t*) "\x01\x0f\x01\x01"
                             "\x00\x00\x00\x00";
     Buffer aa(a, 8);
-    TacacsPacketAuthenticationStart* obj = TacacsPacketAuthenticationStart::decode(aa);
-    BOOST_CHECK(obj->getAction() == TacacsAuthenticationAction::Login);
-    BOOST_CHECK(obj->getPrivLvl() == 15);
-    BOOST_CHECK(obj->getAuthenType() == TacacsAuthenticationType::Ascii);
-    BOOST_CHECK(obj->getService() == TacacsAuthenticationService::Login);
-    BOOST_CHECK(obj->getUser()->getSize() == 0);
-    BOOST_CHECK(obj->getPort()->getSize() == 0);
-    BOOST_CHECK(obj->getRemoteAddr()->getSize() == 0);
-    BOOST_CHECK(obj->getData()->getSize() == 0);
-    BOOST_CHECK(obj->getSize() == 8);
-    delete obj;
+    TacacsPacketAuthenticationStart obj(aa);
+    BOOST_CHECK(obj.getAction() == TacacsAuthenticationAction::Login);
+    BOOST_CHECK(obj.getPrivLvl() == 15);
+    BOOST_CHECK(obj.getAuthenType() == TacacsAuthenticationType::Ascii);
+    BOOST_CHECK(obj.getService() == TacacsAuthenticationService::Login);
+    BOOST_CHECK(obj.getUser()->getSize() == 0);
+    BOOST_CHECK(obj.getPort()->getSize() == 0);
+    BOOST_CHECK(obj.getRemoteAddr()->getSize() == 0);
+    BOOST_CHECK(obj.getData()->getSize() == 0);
+    BOOST_CHECK(obj.getSize() == 8);
 }
 
 BOOST_AUTO_TEST_CASE(decoding_fail)
@@ -45,12 +44,12 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
     Buffer ee(e, 8);
     Buffer ff(f, 4);
 
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(aa), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(bb), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(cc), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(dd), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(ee), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationStart::decode(ff), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(aa), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(bb), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(cc), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(dd), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ee), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ff), DecodingException);
 }
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
@@ -66,18 +65,17 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     FixedLengthString remoteAddrStr("CCC", 3);
     FixedLengthString dataStr("DDDD", 4);
 
-    TacacsPacketAuthenticationStart* obj = TacacsPacketAuthenticationStart::decode(aa);
-    BOOST_CHECK(obj->getSize() == 18);
-    FixedLengthString *user = obj->getUser();
-    FixedLengthString *port = obj->getPort();
-    FixedLengthString *remoteAddr = obj->getRemoteAddr();
-    FixedLengthString *data = obj->getData();
+    TacacsPacketAuthenticationStart obj(aa);
+    BOOST_CHECK(obj.getSize() == 18);
+    FixedLengthString *user = obj.getUser();
+    FixedLengthString *port = obj.getPort();
+    FixedLengthString *remoteAddr = obj.getRemoteAddr();
+    FixedLengthString *data = obj.getData();
 
     BOOST_CHECK(*user == userStr);
     BOOST_CHECK(*port == portStr);
     BOOST_CHECK(*remoteAddr == remoteAddrStr);
     BOOST_CHECK(*data == dataStr);
-    delete obj;
 }
 
 BOOST_AUTO_TEST_CASE(test_encoding)

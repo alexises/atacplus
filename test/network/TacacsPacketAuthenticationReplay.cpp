@@ -11,13 +11,12 @@ BOOST_AUTO_TEST_CASE(basic_decode)
     uint8_t* a = (uint8_t*) "\x01\x00\x00\x00"
                             "\x00\x00";
     Buffer aa(a, 8);
-    TacacsPacketAuthenticationReplay* obj = TacacsPacketAuthenticationReplay::decode(aa);
-    BOOST_CHECK(obj->getStatus() == AuthenticationStatus::Pass);
-    BOOST_CHECK(obj->getFlags() == 0);
-    BOOST_CHECK(obj->getPromptMsg()->getSize() == 0);
-    BOOST_CHECK(obj->getData()->getSize() == 0);
-    BOOST_CHECK(obj->getSize() == 6);
-    delete obj;
+    TacacsPacketAuthenticationReplay obj(aa);
+    BOOST_CHECK(obj.getStatus() == AuthenticationStatus::Pass);
+    BOOST_CHECK(obj.getFlags() == 0);
+    BOOST_CHECK(obj.getPromptMsg()->getSize() == 0);
+    BOOST_CHECK(obj.getData()->getSize() == 0);
+    BOOST_CHECK(obj.getSize() == 6);
 }
 
 BOOST_AUTO_TEST_CASE(decoding_fail)
@@ -35,10 +34,10 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
     Buffer cc(c, 6);
     Buffer dd(d, 4);
 
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationReplay::decode(aa), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationReplay::decode(bb), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationReplay::decode(cc), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketAuthenticationReplay::decode(dd), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(aa), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(bb), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(cc), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(dd), DecodingException);
 }
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
@@ -51,14 +50,13 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     FixedLengthString promptMsgStr("AAAA", 4);
     FixedLengthString dataStr("BBB", 3);
 
-    TacacsPacketAuthenticationReplay* obj = TacacsPacketAuthenticationReplay::decode(aa);
-    BOOST_CHECK(obj->getSize() == 13);
-    FixedLengthString *promptMsg = obj->getPromptMsg();
-    FixedLengthString *data = obj->getData();
+    TacacsPacketAuthenticationReplay obj(aa);
+    BOOST_CHECK(obj.getSize() == 13);
+    FixedLengthString *promptMsg = obj.getPromptMsg();
+    FixedLengthString *data = obj.getData();
 
     BOOST_CHECK(*promptMsg == promptMsgStr);
     BOOST_CHECK(*data == dataStr);
-    delete obj;
 }
 
 BOOST_AUTO_TEST_CASE(test_encoding)

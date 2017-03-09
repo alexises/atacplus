@@ -37,6 +37,7 @@ class TacacsPacketAuthenticationReplay : public TacacsPacketWithHeader
         TacacsPacketAuthenticationReplay(uint8_t status, uint8_t flags,
                                         FixedLengthString* promptMsg,
                                         FixedLengthString* data);
+        TacacsPacketAuthenticationReplay(Buffer& rbuff, bool headerDecode = true);
         virtual ~TacacsPacketAuthenticationReplay();
         /**
          * getStatus get the status of the authentication

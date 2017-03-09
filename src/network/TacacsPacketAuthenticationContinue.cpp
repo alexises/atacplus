@@ -11,6 +11,11 @@ TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(
     this->data = data;
 }
 
+TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(Buffer& rbuff, bool decodeHeader)
+{
+    this->processDecode(rbuff, decodeHeader);
+}
+
 TacacsPacketAuthenticationContinue::~TacacsPacketAuthenticationContinue()
 {
     delete this->userMsg;

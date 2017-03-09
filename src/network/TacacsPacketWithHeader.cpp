@@ -5,9 +5,8 @@ TacacsPacketWithHeader::TacacsPacketWithHeader()
     this->header = NULL;
 }
 
-TacacsPacketWithHeader::TacacsPacketWithHeader(Buffer& rbuff)
+void TacacsPacketWithHeader::processDecode(Buffer& rbuff, bool headerDecode)
 {
-    this->header = NULL;
     this->decode(rbuff);
 }
 

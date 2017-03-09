@@ -21,6 +21,7 @@ class TacacsPacketAuthenticationContinue : public TacacsPacketWithHeader
          */
         TacacsPacketAuthenticationContinue(FixedLengthString* userMsg,
             FixedLengthString* data, uint8_t flags);
+        TacacsPacketAuthenticationContinue(Buffer& rbuff, bool headerDecode = true);
         virtual ~TacacsPacketAuthenticationContinue();
         /**
          * get flags : get flags of the packe

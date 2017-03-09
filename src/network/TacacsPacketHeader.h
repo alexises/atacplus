@@ -29,6 +29,7 @@ class TacacsPacketHeader : public TacacsPacketInterface
                     const uint8_t flags,
                     const uint32_t sessionId,
                     const uint32_t length);
+        TacacsPacketHeader(Buffer& rbuff);
 	TacacsPacketHeader(const TacacsPacketHeader & other);
         virtual ~TacacsPacketHeader();
 

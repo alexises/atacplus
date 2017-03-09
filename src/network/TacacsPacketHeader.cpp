@@ -20,6 +20,11 @@ TacacsPacketHeader::TacacsPacketHeader(const uint8_t version,
     this->length = length;
 }
 
+TacacsPacketHeader::TacacsPacketHeader(Buffer& rbuff)
+{
+    TacacsPacketHeader::decode(rbuff);
+}
+
 TacacsPacketHeader::TacacsPacketHeader(const TacacsPacketHeader & other)
 {
     this->version = other.version;

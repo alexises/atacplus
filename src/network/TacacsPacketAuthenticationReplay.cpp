@@ -12,6 +12,11 @@ TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(uint8_t statu
     this->data = data;
 }
 
+TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(Buffer& rbuff, bool headerDecode)
+{
+    this->processDecode(rbuff, headerDecode);
+}
+
 TacacsPacketAuthenticationReplay::~TacacsPacketAuthenticationReplay()
 {
     delete this->promptMsg;

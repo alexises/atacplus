@@ -28,15 +28,14 @@ BOOST_AUTO_TEST_CASE( check_basic_auth_decode )
                            "\x00\x00\x00\x01"
                            "\x00\x00\x00\x00";
     Buffer bData(data, 12);
-    TacacsPacketHeader* h = TacacsPacketHeader::decode(bData);
-    BOOST_CHECK( h->getMajorVersion() == 12 );
-    BOOST_CHECK( h->getMinorVersion() == 1 );
-    BOOST_CHECK( h->getPacketType() == 1 );
-    BOOST_CHECK( h->getSeqNo() == 1 );
-    BOOST_CHECK( h->getFlags() == 1 );
-    BOOST_CHECK( h->getSessionId() == 1 );
-    BOOST_CHECK( h->getLength() == 0 );
-    delete h;
+    TacacsPacketHeader h(bData);
+    BOOST_CHECK( h.getMajorVersion() == 12 );
+    BOOST_CHECK( h.getMinorVersion() == 1 );
+    BOOST_CHECK( h.getPacketType() == 1 );
+    BOOST_CHECK( h.getSeqNo() == 1 );
+    BOOST_CHECK( h.getFlags() == 1 );
+    BOOST_CHECK( h.getSessionId() == 1 );
+    BOOST_CHECK( h.getLength() == 0 );
 }
 
 BOOST_AUTO_TEST_CASE( check_valid_args )
@@ -57,15 +56,10 @@ BOOST_AUTO_TEST_CASE( check_valid_args )
     Buffer bData2(data2, 12);
     Buffer bData3(data3, 12);
     Buffer bData4(data4, 12);
-    TacacsPacketHeader* h;
-    h = TacacsPacketHeader::decode(bData1);
-    delete h;
-    h = TacacsPacketHeader::decode(bData2);
-    delete h;
-    h = TacacsPacketHeader::decode(bData3);
-    delete h;
-    h = TacacsPacketHeader::decode(bData4);
-    delete h;
+    TacacsPacketHeader h(bData1);
+    TacacsPacketHeader i(bData2);
+    TacacsPacketHeader j(bData3);
+    TacacsPacketHeader k(bData4);
 }
 
 BOOST_AUTO_TEST_CASE( check_invalid_expression )
@@ -91,10 +85,10 @@ BOOST_AUTO_TEST_CASE( check_invalid_expression )
     Buffer bData3(data3, 12);
     Buffer bData4(data4, 12);
     //Buffer bData5(data5, 12);
-    BOOST_CHECK_THROW(TacacsPacketHeader::decode(bData1), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketHeader::decode(bData2), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketHeader::decode(bData3), DecodingException);
-    BOOST_CHECK_THROW(TacacsPacketHeader::decode(bData4), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketHeader(bData1), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketHeader(bData2), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketHeader(bData3), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketHeader(bData4), DecodingException);
     //BOOST_CHECK_THROW(TacacsPacketHeader::decode(bData5), DecodingException);
 }
 

@@ -65,6 +65,7 @@ class TacacsPacketAuthenticationStart : public TacacsPacketWithHeader
             FixedLengthString* port,
             FixedLengthString* remoteAddr,
             FixedLengthString* data);
+        TacacsPacketAuthenticationStart(Buffer& rbuff, bool headerDecode = true);
         virtual ~TacacsPacketAuthenticationStart();
         /**
          * encode : encode a portion of a network packet from

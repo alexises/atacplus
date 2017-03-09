@@ -24,6 +24,11 @@ TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
     this->data = data;
 }
 
+TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(Buffer& rbuff, bool headerDecode)
+{
+    this->processDecode(rbuff, headerDecode);
+}
+
 TacacsPacketAuthenticationStart::~TacacsPacketAuthenticationStart()
 {
     delete this->user;

@@ -11,7 +11,6 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
 {
     public:
         TacacsPacketWithHeader();
-        TacacsPacketWithHeader(Buffer& rbuff);
         virtual ~TacacsPacketWithHeader();
         /**
          * get the associated header
@@ -26,7 +25,16 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
          * @param[in] associated header
          * @pre header != NULL
          */
-        void setHeader(TacacsPacketHeader* header); 
+        void setHeader(TacacsPacketHeader* header);
+        /**
+         * really process the decode operation
+         * should be colled on the constructor with a buffer argument
+         * of each child class
+         *
+         * @param[in] rbuff buffer to decode
+         * @param[în] headerDecode decode the associated header
+         */
+        void processDecode(Buffer& rbuff, bool headerDecode);
     private:
         TacacsPacketHeader* header;
 };
