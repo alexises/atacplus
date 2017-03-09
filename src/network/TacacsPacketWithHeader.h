@@ -11,6 +11,7 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
 {
     public:
         TacacsPacketWithHeader();
+        TacacsPacketWithHeader(Buffer& rbuff);
         virtual ~TacacsPacketWithHeader();
         /**
          * get the associated header

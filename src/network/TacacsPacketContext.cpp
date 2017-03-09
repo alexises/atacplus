@@ -18,7 +18,8 @@ void TacacsPacketContext::setKey(FixedLengthString* key)
 
 TacacsPacketInterface* TacacsPacketContext::decode()
 {
-    if (this->header == NULL)
+/*  FIXME  
+ *  if (this->header == NULL)
     {
         this->header = TacacsPacketHeader::decode(this->rbuff);
     }
@@ -41,5 +42,5 @@ TacacsPacketInterface* TacacsPacketContext::decode()
                 //return TacacsPacketAuthStart::decode(buff, (unsigned int) 0);
                 break;
         }
-    }
+    }*/
 }

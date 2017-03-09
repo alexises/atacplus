@@ -59,14 +59,7 @@ class TacacsPacketAuthenticationContinue : public TacacsPacketWithHeader
          * @param[out] wbuff buffer where the packet will be filled
          */
         virtual void encode(Buffer& wbuff);
-        /**       
-         * decode : decode a portion of network packet and generate
-         * the corresponding TacacsPacketAuthenticationContinue instance
-         *
-         * @param[in] buff buffer where data are located
-         */
-        static TacacsPacketAuthenticationContinue* decode(Buffer& rbuff);
-        /**
+       /**
          * getType : get an unique string that describe the type of pack
 et decoded
          * @return the correspoding unique indentifier string
@@ -75,7 +68,14 @@ et decoded
         {
             return std::string("auth-continue");
         }
-
+    protected:
+        /**       
+         * decode : decode a portion of network packet and generate
+         * the corresponding TacacsPacketAuthenticationContinue instance
+         *
+         * @param[in] buff buffer where data are located
+         */
+        virtual void decode(Buffer& rbuff);
     private:
         FixedLengthString* userMsg;
         FixedLengthString* data;

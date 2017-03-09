@@ -58,8 +58,8 @@ void TacacsPacketAuthenticationContinue::encode(Buffer& wbuff)
           << this->data;
 }
 
-TacacsPacketAuthenticationContinue* 
-    TacacsPacketAuthenticationContinue::decode(Buffer& rbuff)
+ 
+void TacacsPacketAuthenticationContinue::decode(Buffer& rbuff)
 {
     if (rbuff.availableRead() < 5)
     {
@@ -75,13 +75,13 @@ TacacsPacketAuthenticationContinue*
         rbuff -= 5;
         throw DecodingException("no enough byte to decode variable part");
     }
-    FixedLengthString* userMsg = new FixedLengthString(userMsgSize);
-    FixedLengthString* data = new FixedLengthString(dataSize);
-    rbuff >> (*userMsg) >> (*data);
+    this->userMsg = new FixedLengthString(userMsgSize);
+    this->data = new FixedLengthString(dataSize);
+    rbuff >> *(this->userMsg) >> *(this->data);
 
     try
     {
-        return new TacacsPacketAuthenticationContinue(userMsg, data, flags);
+        this->setFlags(flags);
     }
     catch (PreconditionFailException& e)
     {

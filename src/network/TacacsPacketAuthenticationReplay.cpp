@@ -58,11 +58,10 @@ FixedLengthString* TacacsPacketAuthenticationReplay::getData()
     return this->data;
 }
 
-TacacsPacketAuthenticationReplay* TacacsPacketAuthenticationReplay::decode(Buffer& rbuff)
+void TacacsPacketAuthenticationReplay::decode(Buffer& rbuff)
 {
     uint8_t status, flags;
     uint16_t promptMsgSize, dataSize;
-    FixedLengthString *promptMsg, *data;
     if (rbuff.availableRead() < 6)
     {
 	 throw DecodingException("no enougth data for decoding");
@@ -75,13 +74,14 @@ TacacsPacketAuthenticationReplay* TacacsPacketAuthenticationReplay::decode(Buffe
         rbuff -= 6;
         throw DecodingException("no enougth size of variable arguments");
     }
-    promptMsg = new FixedLengthString(promptMsgSize);
-    data = new FixedLengthString(dataSize);
-    rbuff >> (*promptMsg) >> (*data);
+    this->promptMsg = new FixedLengthString(promptMsgSize);
+    this->data = new FixedLengthString(dataSize);
+    rbuff >> *(this->promptMsg) >> *(this->data);
 
     try
     {
-	return new TacacsPacketAuthenticationReplay(status, flags, promptMsg, data);
+        this->setStatus(status);
+        this->setFlags(flags);
     }
     catch (PreconditionFailException& e)
     {

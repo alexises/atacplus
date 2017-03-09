@@ -5,6 +5,12 @@ TacacsPacketWithHeader::TacacsPacketWithHeader()
     this->header = NULL;
 }
 
+TacacsPacketWithHeader::TacacsPacketWithHeader(Buffer& rbuff)
+{
+    this->header = NULL;
+    this->decode(rbuff);
+}
+
 TacacsPacketWithHeader::~TacacsPacketWithHeader()
 {
     if (this->header != NULL)

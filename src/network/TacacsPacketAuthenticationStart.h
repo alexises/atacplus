@@ -73,14 +73,7 @@ class TacacsPacketAuthenticationStart : public TacacsPacketWithHeader
          * @param[out] wbuff buffer where the packet will be filled
          */
         virtual void encode(Buffer& wbuff);
-        /**       
-         * decode : decode a portion of network packet and generate
-         * the corresponding TacacsPacketHeader instance
-         *
-         * @param[in] buff buffer where data are located
-         */
-        static TacacsPacketAuthenticationStart* decode(Buffer& rbuff);
-        /**
+       /**
          * getType : get an unique string that describe the type of pack
 et decoded
          * @return the correspoding unique indentifier string
@@ -191,6 +184,12 @@ et decoded
          * @return data string
          */
         FixedLengthString* getData();
+    protected:
+        /**       
+         * decode : decode a portion of network packet and generate
+         * the corresponding TacacsPacketHeader instance
+         */
+        virtual void decode(Buffer& rbuff);
     private:
         uint8_t action;
         uint8_t privLvl;

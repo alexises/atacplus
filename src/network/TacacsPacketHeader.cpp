@@ -48,20 +48,20 @@ void TacacsPacketHeader::encode(Buffer& wbuff)
           << this->length;
 }
 
-TacacsPacketHeader* TacacsPacketHeader::decode(Buffer& buff)
+void TacacsPacketHeader::decode(Buffer& rbuff)
 {
-    if (buff.availableRead() < TACACS_PACKET_HEADER_SIZE)
+    if (rbuff.availableRead() < TACACS_PACKET_HEADER_SIZE)
     {
         throw DecodingException("buffer too small");
     }
-    uint8_t version, type, seqNo, flags;
-    uint32_t sessionId;
-    uint32_t length;
-    buff >> version >> type >> seqNo >> flags;
-    buff >> sessionId >> length;
+    uint8_t version, type, flags;
+    rbuff >> version >> type >> this->seqNo >> flags
+          >> this->sessionId >> this->length;
 
     try {
-        return new TacacsPacketHeader(version, type, seqNo, flags, sessionId, length);
+        this->setVersion(version);
+        this->setPacketType(type);
+        this->setFlags(flags);
     }
     catch (PreconditionFailException & e)
     {

@@ -27,6 +27,13 @@ class TacacsPacketInterface
          */
         virtual size_t getSize() = 0;
 	virtual inline ~TacacsPacketInterface() { };
+    protected:
+        /**
+         * decode the packet from buffer stream
+         *
+         * @param[in] rbuff buffer where data should be fetched
+         */
+        virtual void decode(Buffer& rbuff) = 0;
 };
 
 #endif

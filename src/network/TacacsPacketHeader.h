@@ -39,14 +39,7 @@ class TacacsPacketHeader : public TacacsPacketInterface
          * @param[out] payload buffer where the packet will be filled
          */
         virtual void encode(Buffer& wbuff);
-        /**       
- 	 * decode : decode a portion of network packet and generate
-         * the corresponding TacacsPacketHeader instance
-         *
-         * @param[in] buff buffer where data are located
-         */
-        static TacacsPacketHeader* decode(Buffer& rbuff);
-        /**
+       /**
          * getType : get an unique string that describe the type of pack
 et decoded
          * @return the correspoding unique indentifier string
@@ -144,6 +137,14 @@ t
          * @return length of the packet
          */
         virtual uint32_t getLength();
+    protected:
+         /**       
+ 	 * decode : decode a portion of network packet and generate
+         * the corresponding TacacsPacketHeader instance
+         *
+         * @param[in] buff buffer where data are located
+         */
+        virtual void decode(Buffer& rbuff);
     private:
         // packet attribute
         uint8_t version;

@@ -32,7 +32,7 @@ TacacsPacketAuthenticationStart::~TacacsPacketAuthenticationStart()
     delete this->data;
 }
 
-TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer& rbuff)
+void TacacsPacketAuthenticationStart::decode(Buffer& rbuff)
 {
     if (rbuff.availableRead() < 8)
     {
@@ -40,7 +40,6 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
     }
     uint8_t action, privLvl, authenType, service;
     uint8_t userLen, portLen, remoteAddrLen, dataLen;
-    FixedLengthString *user, *port, *remoteAddr, *data;
 
     rbuff >> action >> privLvl >> authenType >> service
           >> userLen >> portLen >> remoteAddrLen >> dataLen;
@@ -50,22 +49,23 @@ TacacsPacketAuthenticationStart* TacacsPacketAuthenticationStart::decode(Buffer&
         rbuff -= 8;
         throw DecodingException("no enougth size of variable arguments");
     }
-    user = new FixedLengthString(userLen);
-    port = new FixedLengthString(portLen);
-    remoteAddr = new FixedLengthString(remoteAddrLen);
-    data = new FixedLengthString(dataLen);
-    rbuff >> user >> port >> remoteAddr >> data;
+    this->user = new FixedLengthString(userLen);
+    this->port = new FixedLengthString(portLen);
+    this->remoteAddr = new FixedLengthString(remoteAddrLen);
+    this->data = new FixedLengthString(dataLen);
+    rbuff >> this->user >> this->port >> this->remoteAddr >> this->data;
     try {
-        return new TacacsPacketAuthenticationStart(
-            action, privLvl, authenType, service,
-            user, port, remoteAddr, data);
+        this->setAction(action);
+        this->setPrivLvl(privLvl);
+        this->setAuthenType(authenType);
+        this->setService(service);
     }
     catch (PreconditionFailException &e)
     {
-        delete user;
-        delete port;
-        delete remoteAddr;
-        delete data;
+        delete this->user;
+        delete this->port;
+        delete this->remoteAddr;
+        delete this->data;
         std::string msg("invalid parameter : ");
         msg += e.what();
         throw DecodingException(msg.c_str());

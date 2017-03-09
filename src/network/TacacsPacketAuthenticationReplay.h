@@ -89,14 +89,6 @@ class TacacsPacketAuthenticationReplay : public TacacsPacketWithHeader
          */
         FixedLengthString* getData();
         /**
-         * decode data from a buffer and create the corresponding
-         * instance of TacacsPacketAuthenticationReplay
-         *
-         * @param[in] buffer buffer where fetch bytexs
-         * @return created instance of TacacsPacketAuthenticationReplay
-         */
-        static TacacsPacketAuthenticationReplay* decode(Buffer& rbuff);
-        /**
          * encode this object to the corresponding Buffer
          *
          * @param[out] buffer buffer where bytes are wrote
@@ -118,6 +110,15 @@ class TacacsPacketAuthenticationReplay : public TacacsPacketWithHeader
          * to decode the corresponding package
          */
         virtual size_t getSize();
+    protected:
+        /**
+         * decode data from a buffer and create the corresponding
+         * instance of TacacsPacketAuthenticationReplay
+         *
+         * @param[in] buffer buffer where fetch bytexs
+         * @return created instance of TacacsPacketAuthenticationReplay
+         */
+         virtual void decode(Buffer& rbuff);
     private:
         uint8_t status;
         uint8_t flags;
