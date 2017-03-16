@@ -9,6 +9,9 @@ TacacsPacketContext::TacacsPacketContext(int type, size_t rbuff_size, size_t wbu
     this->header = NULL;
     this->key = NULL;
     this->step = TacacsConnectionStep::NoStart;
+    this->sessionId = 0;
+    this->seqNo = 0;
+    this->decodeHeader = false;
 }
 
 void TacacsPacketContext::setKey(FixedLengthString* key)
@@ -43,4 +46,19 @@ TacacsPacketInterface* TacacsPacketContext::decode()
                 break;
         }
     }*/
+}
+
+uint8_t TacacsPacketContext::getSeqNo()
+{
+    return this->seqNo;
+}
+
+bool TacacsPacketContext::isDecodeHeader()
+{
+    return this->decodeHeader;
+}
+
+void TacacsPacketContext::setDecodeHeader(bool decodeHeader)
+{
+    this->decodeHeader = decodeHeader;
 }

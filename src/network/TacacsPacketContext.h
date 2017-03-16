@@ -45,12 +45,40 @@ class TacacsPacketContext
          * @param[in] key key to set
          */
         void setKey(FixedLengthString* key);
+        /**
+         * getSeqNo get the next sequence number expecteed for
+         * encoding or decoding
+         *
+         * @return expected seqNo
+         */
+        uint8_t getSeqNo();
+        /**
+         * get the decode header boolean.
+         *
+         * This boolean specify if the header should be encoded
+         * when the packet is created
+         *
+         * @return decode header value
+         */
+        bool isDecodeHeader();
+        /**
+         * set the decode header boolean
+         *
+         * This boolean specify if the header should be encoded
+         * when the packet is created
+         *
+         * @param[in] decodeHeader header to set
+         */
+        void setDecodeHeader(bool decodeHeader);
     private:
         int step;
 	int connType;
+        uint32_t sessionId;
+        uint8_t seqNo;
         TacacsPacketHeader* header;
         FixedLengthString* key;
         Buffer rbuff;
         Buffer wbuff;
+        bool decodeHeader;
 };
 #endif
