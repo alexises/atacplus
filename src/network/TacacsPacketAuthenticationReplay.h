@@ -90,12 +90,6 @@ class TacacsPacketAuthenticationReplay : public TacacsPacketWithHeader
          */
         FixedLengthString* getData();
         /**
-         * encode this object to the corresponding Buffer
-         *
-         * @param[out] buffer buffer where bytes are wrote
-         */
-        virtual void encode(Buffer& wbuff);
-        /**
          * getType : get an unique string that describe the type of packet decoded
          * @return the correspoding unique indentifier string
          */
@@ -120,6 +114,12 @@ class TacacsPacketAuthenticationReplay : public TacacsPacketWithHeader
          * @return created instance of TacacsPacketAuthenticationReplay
          */
          virtual void decode(Buffer& rbuff);
+         /**
+         * processEncode this object to the corresponding Buffer
+         *
+         * @param[out] buffer buffer where bytes are wrote
+         */
+        virtual void processEncode(Buffer& wbuff);
     private:
         uint8_t status;
         uint8_t flags;

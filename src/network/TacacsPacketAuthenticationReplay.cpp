@@ -98,7 +98,7 @@ void TacacsPacketAuthenticationReplay::decode(Buffer& rbuff)
     }
 }
 
-void TacacsPacketAuthenticationReplay::encode(Buffer& wbuff)
+void TacacsPacketAuthenticationReplay::processEncode(Buffer& wbuff)
 {
     if (wbuff.availableWrite() < this->getSize())
     {

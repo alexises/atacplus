@@ -50,7 +50,7 @@ size_t TacacsPacketAuthenticationContinue::getSize()
              + this->userMsg->getSize();
 }
 
-void TacacsPacketAuthenticationContinue::encode(Buffer& wbuff)
+void TacacsPacketAuthenticationContinue::processEncode(Buffer& wbuff)
 {
     if (wbuff.availableWrite() < this->getSize())
     {

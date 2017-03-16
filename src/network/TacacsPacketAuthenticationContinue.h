@@ -54,13 +54,6 @@ class TacacsPacketAuthenticationContinue : public TacacsPacketWithHeader
          */
         virtual size_t getSize();
         /**
-         * encode : encode a portion of a network packet from
-         * the corresponding TacacsPacketAuthenticationContinue instance
-         *
-         * @param[out] wbuff buffer where the packet will be filled
-         */
-        virtual void encode(Buffer& wbuff);
-       /**
          * getType : get an unique string that describe the type of pack
 et decoded
          * @return the correspoding unique indentifier string
@@ -77,6 +70,13 @@ et decoded
          * @param[in] buff buffer where data are located
          */
         virtual void decode(Buffer& rbuff);
+        /**
+         * processEncode : encode a portion of a network packet from
+         * the corresponding TacacsPacketAuthenticationContinue instance
+         *
+         * @param[out] wbuff buffer where the packet will be filled
+         */
+        virtual void processEncode(Buffer& wbuff);
     private:
         FixedLengthString* userMsg;
         FixedLengthString* data;

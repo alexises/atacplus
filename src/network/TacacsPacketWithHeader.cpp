@@ -27,6 +27,13 @@ TacacsPacketHeader* TacacsPacketWithHeader::getHeader()
     return this->header;
 }
 
+void TacacsPacketWithHeader::encode(Buffer& wbuff)
+{
+    //FIXME : this is totaly broken, but used on a first pass bases
+    //    this->header->encode(wbuff);
+    this->processEncode(wbuff);
+}
+
 void TacacsPacketWithHeader::setHeader(TacacsPacketHeader* header)
 {
     precondition(header != NULL);

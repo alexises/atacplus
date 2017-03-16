@@ -18,6 +18,13 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
          * @return header of null if no header already set
          */
         TacacsPacketHeader* getHeader();
+        /**
+         * encode : encode a portion of a network packet from
+         * the corresponding TacacsPacketInterface instance
+         *
+         * @param[out] wbuff buffer where the packet will be filled
+         */
+        virtual void encode(Buffer& wbuff);
     protected:
         /**
          * set the associated header
@@ -35,6 +42,15 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
          * @param[în] headerDecode decode the associated header
          */
         void processDecode(Buffer& rbuff, bool headerDecode);
+        /**
+         * really process the encoding operation
+         * this method is called on decode methode and should 
+         * not be called outside of this class
+         *
+         * @param[out] wbuff buffer to encode
+         * @param[in] headerDecode
+         */
+        virtual void processEncode(Buffer& wbuff) = 0;
     private:
         TacacsPacketHeader* header;
 };

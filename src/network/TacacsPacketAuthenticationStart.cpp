@@ -77,7 +77,7 @@ void TacacsPacketAuthenticationStart::decode(Buffer& rbuff)
     }
 }
 
-void TacacsPacketAuthenticationStart::encode(Buffer& wbuff)
+void TacacsPacketAuthenticationStart::processEncode(Buffer& wbuff)
 {
     if (wbuff.availableWrite() < this->getSize())
     {
