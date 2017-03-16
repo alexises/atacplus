@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_CASE(basic_decode)
     uint8_t* a = (uint8_t*) "\x01\x0f\x01\x01"
                             "\x00\x00\x00\x00";
     Buffer aa(a, 8);
-    TacacsPacketAuthenticationStart obj(aa);
+    TacacsPacketAuthenticationStart obj(aa, false);
     BOOST_CHECK(obj.getAction() == TacacsAuthenticationAction::Login);
     BOOST_CHECK(obj.getPrivLvl() == 15);
     BOOST_CHECK(obj.getAuthenType() == TacacsAuthenticationType::Ascii);
@@ -44,12 +44,12 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
     Buffer ee(e, 8);
     Buffer ff(f, 4);
 
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(aa), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(bb), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(cc), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(dd), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ee), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ff), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(aa, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(bb, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(cc, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(dd, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ee, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ff, false), DecodingException);
 }
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     FixedLengthString remoteAddrStr("CCC", 3);
     FixedLengthString dataStr("DDDD", 4);
 
-    TacacsPacketAuthenticationStart obj(aa);
+    TacacsPacketAuthenticationStart obj(aa, false);
     BOOST_CHECK(obj.getSize() == 18);
     FixedLengthString *user = obj.getUser();
     FixedLengthString *port = obj.getPort();

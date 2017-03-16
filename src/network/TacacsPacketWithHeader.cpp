@@ -7,6 +7,10 @@ TacacsPacketWithHeader::TacacsPacketWithHeader()
 
 void TacacsPacketWithHeader::processDecode(Buffer& rbuff, bool headerDecode)
 {
+    if (headerDecode)
+    {
+        this->header = new TacacsPacketHeader(rbuff);
+    }
     this->decode(rbuff);
 }
 

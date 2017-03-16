@@ -11,7 +11,7 @@ BOOST_AUTO_TEST_CASE(basic_decode)
     uint8_t* a = (uint8_t*) "\x00\x00\x00\x00"
                             "\x01";
     Buffer aa(a, 8);
-    TacacsPacketAuthenticationContinue obj(aa);
+    TacacsPacketAuthenticationContinue obj(aa, false);
     BOOST_CHECK(obj.getFlags() == AuthenticationContinueFlags::ContinueAbort);
 }
 
@@ -27,9 +27,9 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
     Buffer bb(b, 5);
     Buffer cc(c, 4);
 
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(aa), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(bb), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(cc), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(aa, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(bb, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(cc, false), DecodingException);
 }
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     FixedLengthString userMsgStr("AAAA", 4);
     FixedLengthString dataStr("BBB", 3);
 
-    TacacsPacketAuthenticationContinue obj(aa);
+    TacacsPacketAuthenticationContinue obj(aa, false);
     BOOST_CHECK(obj.getSize() == 12);
     FixedLengthString *userMsg = obj.getUserMsg();
     FixedLengthString *data = obj.getData();
