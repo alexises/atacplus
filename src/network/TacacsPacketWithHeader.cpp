@@ -69,14 +69,43 @@ TacacsPacketHeader* TacacsPacketWithHeader::getHeader()
 
 void TacacsPacketWithHeader::encode(Buffer& wbuff)
 {
-    //FIXME : naive implementation, should process decode
-    //all child class should generate the proper header
-    //for the object
-    if (this->header != NULL and this->context->isDecodeHeader())
+    bool bufferWasEmpty = false;
+    if (this->context->isDecodeHeader())
     {
+        if (this->header == NULL)
+        {
+            bufferWasEmpty = true;
+            this->generateHeader();
+        }
+        if (wbuff.availableWrite() < 
+            (this->header->getSize() + this->getSize()))
+        {
+            throw EncodingException("no enough byte free on the buffer");
+        }
         this->header->encode(wbuff);
     }
-    this->processEncode(wbuff);
+    try {
+        this->processEncode(wbuff);
+    }
+    catch (EncodingException& e)
+    {
+        if (bufferWasEmpty)
+        {
+            delete this->header;
+            this->header = NULL;
+        }
+        wbuff -= this->header->getSize();
+        throw;
+    }
+    if (this->header != NULL &&
+        (this->header->getFlags() & TacacsPacketFlags::Unencrypted) == 0)
+    {
+        encodeTacacsPacket(wbuff, this->getSize(), 
+                           this->context->getKey(),
+                           this->header->getSessionId(),
+                           this->header->getVersion(),
+                           this->header->getSeqNo());
+    }
 }
 
 void TacacsPacketWithHeader::setHeader(TacacsPacketHeader* header)

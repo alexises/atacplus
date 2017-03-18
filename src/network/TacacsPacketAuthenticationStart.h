@@ -1,6 +1,6 @@
 #ifndef TACACSPACKETAUTHENTICATIONSTART_H
 #define TACACSPACKETAUTHENTICATIONSTART_H
-#include "TacacsPacketWithHeader.h"
+#include "TacacsPacketAuthentication.h"
 #include "TacacsPacketContext.h"
 #include "enum.h"
 #include "FixedLengthString.h"
@@ -38,7 +38,7 @@ struct TacacsAuthenticationService {
     enum_mbr FwProxy = 9;
 };
 
-class TacacsPacketAuthenticationStart : public TacacsPacketWithHeader
+class TacacsPacketAuthenticationStart : public TacacsPacketAuthentication
 {
     public:
         /**

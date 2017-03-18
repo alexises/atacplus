@@ -13,7 +13,7 @@ TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
             FixedLengthString* user,
             FixedLengthString* port,
             FixedLengthString* remoteAddr,
-            FixedLengthString* data) : TacacsPacketWithHeader(context)
+            FixedLengthString* data) : TacacsPacketAuthentication(context)
 {
     this->setAction(action);
     this->setPrivLvl(privLvl);
@@ -27,7 +27,7 @@ TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
 
 TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
     TacacsPacketContext* context,
-    Buffer& rbuff) : TacacsPacketWithHeader(context)
+    Buffer& rbuff) : TacacsPacketAuthentication(context)
 {
     this->processDecode(rbuff);
 }

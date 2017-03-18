@@ -8,7 +8,7 @@ TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(
     uint8_t status,
     uint8_t flags,
     FixedLengthString* promptMsg,
-    FixedLengthString* data) : TacacsPacketWithHeader(context)
+    FixedLengthString* data) : TacacsPacketAuthentication(context)
 {
     this->setStatus(status);
     this->setFlags(flags);
@@ -18,7 +18,7 @@ TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(
 
 TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(
     TacacsPacketContext* context,
-    Buffer& rbuff) : TacacsPacketWithHeader(context)
+    Buffer& rbuff) : TacacsPacketAuthentication(context)
 {
     this->processDecode(rbuff);
 }

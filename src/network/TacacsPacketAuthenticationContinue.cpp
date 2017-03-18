@@ -7,7 +7,7 @@ TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(
      TacacsPacketContext* context,
      FixedLengthString* userMsg,
      FixedLengthString* data,
-     uint8_t flags) : TacacsPacketWithHeader(context)
+     uint8_t flags) : TacacsPacketAuthentication(context)
 {
     this->setFlags(flags);
     this->userMsg = userMsg;
@@ -16,7 +16,7 @@ TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(
 
 TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(
     TacacsPacketContext* context,
-    Buffer& rbuff) : TacacsPacketWithHeader(context)
+    Buffer& rbuff) : TacacsPacketAuthentication(context)
 {
     this->processDecode(rbuff);
 }

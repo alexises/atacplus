@@ -67,3 +67,8 @@ void TacacsPacketContext::setDecodeHeader(bool decodeHeader)
 {
     this->decodeHeader = decodeHeader;
 }
+
+uint32_t TacacsPacketContext::getSessionId()
+{
+    return this->sessionId;
+}

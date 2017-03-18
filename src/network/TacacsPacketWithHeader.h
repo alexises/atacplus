@@ -62,6 +62,11 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
          * @param[out] wbuff buffer to encode
          */
         virtual void processEncode(Buffer& wbuff) = 0;
+        /**
+         * generate and set via setHeader method the corresponding
+         * header with this packet
+         */
+        virtual void generateHeader() = 0;
     private:
         TacacsPacketHeader* header;
         TacacsPacketContext* context;

@@ -76,6 +76,13 @@ class TacacsPacketContext
          * @param[in] decodeHeader header to set
          */
         void setDecodeHeader(bool decodeHeader);
+        /**
+         * getSession id get the session id associated with 
+         * this tacacsPacketContext object
+         *
+         * @return session id
+         */
+        uint32_t getSessionId();
     private:
         int step;
 	int connType;
