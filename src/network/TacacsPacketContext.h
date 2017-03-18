@@ -40,11 +40,17 @@ class TacacsPacketContext
          */
         TacacsPacketInterface* decode();
         /**
-         * the the shared key used to decipher/encipher the packet payload
+         * set the shared key used to decipher/encipher the packet payload
          *
          * @param[in] key key to set
          */
         void setKey(FixedLengthString* key);
+        /**
+         * get the shared key used tu decipher/encipher the packet payload
+         *
+         * @return shared key
+         */
+        FixedLengthString* getKey();
         /**
          * getSeqNo get the next sequence number expecteed for
          * encoding or decoding

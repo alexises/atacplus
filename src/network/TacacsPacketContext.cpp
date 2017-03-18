@@ -19,6 +19,11 @@ void TacacsPacketContext::setKey(FixedLengthString* key)
     this->key = key;
 }
 
+FixedLengthString* TacacsPacketContext::getKey()
+{
+    return this->key;
+}
+
 TacacsPacketInterface* TacacsPacketContext::decode()
 {
 /*  FIXME  
