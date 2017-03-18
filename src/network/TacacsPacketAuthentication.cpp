@@ -9,7 +9,7 @@ TacacsPacketAuthentication::TacacsPacketAuthentication(
 void TacacsPacketAuthentication::generateHeader()
 {
     this->setHeader(
-        new TacacsPacketHeader(TACACS_MAJOR + TACACS_MINOR_ONE,
+        new TacacsPacketHeader((TACACS_MAJOR << 4) + TACACS_MINOR_ONE,
                                TacacsPacketType::Authentication,
                                this->getContext()->getSeqNo(),
                                TacacsPacketFlags::NoFlags,

@@ -11,7 +11,15 @@ TacacsPacketContext::TacacsPacketContext(int type, size_t rbuff_size, size_t wbu
     this->step = TacacsConnectionStep::NoStart;
     this->sessionId = 0;
     this->seqNo = 0;
-    this->decodeHeader = false;
+    this->decodeHeader = true;
+}
+
+TacacsPacketContext::~TacacsPacketContext()
+{
+    if (this->key != NULL)
+    {
+        delete this->key;
+    }
 }
 
 void TacacsPacketContext::setKey(FixedLengthString* key)

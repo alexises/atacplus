@@ -35,6 +35,7 @@ class TacacsPacketContext
          * @param[in] wbuff_size size of the writing buffer
 	 */
         TacacsPacketContext(int type, size_t rbuff_size = 4096, size_t wbuff_size = 4096);
+        ~TacacsPacketContext();
         /**
          * decode a packet
          */

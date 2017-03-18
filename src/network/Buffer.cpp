@@ -19,6 +19,10 @@ Buffer::Buffer(size_t size)
     this->readPos = 0;
     this->writePos = 0;
     this->buff = new uint8_t[this->size];
+    for (size_t i = 0; i < size; ++i)
+    {
+        this->buff[i] = 0xff;
+    }
 }
 
 Buffer::Buffer(const uint8_t* buffer, size_t buffsize, size_t size)

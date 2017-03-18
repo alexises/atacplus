@@ -38,9 +38,9 @@ static int createMD5message(uint8_t** buff, FixedLengthString* key, uint32_t ses
     return firstRoundSize;
 }
 
-void encodeTacacsPacket(Buffer& buff, size_t size, FixedLengthString* key, uint32_t sessionId, uint8_t version, uint8_t seqNo)
+void encodeTacacsPacket(Buffer& buff, size_t size, FixedLengthString* key, uint32_t sessionId, uint8_t version, uint8_t seqNo, size_t offset)
 {
-    precondition(buff.availableRead() >= size);
+    precondition(buff.availableRead() >= (size + offset));
     uint8_t md5EncipheredBuffer[MD5_DIGEST_LENGTH];
     uint8_t* md5ClearBuffer;
     int prevMD5pos = createMD5message(&md5ClearBuffer, key, sessionId, version, seqNo);
@@ -51,7 +51,7 @@ void encodeTacacsPacket(Buffer& buff, size_t size, FixedLengthString* key, uint3
         MD5(md5ClearBuffer, md5ClearBufferSize, md5EncipheredBuffer);
         for (int i = 0; i < MD5_DIGEST_LENGTH && (chunk + i) < size; ++i)
 	{
-	    buff[chunk + i] = buff[chunk + i] ^ md5EncipheredBuffer[i];
+	    buff[chunk + i + offset] = buff[chunk + i + offset] ^ md5EncipheredBuffer[i];
 	    md5ClearBuffer[prevMD5pos + i] = md5EncipheredBuffer[i];
 	}
 	md5ClearBufferSize = prevMD5pos + MD5_DIGEST_LENGTH;

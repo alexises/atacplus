@@ -17,9 +17,9 @@ struct TacacsPacketFlags {
     enum_mbr Unencrypted = 1;
 };
 
-#define TACACS_MAJOR         0xC
-#define TACACS_MINOR_DEFAULT 0x0
-#define TACACS_MINOR_ONE     0x1
+#define TACACS_MAJOR         (uint8_t) 0xC
+#define TACACS_MINOR_DEFAULT (uint8_t) 0x0
+#define TACACS_MINOR_ONE     (uint8_t) 0x1
 class TacacsPacketHeader : public TacacsPacketInterface
 {
     public:

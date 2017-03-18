@@ -96,7 +96,7 @@ void TacacsPacketHeader::setVersion(int major, int minor)
 
 void TacacsPacketHeader::setVersion(uint8_t version)
 {
-    this->setVersion(version >> 4, version & 0x0f);
+    this->setVersion((version & 0xf0) >> 4, version & 0x0f);
 }
 
 uint8_t TacacsPacketHeader::getVersion()

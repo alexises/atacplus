@@ -104,7 +104,8 @@ void TacacsPacketWithHeader::encode(Buffer& wbuff)
                            this->context->getKey(),
                            this->header->getSessionId(),
                            this->header->getVersion(),
-                           this->header->getSeqNo());
+                           this->header->getSeqNo(),
+                           this->header->getSize());
     }
 }
 
