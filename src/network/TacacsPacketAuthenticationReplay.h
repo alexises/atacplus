@@ -29,15 +29,21 @@ class TacacsPacketAuthenticationReplay : public TacacsPacketWithHeader
         /**
          * Create a TacacsPacketAuthenticationReplay packet
          *
+         * @param[in] context context associated with this packet
          * @param[in] status status of the authentication from AuthenticationStatus
          * @param[in] flags flags associated with the replay
          * @param[in] promptMsg message printed to the user for the requested field
          * @param[in] data data requered to perform the specific authentication task
          */
-        TacacsPacketAuthenticationReplay(uint8_t status, uint8_t flags,
-                                        FixedLengthString* promptMsg,
-                                        FixedLengthString* data);
-        TacacsPacketAuthenticationReplay(Buffer& rbuff, bool headerDecode = true);
+        TacacsPacketAuthenticationReplay(
+            TacacsPacketContext* context,
+            uint8_t status, 
+            uint8_t flags,
+            FixedLengthString* promptMsg,
+            FixedLengthString* data);
+        TacacsPacketAuthenticationReplay(
+            TacacsPacketContext* context,
+            Buffer& rbuff);
         virtual ~TacacsPacketAuthenticationReplay();
         /**
          * getStatus get the status of the authentication

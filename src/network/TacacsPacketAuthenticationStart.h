@@ -1,6 +1,7 @@
 #ifndef TACACSPACKETAUTHENTICATIONSTART_H
 #define TACACSPACKETAUTHENTICATIONSTART_H
 #include "TacacsPacketWithHeader.h"
+#include "TacacsPacketContext.h"
 #include "enum.h"
 #include "FixedLengthString.h"
 #include "Buffer.h"
@@ -47,6 +48,7 @@ class TacacsPacketAuthenticationStart : public TacacsPacketWithHeader
          * you should provides instance of theses object that was allocated
          * dynamicaly !
          *
+         * @param[in] context context associated with this object
          * @param[in] action action to be run to authenticate the user
          * @param[in] privLvl request privilege level for the action
          * @param[in] authenType authentication type used to perform the authentication
@@ -57,6 +59,7 @@ class TacacsPacketAuthenticationStart : public TacacsPacketWithHeader
          * @param[in] data data needed to perform the authentication
          */
         TacacsPacketAuthenticationStart(
+            TacacsPacketContext* context,
             const uint8_t action,
             const uint8_t privLvl,
             const uint8_t authenType,
@@ -65,7 +68,7 @@ class TacacsPacketAuthenticationStart : public TacacsPacketWithHeader
             FixedLengthString* port,
             FixedLengthString* remoteAddr,
             FixedLengthString* data);
-        TacacsPacketAuthenticationStart(Buffer& rbuff, bool headerDecode = true);
+        TacacsPacketAuthenticationStart(TacacsPacketContext* context, Buffer& rbuff);
         virtual ~TacacsPacketAuthenticationStart();
         /**
          * getType : get an unique string that describe the type of pack

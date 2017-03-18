@@ -4,16 +4,21 @@
 #include "DecodingException.h"
 
 TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(
-     FixedLengthString* userMsg, FixedLengthString* data, uint8_t flags)
+     TacacsPacketContext* context,
+     FixedLengthString* userMsg,
+     FixedLengthString* data,
+     uint8_t flags) : TacacsPacketWithHeader(context)
 {
     this->setFlags(flags);
     this->userMsg = userMsg;
     this->data = data;
 }
 
-TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(Buffer& rbuff, bool decodeHeader)
+TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(
+    TacacsPacketContext* context,
+    Buffer& rbuff) : TacacsPacketWithHeader(context)
 {
-    this->processDecode(rbuff, decodeHeader);
+    this->processDecode(rbuff);
 }
 
 TacacsPacketAuthenticationContinue::~TacacsPacketAuthenticationContinue()

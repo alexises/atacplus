@@ -15,13 +15,20 @@ class TacacsPacketAuthenticationContinue : public TacacsPacketWithHeader
     public:
         /**
          * create a TacacsPacketAuthenticationContinue packet
+         * @param[in] context context associated with this packet
          * @param[in] userMsg response of the server msg
          * @param[in] data specific data depending on the choose
          *            authentication method
+         * @param[in] flags flags associated with this packet
          */
-        TacacsPacketAuthenticationContinue(FixedLengthString* userMsg,
-            FixedLengthString* data, uint8_t flags);
-        TacacsPacketAuthenticationContinue(Buffer& rbuff, bool headerDecode = true);
+        TacacsPacketAuthenticationContinue(
+            TacacsPacketContext* context,
+            FixedLengthString* userMsg,
+            FixedLengthString* data, 
+            uint8_t flags);
+        TacacsPacketAuthenticationContinue(
+            TacacsPacketContext* context,
+            Buffer& rbuff);
         virtual ~TacacsPacketAuthenticationContinue();
         /**
          * get flags : get flags of the packe

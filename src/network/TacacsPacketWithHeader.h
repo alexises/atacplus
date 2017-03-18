@@ -2,6 +2,7 @@
 #define TACACSPACKETWITHHEADER_H
 #include "TacacsPacketInterface.h"
 #include "TacacsPacketHeader.h"
+#include "TacacsPacketContext.h"
 
 /**
  * allow the end packet to store the corresponding header
@@ -10,7 +11,13 @@
 class TacacsPacketWithHeader : public TacacsPacketInterface
 {
     public:
-        TacacsPacketWithHeader();
+        /**
+         * Build a TacackPacketWithHeader
+         *
+         * the context object is needed for encoding and decoding
+         * @param[in] context context to set
+         */
+        TacacsPacketWithHeader(TacacsPacketContext* context);
         virtual ~TacacsPacketWithHeader();
         /**
          * get the associated header
@@ -25,6 +32,12 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
          * @param[out] wbuff buffer where the packet will be filled
          */
         virtual void encode(Buffer& wbuff);
+        /**
+         * getContext : get the associated context with this object
+         *
+         * @return context associated with this object
+         */
+        TacacsPacketContext* getContext();
     protected:
         /**
          * set the associated header
@@ -39,20 +52,19 @@ class TacacsPacketWithHeader : public TacacsPacketInterface
          * of each child class
          *
          * @param[in] rbuff buffer to decode
-         * @param[în] headerDecode decode the associated header
          */
-        void processDecode(Buffer& rbuff, bool headerDecode);
+        void processDecode(Buffer& rbuff);
         /**
          * really process the encoding operation
          * this method is called on decode methode and should 
          * not be called outside of this class
          *
          * @param[out] wbuff buffer to encode
-         * @param[in] headerDecode
          */
         virtual void processEncode(Buffer& wbuff) = 0;
     private:
         TacacsPacketHeader* header;
+        TacacsPacketContext* context;
 };
 
 #endif

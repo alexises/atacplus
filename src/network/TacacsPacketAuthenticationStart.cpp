@@ -5,6 +5,7 @@
 #include <string>
 
 TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
+            TacacsPacketContext* context,
             const uint8_t action,
             const uint8_t privLvl,
             const uint8_t authenType,
@@ -12,7 +13,7 @@ TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
             FixedLengthString* user,
             FixedLengthString* port,
             FixedLengthString* remoteAddr,
-            FixedLengthString* data)
+            FixedLengthString* data) : TacacsPacketWithHeader(context)
 {
     this->setAction(action);
     this->setPrivLvl(privLvl);
@@ -24,9 +25,11 @@ TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
     this->data = data;
 }
 
-TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(Buffer& rbuff, bool headerDecode)
+TacacsPacketAuthenticationStart::TacacsPacketAuthenticationStart(
+    TacacsPacketContext* context,
+    Buffer& rbuff) : TacacsPacketWithHeader(context)
 {
-    this->processDecode(rbuff, headerDecode);
+    this->processDecode(rbuff);
 }
 
 TacacsPacketAuthenticationStart::~TacacsPacketAuthenticationStart()

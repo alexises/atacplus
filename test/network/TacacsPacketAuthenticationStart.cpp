@@ -3,15 +3,18 @@
 #include "network/Buffer.h"
 #include "network/TacacsPacketAuthenticationStart.h"
 #include "network/DecodingException.h"
+#include "network/TacacsPacketContext.h"
 
 BOOST_AUTO_TEST_SUITE(tacacsPacketAuthenticationStart)
 
 BOOST_AUTO_TEST_CASE(basic_decode)
 {
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     uint8_t* a = (uint8_t*) "\x01\x0f\x01\x01"
                             "\x00\x00\x00\x00";
     Buffer aa(a, 8);
-    TacacsPacketAuthenticationStart obj(aa, false);
+    TacacsPacketAuthenticationStart obj(&context, aa);
     BOOST_CHECK(obj.getAction() == TacacsAuthenticationAction::Login);
     BOOST_CHECK(obj.getPrivLvl() == 15);
     BOOST_CHECK(obj.getAuthenType() == TacacsAuthenticationType::Ascii);
@@ -25,7 +28,8 @@ BOOST_AUTO_TEST_CASE(basic_decode)
 
 BOOST_AUTO_TEST_CASE(decoding_fail)
 {
-
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     uint8_t* a = (uint8_t*) "\x05\x0f\x01\x01" //bad action
                             "\x00\x00\x00\x00";
     uint8_t* b = (uint8_t*) "\x01\x10\x01\x01" //bad privLvl
@@ -44,16 +48,18 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
     Buffer ee(e, 8);
     Buffer ff(f, 4);
 
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(aa, false), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(bb, false), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(cc, false), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(dd, false), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ee, false), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(ff, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(&context, aa), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(&context, bb), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(&context, cc), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(&context, dd), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(&context, ee), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationStart(&context, ff), DecodingException);
 }
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
 {
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     uint8_t* a = (uint8_t*) "\x01\x0f\x01\x01"
                             "\x01\x02\x03\x04"
                             "ABBC"
@@ -65,7 +71,7 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     FixedLengthString remoteAddrStr("CCC", 3);
     FixedLengthString dataStr("DDDD", 4);
 
-    TacacsPacketAuthenticationStart obj(aa, false);
+    TacacsPacketAuthenticationStart obj(&context, aa);
     BOOST_CHECK(obj.getSize() == 18);
     FixedLengthString *user = obj.getUser();
     FixedLengthString *port = obj.getPort();
@@ -80,11 +86,13 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
 
 BOOST_AUTO_TEST_CASE(test_encoding)
 {
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     FixedLengthString* fA = new FixedLengthString("A", 1);
     FixedLengthString* fB = new FixedLengthString("BB", 2);
     FixedLengthString* fC = new FixedLengthString("CCC", 3);
     FixedLengthString* fD = new FixedLengthString("DDDD", 4);
-    TacacsPacketAuthenticationStart packet((uint8_t) 1, (uint8_t) 15, (uint8_t) 1, (uint8_t) 1,
+    TacacsPacketAuthenticationStart packet(&context, (uint8_t) 1, (uint8_t) 15, (uint8_t) 1, (uint8_t) 1,
                                     fA, fB, fC, fD);
     char result[] = "\x01\x0f\x01\x01"
                     "\x01\x02\x03\x04"

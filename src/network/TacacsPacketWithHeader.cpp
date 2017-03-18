@@ -1,13 +1,15 @@
 #include "TacacsPacketWithHeader.h"
 #include "precondition.h"
-TacacsPacketWithHeader::TacacsPacketWithHeader()
+TacacsPacketWithHeader::TacacsPacketWithHeader(TacacsPacketContext* context)
 {
+    precondition(context != NULL);
     this->header = NULL;
+    this->context = context;
 }
 
-void TacacsPacketWithHeader::processDecode(Buffer& rbuff, bool headerDecode)
+void TacacsPacketWithHeader::processDecode(Buffer& rbuff)
 {
-    if (headerDecode)
+    if (this->context->isDecodeHeader())
     {
         this->header = new TacacsPacketHeader(rbuff);
     }
@@ -29,8 +31,13 @@ TacacsPacketHeader* TacacsPacketWithHeader::getHeader()
 
 void TacacsPacketWithHeader::encode(Buffer& wbuff)
 {
-    //FIXME : this is totaly broken, but used on a first pass bases
-    //    this->header->encode(wbuff);
+    //FIXME : naive implementation, should process decode
+    //all child class should generate the proper header
+    //for the object
+    if (this->header != NULL and this->context->isDecodeHeader())
+    {
+        this->header->encode(wbuff);
+    }
     this->processEncode(wbuff);
 }
 
@@ -39,3 +46,9 @@ void TacacsPacketWithHeader::setHeader(TacacsPacketHeader* header)
     precondition(header != NULL);
     this->header = header;
 }
+
+TacacsPacketContext* TacacsPacketWithHeader::getContext()
+{
+    return this->context;
+}
+

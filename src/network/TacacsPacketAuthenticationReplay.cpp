@@ -3,8 +3,12 @@
 #include "DecodingException.h"
 #include "precondition.h"
 
-TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(uint8_t status, uint8_t flags,
-      FixedLengthString* promptMsg, FixedLengthString* data)
+TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(
+    TacacsPacketContext* context,
+    uint8_t status,
+    uint8_t flags,
+    FixedLengthString* promptMsg,
+    FixedLengthString* data) : TacacsPacketWithHeader(context)
 {
     this->setStatus(status);
     this->setFlags(flags);
@@ -12,9 +16,11 @@ TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(uint8_t statu
     this->data = data;
 }
 
-TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(Buffer& rbuff, bool headerDecode)
+TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(
+    TacacsPacketContext* context,
+    Buffer& rbuff) : TacacsPacketWithHeader(context)
 {
-    this->processDecode(rbuff, headerDecode);
+    this->processDecode(rbuff);
 }
 
 TacacsPacketAuthenticationReplay::~TacacsPacketAuthenticationReplay()

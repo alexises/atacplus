@@ -1,5 +1,5 @@
 #include "TacacsPacketContext.h"
-#include "crypto.cpp"
+#include "crypto.h"
 #include "DecodingException.h"
 
 TacacsPacketContext::TacacsPacketContext(int type, size_t rbuff_size, size_t wbuff_size) :

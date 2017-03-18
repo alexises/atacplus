@@ -8,16 +8,19 @@ BOOST_AUTO_TEST_SUITE(tacacsPacketAuthenticationContinue)
 
 BOOST_AUTO_TEST_CASE(basic_decode)
 {
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     uint8_t* a = (uint8_t*) "\x00\x00\x00\x00"
                             "\x01";
     Buffer aa(a, 8);
-    TacacsPacketAuthenticationContinue obj(aa, false);
+    TacacsPacketAuthenticationContinue obj(&context, aa);
     BOOST_CHECK(obj.getFlags() == AuthenticationContinueFlags::ContinueAbort);
 }
 
 BOOST_AUTO_TEST_CASE(decoding_fail)
 {
-
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     uint8_t* a = (uint8_t*) "\x00\x00\x00\x00" //bad flags
                             "\x02";
     uint8_t* b = (uint8_t*) "\x01\x0f\x01\x00" //bad total size
@@ -27,13 +30,15 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
     Buffer bb(b, 5);
     Buffer cc(c, 4);
 
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(aa, false), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(bb, false), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(cc, false), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(&context, aa), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(&context, bb), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationContinue(&context, cc), DecodingException);
 }
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
 {
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     uint8_t* a = (uint8_t*) "\x00\x04\x00\x03"
                             "\x00"
                             "AAAA"
@@ -42,7 +47,7 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
     FixedLengthString userMsgStr("AAAA", 4);
     FixedLengthString dataStr("BBB", 3);
 
-    TacacsPacketAuthenticationContinue obj(aa, false);
+    TacacsPacketAuthenticationContinue obj(&context, aa);
     BOOST_CHECK(obj.getSize() == 12);
     FixedLengthString *userMsg = obj.getUserMsg();
     FixedLengthString *data = obj.getData();
@@ -53,9 +58,11 @@ BOOST_AUTO_TEST_CASE(variable_parameter_check)
 
 BOOST_AUTO_TEST_CASE(test_encoding)
 {
+    TacacsPacketContext context(TacacsConnectionType::Server);
+    context.setDecodeHeader(false);
     FixedLengthString* fUserMsg = new FixedLengthString("AAAA", 4);
     FixedLengthString* fData = new FixedLengthString("BBB", 3);
-    TacacsPacketAuthenticationContinue packet(fUserMsg, fData, 
+    TacacsPacketAuthenticationContinue packet(&context, fUserMsg, fData, 
                         AuthenticationContinueFlags::NoFlags);
     char result[] = "\x00\x04\x00\x03"
                     "\x00"
