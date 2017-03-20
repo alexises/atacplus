@@ -1,7 +1,5 @@
 #ifndef TACACSPACKETCONTEXT_H
 #define TACACSPACKETCONTEXT_H
-#include "TacacsPacketInterface.h"
-#include "TacacsPacketHeader.h"
 #include "enum.h"
 #include "Buffer.h"
 #include "FixedLengthString.h"
@@ -12,14 +10,21 @@ struct TacacsConnectionType
     enum_mbr Server = 2;
 };
 
-struct TacacsConnectionStep
-{
-    enum_mbr NoStart = 0;
-    enum_mbr StartAuthentication = 1;
-    enum_mbr StartAuthorization = 2;
-    enum_mbr StartAccounting = 3;
-    enum_mbr ReplayAuthentication = 4;
-};
+
+//forwoard declaration
+class TacacsPacketContext;
+class TacacsPacketWithHeader; //needed to solve cycling inclusion
+
+
+/**
+ * private function used internally, theses function are declered here 
+ * for freind keyword usage.
+ * theses functions are used for encoding and decoding purpose
+ */
+TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj);
+void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
+TacacsPacketWithHeader* decodeAuthenticationContinue(TacacsPacketContext* obj);
+
 
 /**
  * store the context needed to encode and decode TacacsPacket
@@ -38,8 +43,16 @@ class TacacsPacketContext
         ~TacacsPacketContext();
         /**
          * decode a packet
+         * 
+         * @return decoded packety
          */
-        TacacsPacketInterface* decode();
+        TacacsPacketWithHeader* decode();
+        /**
+         * encode a packet
+         *
+         * @param[in] packet packet to encode
+         */
+        void encode(TacacsPacketWithHeader* packet);
         /**
          * set the shared key used to decipher/encipher the packet payload
          *
@@ -89,10 +102,15 @@ class TacacsPacketContext
 	int connType;
         uint32_t sessionId;
         uint8_t seqNo;
-        TacacsPacketHeader* header;
         FixedLengthString* key;
         Buffer rbuff;
         Buffer wbuff;
         bool decodeHeader;
+        void (*encodeCallback)(TacacsPacketContext*, TacacsPacketWithHeader*);
+        TacacsPacketWithHeader* (*decodeCallback)(TacacsPacketContext*);
+
+    friend TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj);
+    friend void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
+    friend TacacsPacketWithHeader* decodeAuthenticationContinue(TacacsPacketContext* obj);
 };
 #endif
