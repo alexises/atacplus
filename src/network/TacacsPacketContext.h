@@ -24,6 +24,9 @@ class TacacsPacketWithHeader; //needed to solve cycling inclusion
 TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj);
 void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
 TacacsPacketWithHeader* decodeAuthenticationContinue(TacacsPacketContext* obj);
+void startEncode(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
+TacacsPacketWithHeader* decodeAuthenticationReplay(TacacsPacketContext* obj);
+void encodeAuthenticationContinue(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
 
 
 /**
@@ -112,5 +115,8 @@ class TacacsPacketContext
     friend TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj);
     friend void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
     friend TacacsPacketWithHeader* decodeAuthenticationContinue(TacacsPacketContext* obj);
+    friend void startEncode(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
+    friend TacacsPacketWithHeader* decodeAuthenticationReplay(TacacsPacketContext* obj);
+    friend void encodeAuthenticationContinue(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
 };
 #endif

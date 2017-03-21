@@ -37,6 +37,21 @@ TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj)
     return res;
 }
 
+void startEncode(TacacsPacketContext* obj, TacacsPacketWithHeader* packet)
+{
+    std::string type = packet->getType();
+    if (type == "auth-start")
+    {
+        obj->decodeCallback = decodeAuthenticationReplay;
+        obj->encodeCallback = NULL;
+    }
+    else 
+    {
+        throw DecodingException("unexpected packed, expect auth-start");
+    }
+    packet->encode(obj->wbuff);
+}
+
 void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader* packet)
 {
     if (packet->getType() != "auth-replay")
@@ -53,16 +68,38 @@ void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader
         case AuthenticationStatus::GetUser:
         case AuthenticationStatus::GetPassword:
             obj->decodeCallback = decodeAuthenticationContinue;
+            break;
         default:
             obj->decodeCallback = startDecode;
+            break;
     }
     obj->encodeCallback = NULL;
 }
 
+TacacsPacketWithHeader* decodeAuthenticationReplay(TacacsPacketContext* obj)
+{
+    TacacsPacketAuthenticationReplay* packet =
+        new TacacsPacketAuthenticationReplay(obj, obj->rbuff);
+    uint8_t status = packet->getStatus();
+    switch (status)
+    {
+        case AuthenticationStatus::GetData:
+        case AuthenticationStatus::GetUser:
+        case AuthenticationStatus::GetPassword:
+            obj->encodeCallback = encodeAuthenticationContinue;
+            obj->decodeCallback = NULL;
+            break;
+        default:
+            obj->encodeCallback = startEncode;
+            obj->decodeCallback = NULL;
+    }
+    return packet;
+}
+
 TacacsPacketWithHeader* decodeAuthenticationContinue(TacacsPacketContext* obj)
 {
-    TacacsPacketAuthenticationReplay* packet = 
-        new TacacsPacketAuthenticationReplay(obj, obj->rbuff);
+    TacacsPacketAuthenticationContinue* packet = 
+        new TacacsPacketAuthenticationContinue(obj, obj->rbuff);
     if ((packet->getFlags() & AuthenticationContinueFlags::ContinueAbort) != 0)
     {
         obj->encodeCallback = NULL;
@@ -75,6 +112,28 @@ TacacsPacketWithHeader* decodeAuthenticationContinue(TacacsPacketContext* obj)
     }
     return packet;
 }
+
+void encodeAuthenticationContinue(TacacsPacketContext* obj, TacacsPacketWithHeader* packet)
+{
+    if (packet->getType() != "auth-continue")
+    {
+        throw EncodingException("Expect authentication continue packet");
+    }
+    TacacsPacketAuthenticationContinue* castPacket =
+        dynamic_cast<TacacsPacketAuthenticationContinue*>(packet);
+    if ((castPacket->getFlags() & AuthenticationContinueFlags::ContinueAbort) != 0)
+    {
+        obj->encodeCallback = startEncode;
+        obj->decodeCallback = NULL;
+    }
+    else
+    {
+        obj->encodeCallback = NULL;
+        obj->decodeCallback = decodeAuthenticationReplay;
+    }
+    packet->encode(obj->wbuff);
+}
+
 
 TacacsPacketContext::TacacsPacketContext(int type, size_t rbuff_size, size_t wbuff_size) :
     rbuff(rbuff_size), wbuff(wbuff_size)
@@ -91,7 +150,7 @@ TacacsPacketContext::TacacsPacketContext(int type, size_t rbuff_size, size_t wbu
             this->decodeCallback = startDecode;
             break;
         case TacacsConnectionType::Client:
-            this->encodeCallback = NULL;
+            this->encodeCallback = startEncode;
             this->decodeCallback = NULL;
             break;
         default:
