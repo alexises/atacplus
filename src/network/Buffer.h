@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include "FixedLengthString.h"
 
+class TcpSocket;
+
 /**
  * Buffer : define a network buffer
  */
@@ -108,5 +110,6 @@ class Buffer
         size_t size;
         int readPos;
         int writePos;
+    friend class TcpSocket;
 };
 #endif
