@@ -1,13 +1,8 @@
 #include "crypto.h"
 #include "precondition.h"
+#include "macro.h"
 #include <cstring>
 #include <openssl/md5.h>
-
-
-#define min(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a < _b ? _a : _b; })
 
 /**
  * create the clear message used for the first row algorithm

@@ -108,8 +108,8 @@ class Buffer
         void push(uint8_t val);
         uint8_t* buff;
         size_t size;
-        int readPos;
-        int writePos;
+        size_t readPos;
+        size_t writePos;
     friend class TcpSocket;
 };
 #endif

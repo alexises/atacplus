@@ -1,5 +1,7 @@
 #include "TcpSocket.h"
 #include "precondition.h"
+#include "macro.h"
+#include <sys/socket.h>
 
 TcpSocket::TcpSocket()
 {
@@ -64,10 +66,71 @@ void TcpSocket::read(bool rblocking)
 {
     precondition(rbuff != NULL && wbuff != NULL);
     precondition(usable == true);
+    size_t availableWrite, currPos, size, firstBuffSize, secondBuffSize;
+    int flags = 0;
+    availableWrite = this->rbuff->availableWrite();
+    currPos = this->rbuff->writePos;
+    size = this->rbuff->size;
+    firstBuffSize = min(size - currPos, availableWrite);
+    secondBuffSize = availableWrite - firstBuffSize;
+
+    if (!rblocking)
+    {
+        flags = MSG_DONTWAIT;
+    }
+
+    ssize_t readBytes = recv(this->socket, 
+                            &(this->rbuff->buff[currPos % size]),
+                            firstBuffSize, flags);
+    if (readBytes > -1)
+    {
+        this->rbuff->writePos += readBytes;
+        if (readBytes == firstBuffSize)
+        {
+            readBytes = recv(this->socket,
+                             &(this->rbuff->buff),
+                              secondBuffSize, 0);
+        }
+        if (readBytes > -1)
+        {
+            this->rbuff->writePos += readBytes;
+        }
+    }
 }
 
 void TcpSocket::write(bool wblocking)
 {
     precondition(rbuff != NULL && wbuff != NULL);
     precondition(usable == true);
+    size_t availableRead, currPos, size, firstBuffSize, secondBuffSize;
+    int flags = 0;
+    availableRead = this->wbuff->availableRead();
+    currPos = this->wbuff->readPos;
+    size = this->wbuff->size;
+    firstBuffSize = min(size - currPos, availableRead);
+    secondBuffSize = availableRead - firstBuffSize;
+
+    if (!wblocking)
+    {
+        flags = MSG_DONTWAIT;
+    }
+
+    ssize_t writeBytes = send(this->socket,
+                            &(this->wbuff->buff[currPos % size]),
+                            firstBuffSize, flags);
+    if (writeBytes > -1)
+    {
+        this->rbuff->readPos += writeBytes;
+        if (writeBytes == firstBuffSize)
+        {
+            writeBytes = recv(this->socket,
+                             &(this->wbuff->buff),
+                              secondBuffSize, 0);
+        }
+        if (writeBytes > -1)
+        {
+            this->wbuff->readPos += writeBytes;
+        }
+    }
+
 }
