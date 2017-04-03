@@ -34,6 +34,7 @@ set (Atacplus_network_src
         "${SRC_DIR}/network/TacacsPacketContext.cpp"
         "${SRC_DIR}/network/Buffer.cpp"
         "${SRC_DIR}/network/TcpSocket.cpp"
+        "${SRC_DIR}/network/TcpClient.cpp"
         "${SRC_DIR}/network/TacacsPacketAuthentication.cpp"
         "${SRC_DIR}/network/TacacsPacketAuthenticationStart.cpp"
         "${SRC_DIR}/network/TacacsPacketAuthenticationReplay.cpp"

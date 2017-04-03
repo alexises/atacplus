@@ -2,6 +2,7 @@
 #define TCPSOCKET_H
 
 #include "Buffer.h"
+#include "FixedLengthString.h"
 
 /**
  * represent a tcp socket
@@ -10,6 +11,7 @@ class TcpSocket
 {
     public:
         TcpSocket();
+        ~TcpSocket();
         /**
          * set the associated buffer with 
          *
@@ -69,8 +71,11 @@ class TcpSocket
          */
         TcpSocket(int socket);
         bool usable;
-    private:
         int socket;
+        uint32_t remoteAddr;
+        FixedLengthString* remoteFqdn;
+        uint16_t remotePort;
+    private:
         Buffer* rbuff; // this buffer contain bytes in waiting for client read
         Buffer* wbuff; // this buffer contain bytes in waiting for send to the network
 };

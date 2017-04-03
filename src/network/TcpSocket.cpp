@@ -2,6 +2,7 @@
 #include "precondition.h"
 #include "macro.h"
 #include <sys/socket.h>
+#include <unistd.h>
 
 TcpSocket::TcpSocket()
 {
@@ -17,6 +18,15 @@ TcpSocket::TcpSocket(int socket)
     this->rbuff = NULL;
     this->wbuff = NULL;
     this->usable = false;
+}
+
+TcpSocket::~TcpSocket()
+{
+    if (this->usable)
+    {
+        shutdown(this->socket, SHUT_RDWR);
+    }
+    close(this->socket);
 }
 
 void TcpSocket::setBuffer(Buffer* rbuff, Buffer* wbuff)
