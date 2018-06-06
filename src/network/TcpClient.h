@@ -1,9 +1,9 @@
 #ifndef TCPCLIENT_H
 #define TCPCLIENT_H
-#include "TcpSocket.h"
+#include "BufferedTcpSocket.h"
 #include "stdint.h"
 
-class TcpClient : public TcpSocket
+class TcpClient : public BufferedTcpSocket
 {
     public:
         TcpClient();
@@ -17,6 +17,7 @@ class TcpClient : public TcpSocket
          *   true
          */
         void connect(char* addr, uint16_t port);
+        ~TcpClient();
 };
 
 

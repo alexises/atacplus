@@ -110,6 +110,6 @@ class Buffer
         size_t size;
         size_t readPos;
         size_t writePos;
-    friend class TcpSocket;
+    friend class BufferedTcpSocket;
 };
 #endif

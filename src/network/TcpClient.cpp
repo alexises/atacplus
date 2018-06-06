@@ -5,7 +5,7 @@
 #include <netdb.h>
 
 
-TcpClient::TcpClient() : TcpSocket()
+TcpClient::TcpClient() : BufferedTcpSocket()
 {
 }
 
