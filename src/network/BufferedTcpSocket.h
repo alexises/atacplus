@@ -8,6 +8,7 @@
 class BufferedTcpSocket : public TcpSocket
 {
     public:
+        BufferedTcpSocket(int socket);
         BufferedTcpSocket();
         ~BufferedTcpSocket();
 
@@ -52,9 +53,6 @@ class BufferedTcpSocket : public TcpSocket
          * @pre isUsable == true;
          */
         void write(bool wblocking);
-
-    protected:
-        BufferedTcpSocket(int socket);
 
     private:
         Buffer* rbuff; // this buffer contain bytes in waiting for client read

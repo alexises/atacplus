@@ -14,6 +14,7 @@ BufferedTcpSocket::BufferedTcpSocket(int socket) : TcpSocket(socket)
 {
     this->rbuff = NULL;
     this->wbuff = NULL;
+    this->usable = true;
 }
 
 BufferedTcpSocket::~BufferedTcpSocket()

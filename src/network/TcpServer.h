@@ -1,7 +1,8 @@
 #ifndef TCPSERVER_H
 #define TCPSERVER_H
+#include <stdint.h>
 #include "TcpSocket.h"
-#include "stdint.h"
+#include "BufferedTcpSocket.h"
 
 class TcpServer : public TcpSocket
 {
@@ -16,6 +17,13 @@ class TcpServer : public TcpSocket
          *   true
          */
         void listen(char* addr, uint16_t port);
+        /**
+         * accept new connection
+         * 
+         * @pre isUsable()
+         * @return new socket if succes, NULL otherwise
+         */
+        BufferedTcpSocket* accept();
 };
 
 

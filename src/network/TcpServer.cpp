@@ -4,6 +4,7 @@
 #include <netinet/in.h>
 #include <unistd.h>
 #include "TcpServer.h"
+#include "precondition.h"
 
 TcpServer::TcpServer() : TcpSocket()
 {
@@ -39,4 +40,23 @@ void TcpServer::listen(char* addr, uint16_t port)
         return;
     }
     this->usable = true;
+}
+
+BufferedTcpSocket* TcpServer::accept()
+{
+    precondition(this->isUsable());
+
+    struct sockaddr_in addr_struct;
+    socklen_t addr_struct_size = sizeof(addr_struct); 
+    int ret;
+    BufferedTcpSocket* sock = NULL;
+
+    ret = ::accept(this->socket, (sockaddr*) &addr_struct, &addr_struct_size);
+    if (ret == -1)
+    {
+        return NULL;
+    }
+    
+    sock = new BufferedTcpSocket(ret);
+    return sock;
 }
