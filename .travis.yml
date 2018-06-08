@@ -6,6 +6,5 @@ script:
   - cmake .
   - make
   - ctest --verbose
-  - make profile
 compiler: gcc
 
