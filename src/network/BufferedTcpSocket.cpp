@@ -63,13 +63,12 @@ void BufferedTcpSocket::read(bool rblocking)
 {
     precondition(rbuff != NULL && wbuff != NULL);
     precondition(usable == true);
-    size_t availableWrite, currPos, size, firstBuffSize, secondBuffSize;
+    size_t availableWrite, currPos, size, firstBuffSize;
     int flags = 0;
     availableWrite = this->rbuff->availableWrite();
     currPos = this->rbuff->writePos;
     size = this->rbuff->size;
     firstBuffSize = min(size - currPos, availableWrite);
-    secondBuffSize = availableWrite - firstBuffSize;
 
     if (!rblocking)
     {
@@ -82,16 +81,6 @@ void BufferedTcpSocket::read(bool rblocking)
     if (readBytes > -1)
     {
         this->rbuff->writePos += readBytes;
-        if (readBytes == firstBuffSize)
-        {
-            readBytes = recv(this->socket,
-                             &(this->rbuff->buff),
-                              secondBuffSize, 0);
-        }
-        if (readBytes > -1)
-        {
-            this->rbuff->writePos += readBytes;
-        }
     }
 }
 
@@ -99,13 +88,12 @@ void BufferedTcpSocket::write(bool wblocking)
 {
     precondition(rbuff != NULL && wbuff != NULL);
     precondition(usable == true);
-    size_t availableRead, currPos, size, firstBuffSize, secondBuffSize;
+    size_t availableRead, currPos, size, firstBuffSize;
     int flags = 0;
     availableRead = this->wbuff->availableRead();
     currPos = this->wbuff->readPos;
     size = this->wbuff->size;
     firstBuffSize = min(size - currPos, availableRead);
-    secondBuffSize = availableRead - firstBuffSize;
 
     if (!wblocking)
     {
@@ -117,16 +105,6 @@ void BufferedTcpSocket::write(bool wblocking)
                             firstBuffSize, flags);
     if (writeBytes > -1)
     {
-        this->rbuff->readPos += writeBytes;
-        if (writeBytes == firstBuffSize)
-        {
-            writeBytes = recv(this->socket,
-                             &(this->wbuff->buff),
-                              secondBuffSize, 0);
-        }
-        if (writeBytes > -1)
-        {
-            this->wbuff->readPos += writeBytes;
-        }
+        this->wbuff->readPos += writeBytes;
     }
 }
