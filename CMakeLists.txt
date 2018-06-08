@@ -54,6 +54,8 @@ add_library (atacplus_config ${Atacplus_config_src})
 
 # unit test
 enable_testing()
+
+## network test
 set (network_test_files 
 	"${TEST_DIR}/network/TacacsPacketHeader.cpp"
 	"${TEST_DIR}/network/crypto.cpp"
@@ -66,24 +68,37 @@ set (network_test_files
         "${TEST_DIR}/network/TacacsPacketAuthenticationContinue.cpp"
         "${TEST_DIR}/network/TcpServer.cpp")
 
-set (config_test_files
-        "${TEST_DIR}/config/ConfigElement.cpp")
-
-add_executable (test_exec
+add_executable (test_network_exec
 	${network_test_files}
-        ${config_test_files})
+        )
 
 include_directories(${SRC_DIR})
-target_link_libraries(test_exec 
-        atacplus_network atacplus_config
+target_link_libraries(test_network_exec 
+        atacplus_network
         ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
 
-add_test (NAME test_network COMMAND test_exec)
+## config test ##
+set (config_test_files
+        "${TEST_DIR}/config/config.cpp"
+        "${TEST_DIR}/config/ConfigElement.cpp")
+
+add_executable (test_config_exec
+        ${config_test_files}
+        )
+target_link_libraries(test_config_exec 
+        atacplus_config
+        ${Boost_LIBRARIES})
+
+
+add_test (NAME test_network COMMAND test_network_exec)
+add_test (NAME test_config COMMAND test_config_exec)
 
 # valgrind profile
-
-add_custom_target(profile DEPENDS test_exec_profile)
-add_custom_target(test_profile
-                  DEPENDS test_exec
+add_custom_target(profile DEPENDS test_network_profile test_config_profile)
+add_custom_target(test_network_profile
+                  DEPENDS test_network_exec
                   COMMAND ${VALGRIND} ${VALGRIND_ARGS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_network_exec VERBATIM)
 
+add_custom_target(test_config_profile
+                  DEPENDS test_config_exec
+                  COMMAND ${VALGRIND} ${VALGRIND_ARGS} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test_config_exec VERBATIM)
