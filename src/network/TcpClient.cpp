@@ -42,15 +42,11 @@ void TcpClient::connect(const char* addr, uint16_t port)
         if (cStatus == 0)
         {
             this->usable = true;
+            this->remotePort = port;
+            this->remoteAddr = ntohl(h->sin_addr.s_addr);
+            this->remoteFqdn = new FixedLengthString(addr, strlen(addr));
             break;
         }
     }
     freeaddrinfo(servinfo); // all done with this structure
-
-    if (this->usable)
-    {
-        this->remotePort = port;
-        this->remoteAddr = ntohl(h->sin_addr.s_addr);
-        this->remoteFqdn = new FixedLengthString(addr, strlen(addr));
-    }
 }
