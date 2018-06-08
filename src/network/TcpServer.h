@@ -16,7 +16,7 @@ class TcpServer : public TcpSocket
          * @return noting, but set usability by setting the setUsable to
          *   true
          */
-        void listen(char* addr, uint16_t port);
+        void listen(const char* addr, uint16_t port);
         /**
          * accept new connection
          * 

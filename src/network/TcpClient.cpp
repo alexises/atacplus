@@ -9,7 +9,11 @@ TcpClient::TcpClient() : BufferedTcpSocket()
 {
 }
 
-void TcpClient::connect(char* addr, uint16_t port)
+TcpClient::~TcpClient()
+{
+}
+
+void TcpClient::connect(const char* addr, uint16_t port)
 {
     struct addrinfo hints, *servinfo, *p;
     struct sockaddr_in *h;
@@ -33,7 +37,7 @@ void TcpClient::connect(char* addr, uint16_t port)
         if (this->socket == -1)
             continue;
         cStatus = ::connect(this->socket, 
-                     (struct sockaddr *)&h, sizeof(h));
+                     (struct sockaddr *)h, sizeof(struct sockaddr_in));
 
         if (cStatus == 0)
         {

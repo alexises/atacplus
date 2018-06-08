@@ -10,7 +10,7 @@ TcpServer::TcpServer() : TcpSocket()
 {
 }
 
-void TcpServer::listen(char* addr, uint16_t port)
+void TcpServer::listen(const char* addr, uint16_t port)
 {
     struct sockaddr_in addr_struct;
     int ret;

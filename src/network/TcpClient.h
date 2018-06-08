@@ -16,7 +16,7 @@ class TcpClient : public BufferedTcpSocket
          * @return noting, but set usability by setting the setUsable to
          *   true
          */
-        void connect(char* addr, uint16_t port);
+        void connect(const char* addr, uint16_t port);
         ~TcpClient();
 };
 
