@@ -17,9 +17,23 @@ class ConfigElement
         ConfigElement(const char* name, const char* defaultValue, bool required);
 
         /**
+         * affect new value to the configuration element
+         * @param[in] value value to set
+         */
+        void operator=(const char* value);
+        void operator=(const std::string& value);
+
+        /**
          * is valid : check if config element is valid
          */
         bool isValid();
+
+        /**
+         * get value of the config
+         * 
+         * @return value, the string has "" value is no parameter is set
+         */
+         std::string get();
 
     private:
         std::string name;

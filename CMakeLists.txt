@@ -49,6 +49,7 @@ include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 # config library
 set (Atacplus_config_src
         "${SRC_DIR}/config/ConfigElement.cpp"
+        "${SRC_DIR}/config/ConfigSection.cpp"
 )
 add_library (atacplus_config ${Atacplus_config_src})
 

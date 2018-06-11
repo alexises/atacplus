@@ -14,4 +14,14 @@ BOOST_AUTO_TEST_CASE(basic_test)
     BOOST_CHECK(!c.isValid());
 }
 
+BOOST_AUTO_TEST_CASE(value_check)
+{
+    ConfigElement a("a", "", true);
+    BOOST_CHECK(!a.isValid());
+    BOOST_CHECK(a.get() == "");
+    a = "a";
+    BOOST_CHECK(a.isValid());
+    BOOST_CHECK(a.get() == "a");
+}
+
 BOOST_AUTO_TEST_SUITE_END()

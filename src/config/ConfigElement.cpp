@@ -14,3 +14,18 @@ bool ConfigElement::isValid()
 {
     return !this->required || this->value != "";
 }
+
+void ConfigElement::operator=(const char* value)
+{
+    this->value = std::string(value);
+}
+
+void ConfigElement::operator=(const std::string& value)
+{
+    this->value = value;
+}
+
+std::string ConfigElement::get()
+{
+    return this->value;
+}
