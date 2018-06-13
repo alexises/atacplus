@@ -50,6 +50,8 @@ include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
 set (Atacplus_config_src
         "${SRC_DIR}/config/ConfigElement.cpp"
         "${SRC_DIR}/config/ConfigSection.cpp"
+        "${SRC_DIR}/config/ServerConfigSection.cpp"
+        "${SRC_DIR}/config/ConfigElementNotFoundException.cpp"
 )
 add_library (atacplus_config ${Atacplus_config_src})
 
@@ -81,7 +83,8 @@ target_link_libraries(test_network_exec
 ## config test ##
 set (config_test_files
         "${TEST_DIR}/config/config.cpp"
-        "${TEST_DIR}/config/ConfigElement.cpp")
+        "${TEST_DIR}/config/ConfigElement.cpp"
+        "${TEST_DIR}/config/ConfigSection.cpp")
 
 add_executable (test_config_exec
         ${config_test_files}

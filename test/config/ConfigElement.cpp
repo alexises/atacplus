@@ -2,7 +2,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_SUITE(fixedLengthString)
+BOOST_AUTO_TEST_SUITE(configElement)
 BOOST_AUTO_TEST_CASE(basic_test)
 {
     ConfigElement a("a", "a", true);

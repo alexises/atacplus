@@ -1,4 +1,5 @@
 #include "ConfigSection.h"
+#include "ConfigElementNotFoundException.h"
 
 ConfigSection::ConfigSection(char* sectionName) : sectionName(std::string(sectionName))
 {
@@ -20,5 +21,10 @@ void ConfigSection::setAttr(const char* name, const char* defaultValue, bool req
 
 ConfigElement& ConfigSection::operator[](const char* name)
 {
-    return *(this->configElements[std::string(name)]);
+    ConfigElement* elem = this->configElements[std::string(name)];
+    if (elem == NULL)
+    {
+        throw ConfigElementNotFoundException(name);
+    }
+    return *elem;
 }

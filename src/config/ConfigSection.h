@@ -18,6 +18,7 @@ class ConfigSection {
          * @param[in] required set if parameter is required
          */
         void setAttr(const char* name, const char* defaultValue, bool required);
+    public:
         /**
          * get configelement from configuration
          *
