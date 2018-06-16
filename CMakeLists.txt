@@ -22,6 +22,8 @@ set(VALGRIND_ARGS "--leak-check=full")
 # library
 find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework)
 find_package(OpenSSL REQUIRED)
+find_package(FLEX REQUIRED)
+find_package(BISON REQUIRED)
 
 # network library
 set (Atacplus_network_src
@@ -44,16 +46,29 @@ set (Atacplus_network_src
         "${SRC_DIR}/network/TacacsPacketWithHeader.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
-include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} )
 
 # config library
+FLEX_TARGET(scanner
+        "${SRC_DIR}/config/parser.l"
+        "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/scanner.cpp")
+
+BISON_TARGET(parser
+        "${SRC_DIR}/config/parser.y"
+        "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/parser.cpp"
+)
+
 set (Atacplus_config_src
         "${SRC_DIR}/config/ConfigElement.cpp"
         "${SRC_DIR}/config/ConfigSection.cpp"
         "${SRC_DIR}/config/ServerConfigSection.cpp"
         "${SRC_DIR}/config/ConfigElementNotFoundException.cpp"
+        ${FLEX_scanner_OUTPUTS}
+        ${BISON_parser_OUTPUTS}
 )
 add_library (atacplus_config ${Atacplus_config_src})
+target_include_directories(atacplus_config 
+        PRIVATE "${SRC_DIR}/config/")
 
 # unit test
 enable_testing()
