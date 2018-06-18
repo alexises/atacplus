@@ -37,6 +37,7 @@ char* processStr()
      return out;
 }
 %}
+%option noyywrap
 
 %%
 

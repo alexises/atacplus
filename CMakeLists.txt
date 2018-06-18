@@ -51,7 +51,8 @@ include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} )
 # config library
 FLEX_TARGET(scanner
         "${SRC_DIR}/config/parser.l"
-        "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/scanner.cpp")
+        "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/scanner.cpp"
+        COMPILE_FLAGS "--header-file=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/scanner.h")
 
 BISON_TARGET(parser
         "${SRC_DIR}/config/parser.y"
@@ -63,12 +64,14 @@ set (Atacplus_config_src
         "${SRC_DIR}/config/ConfigSection.cpp"
         "${SRC_DIR}/config/ServerConfigSection.cpp"
         "${SRC_DIR}/config/ConfigElementNotFoundException.cpp"
+        "${SRC_DIR}/config/parser.cpp"
         ${FLEX_scanner_OUTPUTS}
         ${BISON_parser_OUTPUTS}
 )
 add_library (atacplus_config ${Atacplus_config_src})
 target_include_directories(atacplus_config 
-        PRIVATE "${SRC_DIR}/config/")
+        PRIVATE "${SRC_DIR}/config/"
+        PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
 
 # unit test
 enable_testing()
@@ -99,11 +102,15 @@ target_link_libraries(test_network_exec
 set (config_test_files
         "${TEST_DIR}/config/config.cpp"
         "${TEST_DIR}/config/ConfigElement.cpp"
-        "${TEST_DIR}/config/ConfigSection.cpp")
+        "${TEST_DIR}/config/ConfigSection.cpp"
+        "${TEST_DIR}/config/parser.cpp")
 
 add_executable (test_config_exec
         ${config_test_files}
         )
+
+target_include_directories(test_config_exec 
+        PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
 target_link_libraries(test_config_exec 
         atacplus_config
         ${Boost_LIBRARIES})
