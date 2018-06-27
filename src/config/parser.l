@@ -12,10 +12,10 @@ void stepPos()
 
 char* processStr()
 {
-     char* out = new char[yyleng - 2];
+     char* out = new char[yyleng - 1];
      int iOut = 0;
      int iIn = 1;
-     while (iIn < yyleng && iOut < (yyleng - 2))
+     while (iIn < (yyleng - 1) && iOut < (yyleng - 2))
      {
          if (yytext[iIn] != '\\')
          {
@@ -29,7 +29,7 @@ char* processStr()
          }
          iOut++;
      }
-     for (; iOut != yyleng; ++iOut)
+     for (; iOut < (yyleng - 1); ++iOut)
      {
          out[iOut] = '\0';
      }
@@ -41,11 +41,13 @@ char* processStr()
 
 %%
 
-{                   { stepPos(); return OPEN_BRACKET; }
-}                   { stepPos(); return CLOSE_BRACKET; }
+\{                   { stepPos(); return OPEN_BRACKET; }
+\}                   { stepPos(); return CLOSE_BRACKET; }
 ;                   { stepPos(); return SEMICOLUMN; }
 server              { stepPos(); return SERVER; }
-[a-z][a-z_-]+       { stepPos(); return CONFIG_NAME; }
+[a-z][a-z_-]+       { stepPos(); 
+                      yylval.char_val = yytext;
+                      return CONFIG_NAME; }
 \"(\\.|[^"\\])*\"   { yylval.char_val = processStr();
                       return STRING; }
 '(\\.|[^'\\])*'     { yylval.char_val = processStr();
