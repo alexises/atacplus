@@ -1,16 +1,39 @@
 %{
-#include "parser.hpp"
+#include <cstdlib>
 #include "parser.h"
-
+#include "parser.hpp"
 int yycharpos = 1;
 char* data;
 
-void stepPos()
-{
-     yycharpos += yyleng;
-}
+#define stepPos() yycharpos += yyleng
+char* processStr(struct yyguts_t* yyg);
+%}
+%option noyywrap
+%option reentrant
+%option bison-bridge
 
-char* processStr()
+%%
+
+\{                   { stepPos(); return OPEN_BRACKET; }
+\}                   { stepPos(); return CLOSE_BRACKET; }
+;                   { stepPos(); return SEMICOLUMN; }
+server              { stepPos(); return SERVER; }
+[a-z][a-z_-]+       { stepPos(); 
+                      yylval->char_val = yytext;
+                      return CONFIG_NAME; }
+[0-9]+              { stepPos(); 
+                      yylval->int_val = strtol(yytext, NULL, 10);
+                      return DIGIT;}
+\"(\\.|[^"\\])*\"   { yylval->char_val = processStr(yyg);
+                      return STRING; }
+'(\\.|[^'\\])*'     { yylval->char_val = processStr(yyg);
+                      return STRING; }
+"[ \t]"             { stepPos(); }
+\n                  { yylineno++; yycharpos=0;}
+
+%%
+
+char* processStr(struct yyguts_t* yyg)
 {
      char* out = new char[yyleng - 1];
      int iOut = 0;
@@ -36,23 +59,3 @@ char* processStr()
      stepPos();
      return out;
 }
-%}
-%option noyywrap
-
-%%
-
-\{                   { stepPos(); return OPEN_BRACKET; }
-\}                   { stepPos(); return CLOSE_BRACKET; }
-;                   { stepPos(); return SEMICOLUMN; }
-server              { stepPos(); return SERVER; }
-[a-z][a-z_-]+       { stepPos(); 
-                      yylval.char_val = yytext;
-                      return CONFIG_NAME; }
-\"(\\.|[^"\\])*\"   { yylval.char_val = processStr();
-                      return STRING; }
-'(\\.|[^'\\])*'     { yylval.char_val = processStr();
-                      return STRING; }
-"[ \t]"             { stepPos(); }
-\n                  { yylineno++; yycharpos=0;}
-
-%%
