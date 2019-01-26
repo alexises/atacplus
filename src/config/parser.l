@@ -3,7 +3,6 @@
 #include "parser.h"
 #include "parser.hpp"
 int yycharpos = 1;
-char* data;
 
 #define stepPos() yycharpos += yyleng
 char* processStr(struct yyguts_t* yyg);
@@ -18,8 +17,10 @@ char* processStr(struct yyguts_t* yyg);
 \}                   { stepPos(); return CLOSE_BRACKET; }
 ;                   { stepPos(); return SEMICOLUMN; }
 server              { stepPos(); return SERVER; }
-[a-z][a-z_-]+       { stepPos(); 
-                      yylval->char_val = yytext;
+[a-z][a-z_-]+       { stepPos();
+                      yylval->char_val = new char[yyleng + 1];
+                      memcpy(yylval->char_val, yytext, yyleng);
+                      yylval->char_val[yyleng] = '\0';
                       return CONFIG_NAME; }
 [0-9]+              { stepPos(); 
                       yylval->int_val = strtol(yytext, NULL, 10);

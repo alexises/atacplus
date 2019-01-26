@@ -65,6 +65,7 @@ set (Atacplus_config_src
         "${SRC_DIR}/config/ServerConfigSection.cpp"
         "${SRC_DIR}/config/ConfigElementNotFoundException.cpp"
         "${SRC_DIR}/config/parser.cpp"
+        "${SRC_DIR}/config/ParserContext.cpp"
         ${FLEX_scanner_OUTPUTS}
         ${BISON_parser_OUTPUTS}
 )

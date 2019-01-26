@@ -1,8 +1,8 @@
 #include "config/parser.h"
 #include "parser.hpp"
 #include "scanner.h"
+#include "config/ConfigElementNotFoundException.h"
 #include <boost/test/unit_test.hpp>
-
 
 BOOST_AUTO_TEST_SUITE(parser_test)
 BOOST_AUTO_TEST_CASE(basic_test)
@@ -85,7 +85,42 @@ BOOST_AUTO_TEST_CASE(test_param_name)
     BOOST_CHECK(yylex(&out, ctx) == SERVER);
     BOOST_CHECK(yylex(&out, ctx) == CONFIG_NAME);
     BOOST_CHECK(std::string("client") == out.char_val);
+    delete[] out.char_val;
     yylex_destroy(ctx);
 }
 
+BOOST_AUTO_TEST_CASE(test_parser)
+{
+    yyscan_t ctx;
+    ParserContext parseCtx;
+    yylex_init(&ctx);
+    
+    char str[] = "server { \n"
+               "  listen '1.2.3.4';\n"
+               "  port '80';\n"
+               "}";
+
+    //yy_delete_buffer(YY_CURRENT_BUFFER, ctx);
+    yy_scan_string(str, ctx); 
+
+    yyparse(ctx, &parseCtx);
+    yylex_destroy(ctx);
+}
+
+BOOST_AUTO_TEST_CASE(test_parser_bad_param)
+{
+    yyscan_t ctx;
+    ParserContext parseCtx;
+    yylex_init(&ctx);
+    
+    char str[] = "server { \n"
+               "  bind '1.2.3.4';\n"
+               "  port '80';\n"
+               "}";
+
+    //yy_delete_buffer(YY_CURRENT_BUFFER, ctx);
+    yy_scan_string(str, ctx); 
+    BOOST_CHECK_THROW(yyparse(ctx, &parseCtx), ConfigElementNotFoundException);
+    yylex_destroy(ctx);
+}
 BOOST_AUTO_TEST_SUITE_END()

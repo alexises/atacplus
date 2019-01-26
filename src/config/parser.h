@@ -1,17 +1,13 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include "ConfigSection.h"
+#include "ParserContext.h"
 
 union parser_data {
     int int_val;
     char* char_val;
 };
 
-struct parser_context{
-    ConfigSection* server;
-    ConfigSection* current;
-};
+typedef void* yyscan_t;
 
-parser_context* parse();
-void yyerror (parser_context* ctx, char const *);
+void yyerror(yyscan_t scanner, ParserContext* ctx, char const *s);
 #endif
