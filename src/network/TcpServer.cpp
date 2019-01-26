@@ -14,8 +14,20 @@ void TcpServer::listen(const char* addr, uint16_t port)
 {
     struct sockaddr_in addr_struct;
     int ret;
+    int sock_reuse=1;
     this->socket = ::socket(AF_INET, SOCK_STREAM, 0);
     if (this->socket == -1)
+    {
+        return;
+    }
+    /*
+     * we use reuseaddr option to be able to reuse socket after
+     * a short restart of program
+     *
+     * this option is independant of a correct cleaning of socket
+     * on exit
+     */
+    if (::setsockopt(this->socket, SOL_SOCKET, SO_REUSEADDR, &sock_reuse, sizeof(int)) < 0)
     {
         return;
     }

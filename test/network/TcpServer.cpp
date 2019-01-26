@@ -1,4 +1,5 @@
 #include <boost/test/unit_test.hpp>
+#include <iostream>
 
 #include "network/TcpServer.h"
 #include "network/TcpClient.h"
@@ -27,7 +28,7 @@ BOOST_AUTO_TEST_CASE(dns_usage_client)
 {
     TcpClient client;
     BOOST_CHECK(client.isUsable() == false);
-    client.connect("www.goole.fr", 80);
+    client.connect("www.github.com", 80);
     BOOST_CHECK(client.isUsable() == true);
 }
 
