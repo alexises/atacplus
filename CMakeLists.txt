@@ -20,7 +20,7 @@ set(VALGRIND /usr/bin/valgrind)
 set(VALGRIND_ARGS "--leak-check=full")
 
 # library
-find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework)
+find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework program_options)
 find_package(OpenSSL REQUIRED)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
@@ -73,6 +73,27 @@ add_library (atacplus_config ${Atacplus_config_src})
 target_include_directories(atacplus_config 
         PRIVATE "${SRC_DIR}/config/"
         PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
+
+#daemon 
+set (Atacplus_daemon_src
+        "${SRC_DIR}/daemon/Options.cpp"
+        "${SRC_DIR}/daemon/main.cpp"
+)
+
+add_executable (atacplus
+        ${Atacplus_daemon_src}
+        )
+
+target_link_libraries(atacplus
+        ${Boost_LIBRARIES}
+        atacplus_network
+        )
+
+
+
+#####################################
+# testing
+#####################################
 
 # unit test
 enable_testing()
