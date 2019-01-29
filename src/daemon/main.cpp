@@ -1,4 +1,5 @@
 #include "Options.h"
+#include "daemonize.h"
 #include <iostream>
 
 int main(int argc, char** argv)
@@ -18,6 +19,9 @@ int main(int argc, char** argv)
     {
         opt.usage();
     }
-
+    if (!opt.isForeground())
+    {
+        daemonize(opt.getUid(), opt.getGid());
+    }
     return 0;
 }

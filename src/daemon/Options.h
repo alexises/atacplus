@@ -30,6 +30,32 @@ class Options
          */
         bool isHelp();
         /**
+         * getUid: get the uid option
+         *
+         * @return the uid passed as command line
+         *         a string object with '' otherwise
+         * @pre isValid() == true;
+         */
+        std::string getUid();
+        /**
+         * getUid: get the uid option
+         *
+         * @return the uid passed as command line
+         *         a string object with '' otherwise
+         * @pre isValid() == true;
+         */
+        std::string getGid();
+        /**
+         * isForeground: check if foreground option is passed
+         *
+         * @return true if foreground option was passed to commend line
+         *         false otherwise
+         * @pre isValid() == true;
+         *
+         */
+        bool isForeground();
+
+        /**
          * usage : print usage message
          */
         void usage();

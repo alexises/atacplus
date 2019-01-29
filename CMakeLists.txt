@@ -77,6 +77,7 @@ target_include_directories(atacplus_config
 #daemon 
 set (Atacplus_daemon_src
         "${SRC_DIR}/daemon/Options.cpp"
+        "${SRC_DIR}/daemon/daemonize.cpp"
         "${SRC_DIR}/daemon/main.cpp"
 )
 
