@@ -64,6 +64,12 @@ bool Options::isHelp()
     return this->help;
 }
 
+bool Options::isDryrun()
+{
+    precondition(this->isValid());
+    return this->help;
+}
+
 void Options::usage()
 {
     this->options.print(std::cout);
@@ -82,4 +88,10 @@ std::string Options::getGid()
 bool Options::isForeground()
 {
     return this->foreground;
+}
+
+std::string Options::getConfigFilename()
+{
+    precondition(this->isValid())
+    return this->configFile;
 }

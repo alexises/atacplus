@@ -54,6 +54,24 @@ class Options
          *
          */
         bool isForeground();
+        /**
+         *
+         * isDruruin: check if dry-run option is passed
+         *
+         * @return true if dry-run option was passed to commend line
+         *         false otherwise
+         * @pre isValid() == true;
+         */
+        bool isDryrun();
+        /**
+         *
+         * getConfigFilename: get the filepath of the confighuration
+         *
+         * @return filepath of the configuration
+         *         
+         * @pre isValid() == true;
+         */
+        std::string getConfigFilename();
 
         /**
          * usage : print usage message

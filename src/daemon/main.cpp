@@ -1,5 +1,6 @@
 #include "Options.h"
 #include "daemonize.h"
+#include "ParserContext.h"
 #include <iostream>
 
 int main(int argc, char** argv)
@@ -19,7 +20,14 @@ int main(int argc, char** argv)
     {
         opt.usage();
     }
-    if (!opt.isForeground())
+    ParserContext ctx;
+    std::string filename = opt.getConfigFilename();
+    if (opt.isDryrun())
+    {
+        ctx.parse(filename);
+        return 0;
+    }
+    else if (!opt.isForeground())
     {
         daemonize(opt.getUid(), opt.getGid());
     }

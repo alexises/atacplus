@@ -2,13 +2,29 @@
 #include <cstdlib>
 #include "parser.h"
 #include "parser.hpp"
+#include <iostream>
 int yycharpos = 1;
 
 #define stepPos() yycharpos += yyleng
 char* processStr(struct yyguts_t* yyg);
+
+#define YY_INPUT(buf, result, max_size)  \
+  result = 0; \
+  while (1) { \
+    int c = yyextra->get(); \
+    if (yyextra->eof()) { \
+      break; \
+    } \
+    buf[result++] = c; \
+    if (result == max_size || c == '\n') { \
+      break; \
+    } \
+  }
+
 %}
 %option noyywrap
 %option reentrant
+%option extra-type="std::iostream *"
 %option bison-bridge
 
 %%

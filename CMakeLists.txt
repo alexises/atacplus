@@ -85,9 +85,14 @@ add_executable (atacplus
         ${Atacplus_daemon_src}
         )
 
+target_include_directories(atacplus
+        PRIVATE "${SRC_DIR}/config/"
+        PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
+
 target_link_libraries(atacplus
         ${Boost_LIBRARIES}
         atacplus_network
+        atacplus_config
         )
 
 
