@@ -3,6 +3,7 @@
 #include "parser.hpp"
 #include "scanner.h"
 #include <fstream>
+#include <stdexcept>
 
 ParserContext::ParserContext()
 {

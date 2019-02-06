@@ -2,6 +2,7 @@
 #include "daemonize.h"
 #include "ParserContext.h"
 #include <iostream>
+#include <stdexcept>
 
 int main(int argc, char** argv)
 {
