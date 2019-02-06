@@ -19,15 +19,25 @@ int main(int argc, char** argv)
     if (opt.isHelp())
     {
         opt.usage();
+        return 0;
     }
     ParserContext ctx;
     std::string filename = opt.getConfigFilename();
-    if (opt.isDryrun())
+    try 
     {
         ctx.parse(filename);
+    }
+    catch (std::runtime_error &e)
+    {
+        std::cerr << e.what() << std::endl;
+        opt.usage();
+        return 1;
+    }
+    if (opt.isDryrun())
+    {
         return 0;
     }
-    else if (!opt.isForeground())
+    if (!opt.isForeground())
     {
         daemonize(opt.getUid(), opt.getGid());
     }

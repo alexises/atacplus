@@ -34,6 +34,10 @@ void ParserContext::parse(std::string& filename)
 {
     std::fstream file;
     file.open(filename.c_str(), std::ios_base::in);
+    if (!file.is_open())
+    {
+       throw std::runtime_error("can't open " + filename + " for reading");
+    }
     this->parse(file);
 }
 

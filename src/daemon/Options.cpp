@@ -67,7 +67,7 @@ bool Options::isHelp()
 bool Options::isDryrun()
 {
     precondition(this->isValid());
-    return this->help;
+    return this->dryrun;
 }
 
 void Options::usage()
