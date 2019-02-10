@@ -4,7 +4,7 @@ before_install:
   - sudo apt-get install -y libboost-test-dev libssl-dev libboost-program-options-dev libboost-thread-dev valgrind
 script:
   - cmake .
-  - make
+  - VERBOSE=1 make
   - ctest --verbose
 compiler: gcc
 
