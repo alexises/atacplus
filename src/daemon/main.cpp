@@ -1,8 +1,10 @@
 #include "Options.h"
 #include "daemonize.h"
 #include "ParserContext.h"
+#include "TacacsServer.h"
 #include <iostream>
 #include <stdexcept>
+#include <cstdlib>
 
 int main(int argc, char** argv)
 {
@@ -42,5 +44,7 @@ int main(int argc, char** argv)
     {
         daemonize(opt.getUid(), opt.getGid());
     }
+    TacacsServer srv((*(ctx.getServer()))["bind"].get().c_str(),
+                     atoi((*(ctx.getServer()))["port"].get().c_str()));
     return 0;
 }

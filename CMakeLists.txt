@@ -20,7 +20,7 @@ set(VALGRIND /usr/bin/valgrind)
 set(VALGRIND_ARGS "--leak-check=full")
 
 # library
-find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework program_options)
+find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework program_options thread)
 find_package(OpenSSL REQUIRED)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
@@ -44,6 +44,8 @@ set (Atacplus_network_src
         "${SRC_DIR}/network/TacacsPacketAuthenticationReplay.cpp"
         "${SRC_DIR}/network/TacacsPacketAuthenticationContinue.cpp"
         "${SRC_DIR}/network/TacacsPacketWithHeader.cpp"
+        "${SRC_DIR}/network/TacacsServer.cpp"
+        "${SRC_DIR}/network/TacacsServerThread.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
 include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} )
@@ -87,6 +89,7 @@ add_executable (atacplus
 
 target_include_directories(atacplus
         PRIVATE "${SRC_DIR}/config/"
+        PRIVATE "${SRC_DIR}/network/"
         PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
 
 target_link_libraries(atacplus
