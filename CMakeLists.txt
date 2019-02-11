@@ -20,6 +20,7 @@ set(VALGRIND /usr/bin/valgrind)
 set(VALGRIND_ARGS "--leak-check=full")
 
 # library
+set(Boost_USE_MULTITHREADED OFF)
 find_package(Boost 1.46.1 REQUIRED COMPONENTS unit_test_framework program_options system thread)
 find_package(OpenSSL REQUIRED)
 find_package(FLEX REQUIRED)
