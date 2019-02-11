@@ -93,6 +93,7 @@ target_include_directories(atacplus
         PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
 
 target_link_libraries(atacplus
+        pthread
         ${Boost_LIBRARIES}
         atacplus_network
         atacplus_config
