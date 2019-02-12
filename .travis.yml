@@ -1,7 +1,7 @@
 language: c++
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y libboost-test-dev libssl-dev libboost-program-options-dev libboost-thread-dev libboost-system-dev valgrind
+  - sudo apt-get install -y libboost-test-dev libssl-dev libboost-program-options-dev libboost-thread-dev libboost-log-dev libboost-system-dev valgrind
 script:
   - cmake .
   - VERBOSE=1 make
