@@ -16,14 +16,14 @@ ParserContext::~ParserContext()
     delete this->server;
 }
 
-ServerConfigSection* ParserContext::getServer()
+ServerConfigSection& ParserContext::getServer()
 {
-    return this->server;
+    return *(this->server);
 }
 
-ConfigSection*  ParserContext::getCtx()
+ConfigSection& ParserContext::getCtx()
 {
-    return this->current_ctx;
+    return *(this->current_ctx);
 }
 
 void ParserContext::setCtx(ConfigSection* ctx)

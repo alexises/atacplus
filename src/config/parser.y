@@ -40,7 +40,7 @@ configSection:
 ;
 
 serverConfigSection:
-  SERVER { ctx->setCtx(ctx->getServer()); } OPEN_BRACKET serverConfigBlock CLOSE_BRACKET
+  SERVER { ctx->setCtx(&(ctx->getServer())); } OPEN_BRACKET serverConfigBlock CLOSE_BRACKET
 ;
 
 serverConfigBlock:
@@ -56,7 +56,7 @@ configInstruction:
   CONFIG_NAME STRING SEMICOLUMN { 
     try
     {
-        (*(ctx->getCtx()))[$1.char_val] = $2.char_val; 
+        ctx->getCtx()[$1.char_val] = $2.char_val; 
         delete[] $1.char_val;
         delete[] $2.char_val;
     }

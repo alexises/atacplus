@@ -13,14 +13,14 @@ class ParserContext {
      *
      * return server subconfig object
      */
-    ServerConfigSection* getServer();
+    ServerConfigSection& getServer();
     /**
      * getCtx : get current parser context
      *
      * return one of the subconfig object depending on the last 
      *        call of setCtx
      */
-    ConfigSection*  getCtx();
+    ConfigSection&  getCtx();
     /**
      * setCtx : set current parser ctx
      */
