@@ -27,6 +27,12 @@ find_package(BISON REQUIRED)
 # boost require header for dynamic linking
 add_definitions(-DBOOST_LOG_DYN_LINK)
 
+#utils library
+set (Atacplus_utils_src
+        "${SRC_DIR}/utils/log.cpp"
+)
+add_library (atacplus_utils ${Atacplus_utils_src})
+
 # network library
 set (Atacplus_network_src
 	"${SRC_DIR}/network/DecodingException.cpp"
@@ -50,6 +56,9 @@ set (Atacplus_network_src
         "${SRC_DIR}/network/TacacsServerThread.cpp"
 )
 add_library (atacplus_network ${Atacplus_network_src})
+target_include_directories(atacplus_network
+        PRIVATE "${SRC_DIR}/utils/"
+        )
 include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} )
 
 # config library
@@ -78,6 +87,7 @@ target_include_directories(atacplus_config
         PRIVATE "${SRC_DIR}/config/"
         PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
 
+
 #daemon 
 set (Atacplus_daemon_src
         "${SRC_DIR}/daemon/Options.cpp"
@@ -92,9 +102,11 @@ add_executable (atacplus
 target_include_directories(atacplus
         PRIVATE "${SRC_DIR}/config/"
         PRIVATE "${SRC_DIR}/network/"
+        PRIVATE "${SRC_DIR}/utils/"
         PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles")
 
 target_link_libraries(atacplus
+        atacplus_utils
         atacplus_network
         atacplus_config
         pthread
@@ -129,6 +141,7 @@ add_executable (test_network_exec
 
 include_directories(${SRC_DIR})
 target_link_libraries(test_network_exec 
+        atacplus_utils
         atacplus_network
         ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES})
 

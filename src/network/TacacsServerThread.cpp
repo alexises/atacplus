@@ -1,4 +1,5 @@
 #include "TacacsServerThread.h"
+#include "log.h"
 
 TacacsServerThread::TacacsServerThread(BufferedTcpSocket* sock)
 {
@@ -12,5 +13,7 @@ TacacsServerThread::~TacacsServerThread()
 
 void TacacsServerThread::operator()()
 {
+   LOG_MSG(debug) << "start new session ";
+   while(1) {}
    return;
 }

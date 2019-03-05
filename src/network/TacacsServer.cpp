@@ -1,5 +1,6 @@
 #include "TacacsServer.h"
 #include "TacacsServerThread.h"
+#include "log.h"
 #include <boost/thread/thread.hpp>
 
 TacacsServer::TacacsServer(const char* host, int port)
@@ -14,7 +15,8 @@ void TacacsServer::listen()
     {
         BufferedTcpSocket* sock = this->server->accept();
         TacacsServerThread* serverThread = new TacacsServerThread(sock);
-        boost::thread threadObj(*serverThread);
+        LOG_MSG(info) << "new connection accepted";
+        boost::thread threadObj(boost::ref(*serverThread));
         threadObj.detach();
     }
 }

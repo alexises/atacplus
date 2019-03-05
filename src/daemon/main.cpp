@@ -2,30 +2,36 @@
 #include "daemonize.h"
 #include "ParserContext.h"
 #include "TacacsServer.h"
+#include "log.h"
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
-#include <boost/log/trivial.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/file.hpp>
 
+BOOST_LOG_ATTRIBUTE_KEYWORD(Line, "Line", int)
+BOOST_LOG_ATTRIBUTE_KEYWORD(File, "File", std::string)
 
 void setupLogging(ParserContext& opt)
 {
+    boost::log::core::get()->add_global_attribute("Line", boost::log::attributes::mutable_constant<int>(5));
+    boost::log::core::get()->add_global_attribute("File", boost::log::attributes::mutable_constant<std::string>(""));
+    boost::log::add_common_attributes();
+
     std::string filename = opt.getServer()["logfile"].get(); 
     if (filename != "")
     {
         boost::log::add_file_log(
             boost::log::keywords::file_name = filename,
-            boost::log::keywords::format = "[%TimeStamp%][%ThreadID%] %Severity%: %Message%"
+            boost::log::keywords::format = "[%TimeStamp%][%File%:%Line%] %Severity%: %Message%"
         );
     }
     else
     {
         boost::log::add_console_log(
             std::clog,
-            boost::log::keywords::format = "[%TimeStamp%][%ThreadID%] %Severity%: %Message%"
+            boost::log::keywords::format = "[%TimeStamp%][%File:Line%] %Severity%: %Message%"
         );
     }
 }
@@ -67,15 +73,16 @@ int main(int argc, char** argv)
     setupLogging(ctx);
     if (opt.isDryrun())
     {
-        BOOST_LOG_TRIVIAL(info) << "dryrun, exiting";
+        LOG_MSG(info) << "dryrun, exiting";
         return 0;
     }
     if (!opt.isForeground())
     {
         daemonize(opt.getUid(), opt.getGid());
     }
-    BOOST_LOG_TRIVIAL(info) << "initialization done, starting event loop";
+    LOG_MSG(info) << "initialization done, starting event loop";
     TacacsServer srv(ctx.getServer()["listen"].get().c_str(),
                      atoi(ctx.getServer()["port"].get().c_str()));
+    srv.listen();
     return 0;
 }
