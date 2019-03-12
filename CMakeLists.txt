@@ -14,7 +14,7 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # debug
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=gnu++03 -Wall -g")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -rdynamic -std=gnu++03 -Wall -g")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall")
 set(VALGRIND /usr/bin/valgrind)
 set(VALGRIND_ARGS "--leak-check=full")
@@ -30,6 +30,8 @@ add_definitions(-DBOOST_LOG_DYN_LINK)
 #utils library
 set (Atacplus_utils_src
         "${SRC_DIR}/utils/log.cpp"
+        "${SRC_DIR}/utils/DateFormatter.cpp"
+        "${SRC_DIR}/utils/DateFormatterFactory.cpp"
 )
 add_library (atacplus_utils ${Atacplus_utils_src})
 

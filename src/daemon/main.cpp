@@ -3,6 +3,7 @@
 #include "ParserContext.h"
 #include "TacacsServer.h"
 #include "log.h"
+#include "DateFormatterFactory.h"
 #include <iostream>
 #include <stdexcept>
 #include <cstdlib>
@@ -24,20 +25,24 @@ void setupLogging(ParserContext& opt)
     {
         boost::log::add_file_log(
             boost::log::keywords::file_name = filename,
-            boost::log::keywords::format = "[%TimeStamp%][%File%:%Line%] %Severity%: %Message%"
+            boost::log::keywords::format = "[%TimeStamp(format=\"%Y\")%][%File%:%Line%] %Severity%: %Message%"
         );
     }
     else
     {
         boost::log::add_console_log(
             std::clog,
-            boost::log::keywords::format = "[%TimeStamp%][%File:Line%] %Severity%: %Message%"
+            boost::log::keywords::format = "[%TimeStamp(format=\"%c\")%][%File%:%Line%] %Severity%: %Message%"
         );
     }
 }
 
 int main(int argc, char** argv)
 {
+    //we need to init the factory first
+    //so we can do proper logging
+    boost::log::register_formatter_factory("TimeStamp", boost::make_shared< DateFormatterFactory >());
+
     BOOST_LOG_TRIVIAL(info) << "start application";
     Options opt(argc, argv);
     try
