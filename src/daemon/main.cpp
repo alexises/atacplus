@@ -21,18 +21,19 @@ void setupLogging(ParserContext& opt)
     boost::log::add_common_attributes();
 
     std::string filename = opt.getServer()["logfile"].get(); 
+    std::string logformat = opt.getServer()["logformat"].get();
     if (filename != "")
     {
         boost::log::add_file_log(
             boost::log::keywords::file_name = filename,
-            boost::log::keywords::format = "[%TimeStamp(format=\"%Y\")%][%File%:%Line%] %Severity%: %Message%"
+            boost::log::keywords::format = logformat
         );
     }
     else
     {
         boost::log::add_console_log(
             std::clog,
-            boost::log::keywords::format = "[%TimeStamp(format=\"%c\")%][%File%:%Line%] %Severity%: %Message%"
+            boost::log::keywords::format = logformat
         );
     }
 }
