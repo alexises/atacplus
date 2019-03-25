@@ -6,6 +6,7 @@
 #include "crypto.h"
 #include "DecodingException.h"
 #include "EncodingException.h"
+#include "BufferExaustionException.h"
 #include "precondition.h"
 
 /**
@@ -17,7 +18,7 @@ TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj)
     TacacsPacketWithHeader* res = NULL; //required for non managed method
     if (obj->rbuff.availableRead() < 12)
     {
-        throw DecodingException("no enougth bytes for decoding");
+        throw BufferExaustionException(BufferExaustionCondition::Underflow, obj->rbuff.availableRead());
     }
     type = obj->rbuff[2];
     switch (type)
@@ -213,4 +214,14 @@ void TacacsPacketContext::setDecodeHeader(bool decodeHeader)
 uint32_t TacacsPacketContext::getSessionId()
 {
     return this->sessionId;
+}
+
+Buffer* TacacsPacketContext::getRbuff()
+{
+    return &(this->rbuff);
+}
+
+Buffer* TacacsPacketContext::getWbuff()
+{
+    return &(this->wbuff);
 }

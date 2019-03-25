@@ -100,6 +100,20 @@ class TacacsPacketContext
          * @return session id
          */
         uint32_t getSessionId();
+        /**
+         * getRbuff get internal read buffer
+         *
+         * this function is needed to warm up the BufferedTcpSocket
+         * @return read buffer
+         */
+        Buffer* getRbuff();
+        /**
+         * getWbuff get internal read buffer
+         *
+         * this function is needed to warm up the BufferedTcpSocket
+         * @return write buffer
+         */
+        Buffer* getWbuff();
     private:
         int step;
 	int connType;

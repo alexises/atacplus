@@ -31,28 +31,35 @@ class BufferedTcpSocket : public TcpSocket
          * processBytes : fetch and push bytes to the socket buffer
          *
          * we try to flush writing buffer and fill input buffer.
-         * @param[in] rblocking set the blocking state for filling the input buffer
-         * @param[in] wblocking set the blocking state for filling the output buffer
+         * @param[in] rbytes minimum required reading bytes to sucess
+         * @param[in] wbytes minimum required sending bytes to sucess
+         *
+         * to block for undefined amount of bytes, please set value to -1.
+         * value of 0 perform a non blocking operation
+         
          * @pre rbuff != NULL && wbuff != NULL
          * @pre isUsable == true;
          */
-        void processBytes(bool rblocking, bool wblocking);
+        void processBytes(int rbytes, int wbytes);
         /**
          * read : read some byte from the network and fill the buffer
          *
          * @param[in] rblocking set the blocking state for filling the input buffer
          * @pre rbuff != NULL && wbuff != NULL
          * @pre isUsable == true;
+         * @return number of read bytes
          */
-        void read(bool rblocking);
+        int read(bool rblocking);
+
         /**
          * write : write some byte from the network and fill the buffer
          *
          * @param[in] wblocking set the blocking state for filling the input buffer
          * @pre rbuff != NULL && wbuff != NULL
          * @pre isUsable == true;
+         * @return number of writed bytes
          */
-        void write(bool wblocking);
+        int write(bool wblocking);
 
     private:
         Buffer* rbuff; // this buffer contain bytes in waiting for client read

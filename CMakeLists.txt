@@ -39,6 +39,7 @@ add_library (atacplus_utils ${Atacplus_utils_src})
 set (Atacplus_network_src
 	"${SRC_DIR}/network/DecodingException.cpp"
 	"${SRC_DIR}/network/EncodingException.cpp"
+	"${SRC_DIR}/network/BufferExaustionException.cpp"
 	"${SRC_DIR}/network/TacacsPacketHeader.cpp"
 	"${SRC_DIR}/network/PreconditionFailException.cpp"
 	"${SRC_DIR}/network/crypto.cpp"
@@ -113,6 +114,7 @@ target_link_libraries(atacplus
         atacplus_config
         pthread
         ${Boost_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
         )
 
 

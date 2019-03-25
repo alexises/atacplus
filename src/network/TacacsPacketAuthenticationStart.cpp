@@ -1,6 +1,7 @@
 #include "TacacsPacketAuthenticationStart.h"
 #include "DecodingException.h"
 #include "EncodingException.h"
+#include "BufferExaustionException.h"
 #include "precondition.h"
 #include <string>
 
@@ -44,7 +45,7 @@ void TacacsPacketAuthenticationStart::decode(Buffer& rbuff)
 {
     if (rbuff.availableRead() < 8)
     {
-        throw DecodingException("no enough size");
+        throw BufferExaustionException(BufferExaustionCondition::Underflow, 8 - rbuff.availableRead());
     }
     uint8_t action, privLvl, authenType, service;
     uint8_t userLen, portLen, remoteAddrLen, dataLen;
@@ -55,7 +56,7 @@ void TacacsPacketAuthenticationStart::decode(Buffer& rbuff)
     if (rbuff.availableRead() < (size_t) (userLen + portLen + remoteAddrLen + dataLen))
     {
         rbuff -= 8;
-        throw DecodingException("no enougth size of variable arguments");
+        throw BufferExaustionException(BufferExaustionCondition::Underflow, (userLen + portLen + remoteAddrLen + dataLen) - rbuff.availableRead());
     }
     this->user = new FixedLengthString(userLen);
     this->port = new FixedLengthString(portLen);
@@ -84,7 +85,7 @@ void TacacsPacketAuthenticationStart::processEncode(Buffer& wbuff)
 {
     if (wbuff.availableWrite() < this->getSize())
     {
-        throw EncodingException("No enough size on the buffer");
+        throw BufferExaustionException(BufferExaustionCondition::Overflow, this->getSize() - wbuff.availableRead());
     }
 
     wbuff << this->action << this->privLvl << this->authenType << this->service

@@ -28,7 +28,7 @@ void BufferedTcpSocket::setBuffer(Buffer* rbuff, Buffer* wbuff)
     this->wbuff = wbuff;
 }
 
-void BufferedTcpSocket::processBytes(bool rblocking, bool wblocking)
+void BufferedTcpSocket::processBytes(int rbytes, int wbytes)
 {
     precondition(rbuff != NULL && wbuff != NULL);
     precondition(usable == true);
@@ -38,28 +38,31 @@ void BufferedTcpSocket::processBytes(bool rblocking, bool wblocking)
     size_t spaceForReading = this->rbuff->availableWrite();
     if (waitingWriteByte > 0)
     {
-        this->write(false);
+        wbytes -= this->write(false);
     }
     if (spaceForReading > 0)
     {
-        this->read(false);
+        rbytes -= this->read(false);
     }
     //now we do blocking operation only if no bytes
     //have been proccesses
     //we begin by writing first
-    if (wblocking &&
-        waitingWriteByte == this->wbuff->availableRead())
+    while (rbytes > 0 || wbytes > 0)
     {
-        this->write(true);
-    }
-    if (rblocking &&
-        spaceForReading == this->rbuff->availableRead())
-    {
-        this->read(true);
+        if (wbytes > 0 &&
+            waitingWriteByte == this->wbuff->availableRead())
+        {
+            wbytes -= this->write(true);
+        }
+        if (rbytes > 0 &&
+            spaceForReading == this->rbuff->availableRead())
+        {
+            rbytes -= this->read(true);
+        }
     }
 }
 
-void BufferedTcpSocket::read(bool rblocking)
+int BufferedTcpSocket::read(bool rblocking)
 {
     precondition(rbuff != NULL && wbuff != NULL);
     precondition(usable == true);
@@ -81,10 +84,15 @@ void BufferedTcpSocket::read(bool rblocking)
     if (readBytes > -1)
     {
         this->rbuff->writePos += readBytes;
+        return readBytes;
+    }
+    else
+    {
+        return 0;
     }
 }
 
-void BufferedTcpSocket::write(bool wblocking)
+int BufferedTcpSocket::write(bool wblocking)
 {
     precondition(rbuff != NULL && wbuff != NULL);
     precondition(usable == true);
@@ -106,5 +114,10 @@ void BufferedTcpSocket::write(bool wblocking)
     if (writeBytes > -1)
     {
         this->wbuff->readPos += writeBytes;
+        return writeBytes;
+    }
+    else
+    {
+        return 0;
     }
 }

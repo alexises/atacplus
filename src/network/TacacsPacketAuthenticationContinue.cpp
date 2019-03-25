@@ -2,6 +2,7 @@
 #include "precondition.h"
 #include "EncodingException.h"
 #include "DecodingException.h"
+#include "BufferExaustionException.h"
 
 TacacsPacketAuthenticationContinue::TacacsPacketAuthenticationContinue(
      TacacsPacketContext* context,
@@ -59,7 +60,7 @@ void TacacsPacketAuthenticationContinue::processEncode(Buffer& wbuff)
 {
     if (wbuff.availableWrite() < this->getSize())
     {
-        throw EncodingException("no enough space on the buffer");
+        throw BufferExaustionException(BufferExaustionCondition::Overflow, this->getSize() - wbuff.availableWrite());
     }
 
     wbuff << (uint16_t) this->userMsg->getSize()
@@ -73,7 +74,7 @@ void TacacsPacketAuthenticationContinue::decode(Buffer& rbuff)
 {
     if (rbuff.availableRead() < 5)
     {
-        throw DecodingException("no enough space to read header");
+        throw BufferExaustionException(BufferExaustionCondition::Underflow, 5 - rbuff.availableRead());
     }
     
     uint16_t userMsgSize, dataSize;
@@ -83,7 +84,7 @@ void TacacsPacketAuthenticationContinue::decode(Buffer& rbuff)
     if (rbuff.availableRead() < (userMsgSize + dataSize))
     {
         rbuff -= 5;
-        throw DecodingException("no enough byte to decode variable part");
+        throw BufferExaustionException(BufferExaustionCondition::Underflow, (userMsgSize + dataSize) - rbuff.availableRead());
     }
     this->userMsg = new FixedLengthString(userMsgSize);
     this->data = new FixedLengthString(dataSize);

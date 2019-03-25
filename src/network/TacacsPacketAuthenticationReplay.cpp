@@ -1,6 +1,7 @@
 #include "TacacsPacketAuthenticationReplay.h"
 #include "EncodingException.h"
 #include "DecodingException.h"
+#include "BufferExaustionException.h"
 #include "precondition.h"
 
 TacacsPacketAuthenticationReplay::TacacsPacketAuthenticationReplay(
@@ -75,7 +76,7 @@ void TacacsPacketAuthenticationReplay::decode(Buffer& rbuff)
     uint16_t promptMsgSize, dataSize;
     if (rbuff.availableRead() < 6)
     {
-	 throw DecodingException("no enougth data for decoding");
+         throw BufferExaustionException(BufferExaustionCondition::Underflow, 6 - rbuff.availableRead());
     }
     rbuff >> status >> flags
     	  >> promptMsgSize >> dataSize;
@@ -83,7 +84,7 @@ void TacacsPacketAuthenticationReplay::decode(Buffer& rbuff)
     if (rbuff.availableRead() < (promptMsgSize + dataSize))
     {
         rbuff -= 6;
-        throw DecodingException("no enougth size of variable arguments");
+        throw BufferExaustionException(BufferExaustionCondition::Underflow, (promptMsgSize + dataSize) - rbuff.availableRead());
     }
     this->promptMsg = new FixedLengthString(promptMsgSize);
     this->data = new FixedLengthString(dataSize);
@@ -108,7 +109,7 @@ void TacacsPacketAuthenticationReplay::processEncode(Buffer& wbuff)
 {
     if (wbuff.availableWrite() < this->getSize())
     {
-        throw EncodingException("to few bytes in the buffer");
+        throw BufferExaustionException(BufferExaustionCondition::Overflow, this->getSize() - wbuff.availableWrite());
     }
     wbuff << this->status << this->flags
 	  << (uint16_t) this->promptMsg->getSize()

@@ -51,8 +51,8 @@ BOOST_AUTO_TEST_CASE(client_server_crosstest)
     
     //check client sending
     wBuffClient << (uint8_t) 'a' << (uint8_t) 'b';
-    client.processBytes(false, true);
-    serverClient->processBytes(true, false);
+    client.processBytes(0, 2);
+    serverClient->processBytes(2, 0);
     uint8_t c;
     rBuffServer >> c;
     BOOST_CHECK(c == 'a');
@@ -61,8 +61,8 @@ BOOST_AUTO_TEST_CASE(client_server_crosstest)
 
     //check server sending
     wBuffServer << (uint8_t) 'c' << (uint8_t) 'd';
-    serverClient->processBytes(false, true);
-    client.processBytes(true, false);
+    serverClient->processBytes(0, 2);
+    client.processBytes(2, 0);
     rBuffClient >> c;
     BOOST_CHECK(c == 'c');
     rBuffClient >> c;

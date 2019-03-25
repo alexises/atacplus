@@ -3,6 +3,7 @@
 #include "network/Buffer.h"
 #include "network/TacacsPacketAuthenticationReplay.h"
 #include "network/DecodingException.h"
+#include "network/BufferExaustionException.h"
 
 BOOST_AUTO_TEST_SUITE(tacacsPacketAuthenticationReplay)
 
@@ -39,8 +40,8 @@ BOOST_AUTO_TEST_CASE(decoding_fail)
 
     BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(&context, aa), DecodingException);
     BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(&context, bb), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(&context, cc), DecodingException);
-    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(&context, dd), DecodingException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(&context, cc), BufferExaustionException);
+    BOOST_CHECK_THROW(new TacacsPacketAuthenticationReplay(&context, dd), BufferExaustionException);
 }
 
 BOOST_AUTO_TEST_CASE(variable_parameter_check)
