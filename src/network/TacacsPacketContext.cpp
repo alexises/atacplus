@@ -25,8 +25,7 @@ TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj)
     {
         case TacacsPacketType::Authentication:
             res = new TacacsPacketAuthenticationStart(obj, obj->rbuff);
-            obj->decodeCallback = NULL;
-            obj->encodeCallback = encodeAuthenticationReplay;
+            obj->stateId = TacacsPacketContextState::EncodeAuthReplay;
             break;
         case TacacsPacketType::Authorization:
             break;
@@ -43,8 +42,7 @@ void startEncode(TacacsPacketContext* obj, TacacsPacketWithHeader* packet)
     std::string type = packet->getType();
     if (type == "auth-start")
     {
-        obj->decodeCallback = decodeAuthenticationReplay;
-        obj->encodeCallback = NULL;
+        obj->stateId = TacacsPacketContextState::EncodeAuthReplay;
     }
     else 
     {
@@ -68,13 +66,12 @@ void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader
         case AuthenticationStatus::GetData:
         case AuthenticationStatus::GetUser:
         case AuthenticationStatus::GetPassword:
-            obj->decodeCallback = decodeAuthenticationContinue;
+            obj->stateId = TacacsPacketContextState::DecodeAuthContinue;
             break;
         default:
-            obj->decodeCallback = startDecode;
+            obj->stateId = TacacsPacketContextState::StartServer;
             break;
     }
-    obj->encodeCallback = NULL;
 }
 
 TacacsPacketWithHeader* decodeAuthenticationReplay(TacacsPacketContext* obj)
@@ -87,12 +84,11 @@ TacacsPacketWithHeader* decodeAuthenticationReplay(TacacsPacketContext* obj)
         case AuthenticationStatus::GetData:
         case AuthenticationStatus::GetUser:
         case AuthenticationStatus::GetPassword:
-            obj->encodeCallback = encodeAuthenticationContinue;
-            obj->decodeCallback = NULL;
+            obj->stateId = TacacsPacketContextState::EncodeAuthContinue;
             break;
         default:
-            obj->encodeCallback = startEncode;
-            obj->decodeCallback = NULL;
+            obj->stateId = TacacsPacketContextState::StartClient;
+            break;
     }
     return packet;
 }
@@ -103,13 +99,11 @@ TacacsPacketWithHeader* decodeAuthenticationContinue(TacacsPacketContext* obj)
         new TacacsPacketAuthenticationContinue(obj, obj->rbuff);
     if ((packet->getFlags() & AuthenticationContinueFlags::ContinueAbort) != 0)
     {
-        obj->encodeCallback = NULL;
-        obj->decodeCallback = startDecode;
+        obj->stateId = TacacsPacketContextState::StartServer;
     }
     else
     {
-        obj->encodeCallback = encodeAuthenticationReplay;
-        obj->decodeCallback = NULL;
+        obj->stateId = TacacsPacketContextState::EncodeAuthReplay;
     }
     return packet;
 }
@@ -124,13 +118,11 @@ void encodeAuthenticationContinue(TacacsPacketContext* obj, TacacsPacketWithHead
         dynamic_cast<TacacsPacketAuthenticationContinue*>(packet);
     if ((castPacket->getFlags() & AuthenticationContinueFlags::ContinueAbort) != 0)
     {
-        obj->encodeCallback = startEncode;
-        obj->decodeCallback = NULL;
+        obj->stateId = TacacsPacketContextState::StartClient;
     }
     else
     {
-        obj->encodeCallback = NULL;
-        obj->decodeCallback = decodeAuthenticationReplay;
+        obj->stateId = TacacsPacketContextState::DecodeAuthReplay;
     }
     packet->encode(obj->wbuff);
 }
@@ -144,15 +136,29 @@ TacacsPacketContext::TacacsPacketContext(int type, size_t rbuff_size, size_t wbu
     this->sessionId = 0;
     this->seqNo = 0;
     this->decodeHeader = true;
+
+    for (int i = 0; i < STATE_COUNT; ++i)
+    {
+       this->encodeCallback[i] = NULL;
+       this->decodeCallback[i] = NULL;
+    }
+   
+    //fill callback arrays
+    this->decodeCallback[TacacsPacketContextState::StartServer] = startDecode;
+    this->decodeCallback[TacacsPacketContextState::DecodeAuthReplay] = decodeAuthenticationReplay;
+    this->decodeCallback[TacacsPacketContextState::DecodeAuthContinue] = decodeAuthenticationContinue;
+    
+    this->encodeCallback[TacacsPacketContextState::StartClient] = startEncode;
+    this->encodeCallback[TacacsPacketContextState::EncodeAuthReplay] = encodeAuthenticationReplay;
+    this->encodeCallback[TacacsPacketContextState::EncodeAuthContinue] = encodeAuthenticationContinue;
+
     switch(this->connType)
     {
         case TacacsConnectionType::Server:
-            this->encodeCallback = NULL;
-            this->decodeCallback = startDecode;
+            this->stateId = TacacsPacketContextState::StartServer;
             break;
         case TacacsConnectionType::Client:
-            this->encodeCallback = startEncode;
-            this->decodeCallback = NULL;
+            this->stateId = TacacsPacketContextState::StartClient;
             break;
         default:
             throw PreconditionFailException("bad connection type should be TacacsConnectionType::Server or TacacsConnectionType::Client");
@@ -180,20 +186,20 @@ FixedLengthString* TacacsPacketContext::getKey()
 
 TacacsPacketWithHeader* TacacsPacketContext::decode()
 {
-    if (this->decodeCallback == NULL)
+    if (this->decodeCallback[this->stateId] == NULL)
     {
         throw DecodingException("not expectiong decoding operation");
     }
-    return this->decodeCallback(this);
+    return this->decodeCallback[this->stateId](this);
 }
 
 void TacacsPacketContext::encode(TacacsPacketWithHeader* packet)
 {
-    if (this->decodeCallback == NULL)
+    if (this->decodeCallback[this->stateId] == NULL)
     {
         throw EncodingException("not expection encoding operation");
     }
-    this->encodeCallback(this, packet);
+    this->encodeCallback[this->stateId](this, packet);
 }
 
 uint8_t TacacsPacketContext::getSeqNo()

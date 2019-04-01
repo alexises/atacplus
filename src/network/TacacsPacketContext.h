@@ -10,6 +10,16 @@ struct TacacsConnectionType
     enum_mbr Server = 2;
 };
 
+struct TacacsPacketContextState
+{
+    enum_mbr StartClient = 0;
+    enum_mbr StartServer = 1;
+    enum_mbr EncodeAuthReplay = 2;
+    enum_mbr DecodeAuthReplay = 3;
+    enum_mbr EncodeAuthContinue = 4;
+    enum_mbr DecodeAuthContinue = 5;
+};
+#define STATE_COUNT 6
 
 //forwoard declaration
 class TacacsPacketContext;
@@ -115,16 +125,17 @@ class TacacsPacketContext
          */
         Buffer* getWbuff();
     private:
-        int step;
-	int connType;
+        int stateId;
+        int connType;
+        int context;
         uint32_t sessionId;
         uint8_t seqNo;
         FixedLengthString* key;
         Buffer rbuff;
         Buffer wbuff;
         bool decodeHeader;
-        void (*encodeCallback)(TacacsPacketContext*, TacacsPacketWithHeader*);
-        TacacsPacketWithHeader* (*decodeCallback)(TacacsPacketContext*);
+        void (*encodeCallback[STATE_COUNT])(TacacsPacketContext*, TacacsPacketWithHeader*);
+        TacacsPacketWithHeader* (*decodeCallback[STATE_COUNT])(TacacsPacketContext*);
 
     friend TacacsPacketWithHeader* startDecode(TacacsPacketContext* obj);
     friend void encodeAuthenticationReplay(TacacsPacketContext* obj, TacacsPacketWithHeader* packet);
